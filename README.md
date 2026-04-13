@@ -1,5 +1,5 @@
 # BH Works
-
+Plataforma web que conecta candidatos a empresas. Candidatos buscam e se candidatam a vagas via listagem ou mapa; empresas cadastram perfil e publicam oportunidades.
 
 
 ## Alunos integrantes da equipe

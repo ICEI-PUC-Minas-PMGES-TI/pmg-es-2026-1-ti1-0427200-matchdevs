@@ -11,9 +11,12 @@ Informações básicas do projeto.
 * Pedro Marcos Costa
 * Rafael lima Pais
 
-  * [Patrick](https://github.com/patrickaugustodeoliveira)
-  * [João](https://github.com/Joao-Baiao)
-  * [Rafael lima](https://github.com/rafael012020) 
+  * [Patrick] [https://github.com/patrickaugustodeoliveira]
+  * [João] [https://github.com/Joao-Baiao]
+  * [Rafael_lima] [https://github.com/rafael012020]
+  * [Rafael_melo] [https://github.com/rafaelmelomansur]
+  * [Erik] [https://github.com/Kivimac]
+  * [Pedro] [https://github.com/peligado]
 
 A documentação do projeto é estruturada da seguinte forma:
 
@@ -29,7 +32,9 @@ A documentação do projeto é estruturada da seguinte forma:
 
 # Contexto
 
-Detalhes sobre o espaço de problema, os objetivos do projeto, sua justificativa e público-alvo.
+O projeto é uma plataforma digital de recrutamento voltada para o mercado brasileiro, projetada para simplificar o processo de busca e publicação de vagas. A navegação é organizada em dois fluxos distintos: um para candidatos e outro para empresas, garantindo que cada usuário encontre rapidamente o que precisa sem sobrecarga de informação.
+
+O candidato pode explorar vagas através de listagens filtradas por tipo, localização, faixa salarial e contrato, ou visualizar oportunidades diretamente em um mapa geográfico interativo. Após encontrar uma vaga de interesse, pode salvar ou se candidatar com um clique, acompanhando tudo pelo seu perfil pessoal. Empresas, por sua vez, cadastram seu perfil institucional, publicam vagas e ficam visíveis tanto na listagem quanto no mapa.
 
 ## Problema
 
@@ -191,33 +196,20 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 Artefatos relacionados com a interface e a interacão do usuário na proposta de solução.
 
 ### Wireframes
+(images/wire1.png)
 
-Estes são os protótipos de telas do sistema.
-
-**✳️✳️✳️ COLOQUE AQUI OS PROTÓTIPOS DE TELAS COM TÍTULO E DESCRIÇÃO ✳️✳️✳️**
 
 ##### TELA XPTO ⚠️ EXEMPLO ⚠️
 
-Descrição para a tela XPTO
 
-![Exemplo de wireframe](images/exemplo-wireframe.png)
 
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Wireframes são protótipos das telas da aplicação usados em design de interface para sugerir a estrutura de um site web e seu relacionamentos entre suas páginas. Um wireframe web é uma ilustração semelhante ao layout de elementos fundamentais na interface.
->
-> **Orientações**:
->
-> - [Ferramentas de Wireframes](https://rockcontent.com/blog/wireframes/)
-> - [Figma](https://www.figma.com/)
-> - [Adobe XD](https://www.adobe.com/br/products/xd.html#scroll)
-> - [MarvelApp](https://marvelapp.com/developers/documentation/tutorials/)
+
 
 ### User Flow
 
 **✳️✳️✳️ COLOQUE AQUI O DIAGRAMA DE FLUXO DE TELAS ✳️✳️✳️**
 
-![Exemplo de fluxo de telas](images/exemplo-userflow.png)
+![Exemplo de fluxo de telas]()
 
 > ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
 >
@@ -231,13 +223,9 @@ Descrição para a tela XPTO
 
 ### Protótipo Interativo
 
-**✳️✳️✳️ COLOQUE AQUI UM IFRAME COM SEU PROTÓTIPO INTERATIVO ✳️✳️✳️**
+protótipo interativo 
 
-✅ [Protótipo Interativo (MarvelApp)](https://marvelapp.com/prototype/4hd6091?emb=1&iosapp=false&frameless=false)  ⚠️ EXEMPLO ⚠️
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Um protótipo interativo apresenta o projeto de interfaces e permite ao usuário navegar pelas funcionalidades como se estivesse lidando com o software pronto. Utilize as mesmas ferramentas de construção de wireframes para montagem do seu protótipo interativo. Inclua o link para o protótipo interativo do projeto.
+[https://marvelapp.com/prototype/aihe1fa]
 
 # Metodologia
 
