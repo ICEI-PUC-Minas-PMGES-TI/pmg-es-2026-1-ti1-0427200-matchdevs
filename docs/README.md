@@ -2,13 +2,18 @@
 
 Informações básicas do projeto.
 
-* **Projeto:** [NOME DO PROJETO]
-* **Repositório GitHub:** [LINK PARA O REPOSITÓRIO NO GITHUB]
-* **Membros da equipe:**
+* **Projeto:** [BH Works]
+* **Repositório GitHub:** [https://github.com/ICEI-PUC-Minas-PMGES-TI/matchdevsBh.git]
+*  João Pedro Fonseca Baião
+* Patrick Augusto de Oliveira
+* Rafael Melo Mansur Cardoso
+* Erik Vilança
+* Pedro Marcos Costa
+* Rafael lima Pais
 
-  * [Fulano](https://github.com/fulano) ⚠️ EXEMPLO ⚠️
-  * [Beltrano](https://github.com/beltrano) ⚠️ EXEMPLO ⚠️
-  * [Cicrano](https://github.com/cicrano) ⚠️ EXEMPLO ⚠️
+  * [Patrick](https://github.com/patrickaugustodeoliveira)
+  * [João](https://github.com/Joao-Baiao)
+  * [Rafael lima](https://github.com/rafael012020) 
 
 A documentação do projeto é estruturada da seguinte forma:
 
@@ -20,7 +25,7 @@ A documentação do projeto é estruturada da seguinte forma:
 6. Solução
 7. Referências Bibliográficas
 
-✅ [Documentação de Design Thinking (MIRO)](files/processo-dt.pdf)
+✅ [(https://github.com/patrickaugustodeoliveira)]
 
 # Contexto
 
