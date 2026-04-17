@@ -28,8 +28,6 @@ A documentação do projeto é estruturada da seguinte forma:
 6. Solução
 7. Referências Bibliográficas
 
-✅ [(https://github.com/patrickaugustodeoliveira)]
-
 # Contexto
 
 O projeto é uma plataforma digital de recrutamento voltada para o mercado brasileiro, projetada para simplificar o processo de busca e publicação de vagas. A navegação é organizada em dois fluxos distintos: um para candidatos e outro para empresas, garantindo que cada usuário encontre rapidamente o que precisa sem sobrecarga de informação.
@@ -51,18 +49,6 @@ frustração na busca por emprego
 
 ## Justificativa
 
-**✳️✳️✳️ COLOQUE AQUI O SEU TEXTO ✳️✳️✳️**
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Descreva a importância ou a motivação para trabalhar com esta aplicação que você escolheu. Indique as razões pelas quais você escolheu seus objetivos específicos ou as razões para aprofundar em certos aspectos do software.
->
-> O grupo de trabalho pode fazer uso de questionários, entrevistas e dados estatísticos, que podem ser apresentados, com o objetivo de esclarecer detalhes do problema que será abordado pelo grupo.
->
-> **Orientações**:
->
-> - [Como montar a justificativa](https://guiadamonografia.com.br/como-montar-justificativa-do-tcc/)
-
 ## Público-Alvo
 
 Nosso público alvo são empresas com dificuldade de achar funcionarios e pessoas com dificuldade de achar emprego por diferentes motivos, mesmo sendo qualificados.
@@ -82,11 +68,13 @@ Nosso público alvo são empresas com dificuldade de achar funcionarios e pessoa
 ![personas](images/João%20bernado-p.png)
 ![personas](images/Carloshenrique-p.png)
 ![personas](images/olivia%20rodrigues-p.png)
+
 # Product Design
 
 
 
 ## Histórias de Usuários
+
 ![histórias de usuários](images/historia%20de%20usuario.png)
 
 ## Proposta de Valor
@@ -98,6 +86,7 @@ Nosso público alvo são empresas com dificuldade de achar funcionarios e pessoa
 
 
 ## Requisitos
+
 cadastro de usuário, duas telas de login(empresas e trabalhadores), conexão direta entre usuários,integração com api para encontrar meios de transporte, comparação de salário com vagas semelhantes e mapa interativo de vagas.
 
 ### Requisitos Funcionais
@@ -113,22 +102,6 @@ cadastro de usuário, duas telas de login(empresas e trabalhadores), conexão di
 | RNF-001 | Integração com api para encontrar meios de transporte      | MÉDIA     |
 | RNF-002 | comparação de salário com vagas semelhantes      | Alta     |
 | RNF-003 | Mapa interativo de vagas      | Media     |
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Os requisitos de um projeto são classificados em dois grupos:
->
-> - [Requisitos Funcionais (RF)](https://pt.wikipedia.org/wiki/Requisito_funcional):
->   correspondem a uma funcionalidade que deve estar presente na plataforma (ex: cadastro de usuário).
-> - [Requisitos Não Funcionais (RNF)](https://pt.wikipedia.org/wiki/Requisito_n%C3%A3o_funcional):
->   correspondem a uma característica técnica, seja de usabilidade, desempenho, confiabilidade, segurança ou outro (ex: suporte a dispositivos iOS e Android).
->
-> Lembre-se que cada requisito deve corresponder à uma e somente uma característica alvo da sua solução. Além disso, certifique-se de que todos os aspectos capturados nas Histórias de Usuário foram cobertos.
->
-> **Orientações**:
->
-> - [O que são Requisitos Funcionais e Requisitos Não Funcionais?](https://codificar.com.br/requisitos-funcionais-nao-funcionais/)
-> - [O que são requisitos funcionais e requisitos não funcionais?](https://analisederequisitos.com.br/requisitos-funcionais-e-requisitos-nao-funcionais-o-que-sao/)
 
 ## Projeto de Interface
 
@@ -153,30 +126,14 @@ Artefatos relacionados com a interface e a interacão do usuário na proposta de
 ### User Flow
 
 
-![User Flow]()
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Fluxo de usuário (User Flow) é uma técnica que permite ao desenvolvedor mapear todo fluxo de telas do site ou app. Essa técnica funciona para alinhar os caminhos e as possíveis ações que o usuário pode fazer junto com os membros de sua equipe.
->
-> **Orientações**:
->
-> - [User Flow: O Quê É e Como Fazer?](https://medium.com/7bits/fluxo-de-usu%C3%A1rio-user-flow-o-que-%C3%A9-como-fazer-79d965872534)
-> - [User Flow vs Site Maps](http://designr.com.br/sitemap-e-user-flow-quais-as-diferencas-e-quando-usar-cada-um/)
-> - [Top 25 User Flow Tools &amp; Templates for Smooth](https://www.mockplus.com/blog/post/user-flow-tools)
-<<<<<<< HEAD
-=======
-![User Flow](user_flow.png)
->>>>>>> dcd5e5eeb5e085c2492c413cd7e5c7ae861aa2be
-
-![userflow](images/userflow.jpeg)
+![User Flow](images/userflow.jpeg)
 
 
 ### Protótipo Interativo
 
 protótipo interativo 
 
-[https://marvelapp.com/prototype/aihe1fa]
+[https://www.figma.com/site/jooJIPEmVqScdTxCrb3opO/Sem-t%C3%ADtulo?node-id=0-1&t=t90axaquyzcCqtLl-1]
 
 # Metodologia
 
@@ -188,15 +145,11 @@ Relação de ferramentas empregadas pelo grupo durante o projeto.
 
 | Ambiente                    | Plataforma | Link de acesso                                     |
 | --------------------------- | ---------- | -------------------------------------------------- |
-| Processo de Design Thinking | Miro       | https://miro.com/XXXXXXX ⚠️ EXEMPLO ⚠️        |
-| Repositório de código     | GitHub     | https://github.com/XXXXXXX ⚠️ EXEMPLO ⚠️      |
+| Processo de Design Thinking | Miro       |https://miro.com/app/board/uXjVGvR6Pj8=/?share_link_id=225176546840|
+| Repositório de código     | GitHub     |https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-1-ti1-0427200-matchdevs|
 | Hospedagem do site          | Render     | https://site.render.com/XXXXXXX ⚠️ EXEMPLO ⚠️ |
-| Protótipo Interativo       | MarvelApp  | https://marvelapp.com/XXXXXXX ⚠️ EXEMPLO ⚠️   |
+| Protótipo Interativo       | MarvelApp  |[https://www.figma.com/site/jooJIPEmVqScdTxCrb3opO/Sem-t%C3%ADtulo?node-id=0-1&t=t90axaquyzcCqtLl-1]|
 |                             |            |                                                    |
-
-> ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
->
-> Liste as ferramentas empregadas no desenvolvimento do projeto, justificando a escolha delas, sempre que possível. Inclua itens como: (1) Editor de código, (2) )ferramentas de comunicação, (3) )ferramentas de diagramação, (4) )plataformas de hospedagem, entre outras.
 
 ## Gerenciamento do Projeto
 
