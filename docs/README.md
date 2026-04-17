@@ -217,7 +217,7 @@ Descrição para a tela XPTO
 
 **✳️✳️✳️ COLOQUE AQUI O DIAGRAMA DE FLUXO DE TELAS ✳️✳️✳️**
 
-![User Flow](user_flow.png)
+![User Flow]()
 
 > ⚠️ **APAGUE ESSA PARTE ANTES DE ENTREGAR SEU TRABALHO**
 >
