@@ -9,6 +9,7 @@ Plataforma web que conecta candidatos a empresas. Candidatos buscam e se candida
 * Rafael Melo Mansur Cardoso
 * Erik Vilança
 * Pedro Marcos Costa
+* Rafael Lima Pais
 
 ## Professores responsáveis
 
