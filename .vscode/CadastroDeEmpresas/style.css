@@ -63,3 +63,75 @@ font-size: 16px;
 background-color: #ccc;
 }
 
+
+@media screen and (max-width: 480px) and (orientation: portrait) {
+
+body {
+padding: 10px;
+height: auto;
+}
+
+.container {
+width: 100%;
+padding: 15px;
+}
+
+h2 {
+font-size: 22px;
+}
+
+input, textarea, .btn {
+font-size: 14px;
+}
+}
+
+
+@media screen and (max-width: 932px) and (orientation: landscape) {
+
+body {
+padding: 15px;
+height: auto;
+}
+
+.container {
+width: 90%;
+}
+
+h2 {
+font-size: 24px;
+}
+}
+
+
+@media screen and (min-width: 481px) and (max-width: 768px) and (orientation: portrait) {
+
+.container {
+width: 85%;
+}
+}
+
+
+@media screen and (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+
+.container {
+width: 75%;
+}
+}
+
+
+@media screen and (max-height: 500px) {
+
+body {
+align-items: flex-start;
+padding-top: 20px;
+padding-bottom: 20px;
+}
+}
+
+
+@media screen and (min-width: 1025px) {
+
+.container {
+width: 500px;
+}
+}
