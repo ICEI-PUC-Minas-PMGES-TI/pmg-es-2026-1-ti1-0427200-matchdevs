@@ -1,0 +1,57 @@
+{
+  "vagas": [
+    {
+      "id": 1,
+      "titulo": "Desenvolvedor Backend",
+      "empresa": "BhTech Solutions",
+      "localizacao": "Belo Horizonte, MG",
+      "tipo_contrato": "CLT",
+      "salario": "R$ 8.000,00",
+      "descricao": "Responsável por desenvolver e manter APIs escaláveis.",
+      "requisitos": [
+        "Node.js",
+        "Conhecimento em bancos de dados relacionais",
+        "Git e metodologias ágeis"
+      ],
+      "data_publicacao": "2026-04-20",
+      "lat": -19.9167,
+      "lng": -43.9345
+    },
+    {
+      "id": 2,
+      "titulo": "Analista de Marketing Digital",
+      "empresa": "InovaWeb Agency",
+      "localizacao": "São Paulo, SP",
+      "tipo_contrato": "PJ",
+      "salario": "R$ 6.500,00",
+      "descricao": "Planejamento e execução de campanhas digitais focadas em performance.",
+      "requisitos": [
+        "SEO",
+        "Google Ads",
+        "Meta Ads",
+        "Excel avançado"
+      ],
+      "data_publicacao": "2026-04-18",
+      "lat": -23.5505,
+      "lng": -46.6333
+    },
+    {
+      "id": 3,
+      "titulo": "Engenheiro de Dados",
+      "empresa": "DataFlow Corp",
+      "localizacao": "Curitiba, PR",
+      "tipo_contrato": "CLT",
+      "salario": "R$ 12.000,00",
+      "descricao": "Construção e otimização de pipelines de dados para análise em larga escala.",
+      "requisitos": [
+        "Python",
+        "Spark",
+        "AWS",
+        "Modelagem de dados"
+      ],
+      "data_publicacao": "2026-04-22",
+      "lat": -25.4284,
+      "lng": -49.2733
+    }
+  ]
+}

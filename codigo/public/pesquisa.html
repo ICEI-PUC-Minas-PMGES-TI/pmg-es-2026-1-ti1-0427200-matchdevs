@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mapa de Vagas</title>
+
+  <!-- Base CSS -->
+  <link rel="stylesheet" href="assets/css/pesquisa.css" />
+
+  <!-- Leaflet (mapa interativo) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+</head>
+<body>
+  <div class="container">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo">LOGO</div>
+    </header>
+
+    <!-- FILTROS -->
+    <section class="filters">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input id="searchInput" type="text" placeholder="Buscar vaga ou empresa..." />
+      </div>
+
+      <div class="select-group">
+        <select id="typeSelect">
+          <option value="">Selecione o tipo de vaga</option>
+        </select>
+
+        <select id="locationSelect">
+          <option value="">Selecione a localização</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- MAPA -->
+    <section class="map-section">
+      <div id="map" class="map" aria-label="Mapa com localizações das vagas"></div>
+    </section>
+
+    <!-- LISTA DE VAGAS -->
+    <section class="jobs">
+      <div id="jobsList"></div>
+      <div id="emptyState" class="empty-state" hidden>
+        Nenhuma vaga encontrada com os filtros atuais.
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Modal de detalhes -->
+  <div id="detailsModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel" role="document">
+      <button class="modal__close" type="button" aria-label="Fechar" data-close>✕</button>
+      <div id="modalContent" class="modal__content"></div>
+    </div>
+  </div>
+
+  <!-- Leaflet -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <!-- App -->
+  <script src="assets/js/pesquisa.js" defer></script>
+</body>
+</html>
