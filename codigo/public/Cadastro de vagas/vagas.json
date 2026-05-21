@@ -13,7 +13,9 @@
         "Conhecimento em bancos de dados relacionais",
         "Git e metodologias ágeis"
       ],
-      "data_publicacao": "2026-04-20"
+      "data_publicacao": "2026-04-20",
+      "lat": -19.9167,
+      "lng": -43.9345
     },
     {
       "id": 2,
@@ -29,7 +31,9 @@
         "Meta Ads",
         "Excel avançado"
       ],
-      "data_publicacao": "2026-04-18"
+      "data_publicacao": "2026-04-18",
+      "lat": -23.5505,
+      "lng": -46.6333
     },
     {
       "id": 3,
@@ -45,7 +49,9 @@
         "AWS",
         "Modelagem de dados"
       ],
-      "data_publicacao": "2026-04-22"
+      "data_publicacao": "2026-04-22",
+      "lat": -25.4284,
+      "lng": -49.2733
     }
   ]
 }

@@ -79,9 +79,13 @@ Nosso público alvo são empresas com dificuldade de achar funcionarios e pessoa
 
 ## Proposta de Valor
 
-
+CARLOS HENRIQUE 
 ![proposta de valor](images/Carlos%20Henrique.png)
+
+JOÃO BERNADO 
 ![proposta de valor](images/joãobernado.png)
+
+OLIVIA RODRIGUES
 ![proposta de valor](images/OliviaRodrigues.png)
 
 
@@ -103,9 +107,13 @@ cadastro de usuário, duas telas de login(empresas e trabalhadores), conexão di
 | RNF-002 | comparação de salário com vagas semelhantes      | Alta     |
 | RNF-003 | Mapa interativo de vagas      | Media     |
 
+<<<<<<< HEAD
+
+=======
 ## Projeto de Interface
 
 Artefatos relacionados com a interface e a interacão do usuário na proposta de solução.
+>>>>>>> 53ba4f35efd2270ea1f16968ec84a371603956cf
 
 ### Wireframes
 
@@ -126,7 +134,15 @@ Artefatos relacionados com a interface e a interacão do usuário na proposta de
 ### User Flow
 
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+![User Flow](user_flow.png)
+>>>>>>> dcd5e5eeb5e085c2492c413cd7e5c7ae861aa2be
+
+=======
 ![User Flow](images/userflow.jpeg)
+>>>>>>> 53ba4f35efd2270ea1f16968ec84a371603956cf
 
 
 ### Protótipo Interativo

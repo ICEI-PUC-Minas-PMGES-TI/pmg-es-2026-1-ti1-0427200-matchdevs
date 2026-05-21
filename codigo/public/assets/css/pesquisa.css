@@ -1,33 +1,33 @@
 /* RESET */
-* {
+*{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-body {
+body{
   display: flex;
   justify-content: center;
   padding: 40px 20px;
 }
 
 /* CONTAINER */
-.container {
+.container{
   width: 100%;
   max-width: 720px;
   border: 1px solid #000;
 }
 
 /* HEADER */
-.header {
+.header{
   border-bottom: 1px solid #000;
   padding: 20px;
   display: flex;
   justify-content: center;
 }
 
-.logo {
+.logo{
   border: 1px solid #000;
   padding: 15px 60px;
   font-size: 32px;
@@ -35,12 +35,12 @@ body {
 }
 
 /* FILTROS */
-.filters {
+.filters{
   padding: 25px;
   border-bottom: 1px solid #000;
 }
 
-.search-box {
+.search-box{
   border: 1px solid #000;
   display: flex;
   align-items: center;
@@ -48,12 +48,12 @@ body {
   margin-bottom: 20px;
 }
 
-.search-icon {
+.search-icon{
   font-size: 22px;
   margin-right: 10px;
 }
 
-.search-box input {
+.search-box input{
   border: none;
   outline: none;
   width: 100%;
@@ -61,12 +61,12 @@ body {
   background: transparent;
 }
 
-.select-group {
+.select-group{
   display: flex;
   gap: 20px;
 }
 
-.select-group select {
+.select-group select{
   width: 100%;
   padding: 12px;
   border: 1px solid #000;
@@ -75,126 +75,155 @@ body {
 }
 
 /* MAPA */
-.map-section {
+.map-section{
   border-bottom: 1px solid #000;
 }
 
-.map {
-  position: relative;
+.map{
   height: 320px;
-  overflow: hidden;
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
 }
 
-/* Simulação das ruas */
-.map::before,
-.map::after {
-  content: "";
-  position: absolute;
-  width: 150%;
-  height: 2px;
-  background: #000;
-  opacity: 0.3;
-}
-
-.map::before {
-  top: 50px;
-  left: -50px;
-  transform: rotate(15deg);
-}
-
-.map::after {
-  top: 180px;
-  left: -30px;
-  transform: rotate(-10deg);
-}
-
-.pin {
-  position: absolute;
-  font-size: 40px;
-}
-
-.pin1 {
-  top: 40px;
-  left: 60px;
-}
-
-.pin2 {
-  top: 30px;
-  left: 300px;
-}
-
-.pin3 {
-  top: 40px;
-  right: 100px;
-}
-
-.pin4 {
-  bottom: 80px;
-  left: 120px;
-}
-
-.pin5 {
-  bottom: 60px;
-  right: 220px;
-}
-
-.pin6 {
-  bottom: 40px;
-  right: 80px;
+/* Leaflet dentro do wireframe */
+.leaflet-container{
+  background: #eee;
 }
 
 /* JOBS */
-.jobs {
+.jobs{
   padding: 25px;
 }
 
-.job-card {
+.job-card{
   border: 1px solid #000;
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  gap: 16px;
 }
 
-.job-info h3 {
+.job-card.is-active{
+  outline: 3px solid #000;
+}
+
+.job-info h3{
   font-size: 28px;
   margin-bottom: 10px;
 }
 
-.job-info h4 {
+.job-info h4{
   font-size: 24px;
   margin-bottom: 10px;
   border-bottom: 1px solid #000;
   padding-bottom: 10px;
 }
 
-.job-info p {
+.job-info p{
   font-size: 22px;
 }
 
-.job-card button {
+.job-meta{
+  margin-top: 10px;
+  font-size: 16px;
+  opacity: .85;
+}
+
+.job-card button{
   border: 1px solid #000;
   background: transparent;
   padding: 15px 25px;
   font-size: 20px;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.empty-state{
+  border: 1px dashed #000;
+  padding: 18px;
+  font-size: 18px;
 }
 
 /* BOTÃO FINAL */
-.register-company {
+.register-company{
   display: flex;
   justify-content: center;
   padding: 10px 0 40px;
 }
 
-.register-company button {
+.register-company button{
   border: 1px solid #000;
   background: transparent;
   padding: 18px 50px;
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
+}
+
+/* MODAL */
+.modal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal[aria-hidden="false"]{
+  display: flex;
+}
+
+.modal__backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+}
+
+.modal__panel{
+  position: relative;
+  width: min(680px, calc(100% - 32px));
+  border: 1px solid #000;
+  background: #fff;
+  padding: 18px 18px 22px;
+}
+
+.modal__close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 1px solid #000;
+  background: transparent;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+}
+
+.modal__content h2{
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.modal__content h3{
+  font-size: 20px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #000;
+  padding-bottom: 10px;
+}
+
+.modal__content p{
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+.modal__content ul{
+  margin: 10px 0 0 18px;
+}
+
+@media (max-width: 520px){
+  .select-group{ flex-direction: column; }
+  .job-card{ flex-direction: column; align-items: flex-start; }
+  .job-card button{ width: 100%; }
 }
