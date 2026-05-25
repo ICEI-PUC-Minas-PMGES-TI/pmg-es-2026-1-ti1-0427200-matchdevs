@@ -4,36 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Cadastro de Vagas</title>
+    <title>BH WORKS - Cadastro de Vagas</title>
 </head>
 <body>
     
 <div class="container">
-    <div class="logo">LOGO</div>
+    <div class="logo">BH WORKS</div>
 
     <h2>Cadastro de Vaga</h2>
 
-    <form>
-        <label>Título da Vaga:</label>
-        <input type="text" placeholder="Informe o título da vaga">
+    <form id="vagaForm">
+        <label for="titulo">Título da Vaga:</label>
+        <input type="text" id="titulo" placeholder="Ex: Desenvolvedor Backend" required>
 
-        <label>Empresa:</label>
-        <input type="text" placeholder="Digite o nome da empresa">
+        <label for="empresa">Empresa:</label>
+        <input type="text" id="empresa" placeholder="Ex: BhTech Solutions" required>
 
-        <label>Localização:</label>
-        <input type="text" placeholder="Informe a localização da vaga">
+        <label for="localizacao">Localização:</label>
+        <input type="text" id="localizacao" placeholder="Ex: Belo Horizonte, MG" required>
 
-        <label>Descrição:</label>
-        <textarea placeholder="Descreva as responsabilidades e atividades"></textarea>
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" placeholder="Descreva as responsabilidades e atividades"></textarea>
 
-        <label>Requisitos:</label>
-        <textarea placeholder="Liste os requisitos e qualificações"></textarea>
+        <label for="requisitos">Requisitos:</label>
+        <textarea id="requisitos" placeholder="Liste os requisitos (um por linha)"></textarea>
 
-        <label>Salário:</label>
-        <input type="number" placeholder="Informe o salário">
+        <label for="salario">Salário (R$):</label>
+        <input type="number" id="salario" placeholder="Ex: R$ 8.000,00">
 
-        <label>Tipo de Contrato:</label>
-        <select>
+        <label for="tipoContrato">Tipo de Contrato:</label>
+        <select id="tipoContrato">
             <option value="">Selecione</option>
             <option value="CLT">CLT</option>
             <option value="PJ">PJ</option>
@@ -44,8 +44,83 @@
 
         <button type="submit" class="btn">Cadastrar Vaga</button>
     </form>
+
+    <div id="mensagem" style="margin-top: 20px; padding: 10px; display: none; border-radius: 5px; text-align: center; font-size: 14px;"></div>
 </div>
 
+<script>
+    // URL da API REST (Servidor Node.js na porta 3000)
+    const API_URL = '/vagas';
+
+    function mostrarMensagem(texto, tipo) {
+        const mensagemDiv = document.getElementById('mensagem');
+        mensagemDiv.textContent = texto;
+        mensagemDiv.style.display = 'block';
+        
+        if (tipo === 'sucesso') {
+            mensagemDiv.style.backgroundColor = '#d4edda';
+            mensagemDiv.style.color = '#155724';
+            mensagemDiv.style.border = '1px solid #c3e6cb';
+        } else {
+            mensagemDiv.style.backgroundColor = '#f8d7da';
+            mensagemDiv.style.color = '#721c24';
+            mensagemDiv.style.border = '1px solid #f5c6cb';
+        }
+
+        setTimeout(() => {
+            mensagemDiv.style.display = 'none';
+        }, 5000);
+    }
+
+    document.getElementById('vagaForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const titulo = document.getElementById('titulo').value.trim();
+        const empresa = document.getElementById('empresa').value.trim();
+        const localizacao = document.getElementById('localizacao').value.trim();
+        const descricao = document.getElementById('descricao').value.trim();
+        const requisitosTexto = document.getElementById('requisitos').value.trim();
+        const salario = document.getElementById('salario').value.trim();
+        const tipoContrato = document.getElementById('tipoContrato').value;
+
+        const requisitos = requisitosTexto
+            .split('\n')
+            .map(r => r.trim())
+            .filter(r => r.length > 0);
+
+        const novaVaga = {
+            titulo: titulo,
+            empresa: empresa,
+            localizacao: localizacao,
+            tipo_contrato: tipoContrato,
+            salario: salario,
+            descricao: descricao,
+            requisitos: requisitos,
+            data_publicacao: new Date().toISOString().split('T')[0]
+        };
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(novaVaga)
+            });
+
+            if (response.ok) {
+                const vagaCriada = await response.json();
+                mostrarMensagem(`Sucesso! Vaga "${vagaCriada.titulo}" cadastrada.`, 'sucesso');
+                document.getElementById('vagaForm').reset();
+            } else {
+                throw new Error('Falha ao salvar no servidor.');
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+            mostrarMensagem('Erro: O servidor Node.js (npm start) está rodando?', 'erro');
+        }
+    });
+</script>
     
 </body>
 </html>
