@@ -1,0 +1,34 @@
+{
+  "empresas": [
+    {
+      "id": 1,
+      "nome": "bhtech solutions",
+      "localizacao": "belo horizonte, mg",
+      "setor": "tecnologia",
+      "descricao": "empresa focada em soluções backend.",
+      "email": "contato@bhtech.com",
+      "telefone": "(31) 98888-1111",
+      "website": "https://bhtech.com"
+    },
+    {
+      "id": 2,
+      "nome": "inovaweb agency",
+      "localizacao": "belo horizonte, mg",
+      "setor": "marketing digital",
+      "descricao": "agência especializada em campanhas digitais.",
+      "email": "contato@inovaweb.com",
+      "telefone": "(31) 97777-2222",
+      "website": "https://inovaweb.com"
+    },
+    {
+      "id": 3,
+      "nome": "eco energia brasil",
+      "localizacao": "são paulo, sp",
+      "setor": "energia sustentável",
+      "descricao": "soluções em energia solar para residências e empresas.",
+      "email": "suporte@ecoenergia.com",
+      "telefone": "(11) 96666-3333",
+      "website": "https://ecoenergia.com"
+    }
+  ]
+}
