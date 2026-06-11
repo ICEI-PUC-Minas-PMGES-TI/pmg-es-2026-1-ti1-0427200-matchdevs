@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="perfilempresa.css">
+    <title>Perfil da Empresa - BH Works</title>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-logo">BH<span>WORKS</span></div>
+        <div class="nav-links">
+            <a href="vagas.html">Vagas</a>
+            <a href="#">Empresas</a>
+            <a href="#">Candidatos</a>
+        </div>
+    </nav>
+
+    <main class="main">
+
+        <section class="perfil-card">
+            <div class="perfil-avatar" id="empresa-inicial">T</div>
+            <div class="perfil-info">
+                <h1 id="empresa-nome">Tech Minas</h1>
+                <p id="empresa-setor" class="perfil-setor">Tecnologia</p>
+                <p id="empresa-local" class="perfil-local">📍 Belo Horizonte, MG</p>
+                <p id="empresa-descricao" class="perfil-desc">Desenvolvimento de sistemas web e aplicativos modernos.</p>
+            </div>
+            <button class="btn-editar" onclick="alert('Em breve!')">Editar Perfil</button>
+        </section>
+
+        <div class="grid">
+
+            <section class="secao">
+                <div class="secao-topo">
+                    <h2>Vagas Abertas</h2>
+                    <button class="btn-nova" onclick="alert('Em breve!')">+ Nova vaga</button>
+                </div>
+                <div id="vagas-lista"></div>
+                <p id="vagas-vazio" class="vazio" style="display:none;">Nenhuma vaga publicada ainda.</p>
+            </section>
+
+            <aside>
+
+                <div class="card">
+                    <h3>Contato</h3>
+                    <p id="contato-email">—</p>
+                    <p id="contato-tel">—</p>
+                </div>
+
+                <div class="card">
+                    <h3>Localização</h3>
+                    <div class="mapa-placeholder">
+                        <p>📍 <span id="mapa-cidade">Belo Horizonte, MG</span></p>
+                        <small>Mapa disponível com Google Maps API</small>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p>BH<span>WORKS</span> · <span id="footer-email"></span> · <span id="footer-tel"></span></p>
+    </footer>
+
+    <script src="perfilempresa.js"></script>
+</body>
+</html>
