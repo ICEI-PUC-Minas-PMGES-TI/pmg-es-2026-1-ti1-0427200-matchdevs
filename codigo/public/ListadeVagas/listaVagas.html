@@ -1,198 +1,119 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style-vagas.css">
-    <title>Listagem de Vagas - BH Works</title>
+    <title>Vagas - BH Works</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f4f4f4; padding: 20px; display: flex; justify-content: center; }
+        
+        .main-wrapper { width: 100%; max-width: 800px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        .banner-topo { 
+            width: 100%; height: 200px; 
+            background: linear-gradient(rgba(76,76,214,0.6), rgba(76,76,214,0.6)), url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1200');
+            background-size: cover; background-position: center;
+        }
+
+        .logo-area { padding: 30px 40px 10px; }
+        .logo { font-size: 32px; font-weight: bold; color: #4c4cd6; }
+
+        .conteudo { padding: 20px 40px 40px; }
+        h1 { margin-bottom: 5px; }
+        .sub-header { color: #666; margin-bottom: 20px; }
+        
+        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 20px; }
+        
+        .card-vaga { border: 1px solid #eee; padding: 20px; border-radius: 10px; margin-bottom: 15px; background: #fafafa; }
+        .card-vaga h3 { color: #4c4cd6; margin-bottom: 5px; }
+        .info-linha { margin: 5px 0; font-size: 14px; }
+        .tag-container { margin: 10px 0; }
+        .tag { display: inline-block; background: #e0e0ff; color: #4c4cd6; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-right: 5px; margin-bottom: 5px; }
+        
+        .btn { display: inline-block; padding: 10px 20px; background: #4c4cd6; color: white; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; }
+    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="logo">LOGO</div>
 
-        <h2>Lista de Vagas</h2>
+<div class="main-wrapper">
+    <div class="banner-topo"></div>
 
-        <input type="text" class="pesquisa" id="pesquisa" placeholder="Buscar vaga ou empresa...">
-
-        <div id="vagas-container"></div>
-
-        <div class="footer">
-            <a href="#">Sobre</a>
-            <a href="#">Política de Privacidade</a>
-            <a href="#">Ajuda</a>
-        </div>
+    <div class="logo-area">
+        <div class="logo">BH WORKS</div>
     </div>
 
-    <script>
-        let vagas = [];
-        let favoritos = [];
+    <div class="conteudo">
+        <h1>Vagas Disponíveis</h1>
+        <p class="sub-header">Encontre a sua próxima oportunidade.</p>
+        <input type="text" id="campopesquisa" placeholder="Pesquisar por cargo ou empresa...">
+        <div id="listavagas"></div>
+    </div>
+</div>
 
-        // Carregar dados ao iniciar
-        window.onload = () => {
-            carregarDados();
-            carregarFavoritos();
-        };
-
-        function carregarDados() {
-            fetch('http://localhost:3000/vagas')
-                .then(response => response.json())
-                .then(data => {
-                    vagas = data.vagas || data;
-                    renderizarVagas();
-                })
-                .catch(() => {
-                    fetch('vagas.json')
-                        .then(response => response.json())
-                        .then(data => {
-                            vagas = data.vagas || data;
-                            renderizarVagas();
-                        })
-                        .catch(() => {
-                            vagas = [
-                                {
-                                    "id": 1,
-                                    "titulo": "Desenvolvedor Backend",
-                                    "empresa": "BhTech Solutions",
-                                    "localizacao": "Belo Horizonte, MG",
-                                    "tipo_contrato": "CLT",
-                                    "salario": "R$ 8.000,00",
-                                    "descricao": "Responsável por desenvolver e manter APIs escaláveis.",
-                                    "requisitos": ["Node.js", "Conhecimento em bancos de dados relacionais", "Git e metodologias ágeis"],
-                                    "data_publicacao": "2026-04-20",
-                                    "lat": -19.9167,
-                                    "lng": -43.9345
-                                },
-                                {
-                                    "id": 2,
-                                    "titulo": "Analista de Marketing Digital",
-                                    "empresa": "InovaWeb Agency",
-                                    "localizacao": "São Paulo, SP",
-                                    "tipo_contrato": "PJ",
-                                    "salario": "R$ 6.500,00",
-                                    "descricao": "Planejamento e execução de campanhas digitais focadas em performance.",
-                                    "requisitos": ["SEO", "Google Ads", "Meta Ads", "Excel avançado"],
-                                    "data_publicacao": "2026-04-18",
-                                    "lat": -23.5505,
-                                    "lng": -46.6333
-                                },
-                                {
-                                    "id": 3,
-                                    "titulo": "Engenheiro de Dados",
-                                    "empresa": "DataFlow Corp",
-                                    "localizacao": "Curitiba, PR",
-                                    "tipo_contrato": "CLT",
-                                    "salario": "R$ 12.000,00",
-                                    "descricao": "Construção e otimização de pipelines de dados para análise em larga escala.",
-                                    "requisitos": ["Python", "Spark", "AWS", "Modelagem de dados"],
-                                    "data_publicacao": "2026-04-22",
-                                    "lat": -25.4284,
-                                    "lng": -49.2733
-                                }
-                            ];
-                            renderizarVagas();
-                        });
-                });
+<script>
+    const vagas = [
+        {
+            id: 1,
+            titulo: "Desenvolvedor Backend",
+            empresa: "BhTech Solutions",
+            localizacao: "Belo Horizonte, MG",
+            tipo_contrato: "CLT",
+            salario: "R$ 8.000,00",
+            descricao: "Responsável por desenvolver e manter APIs escaláveis.",
+            requisitos: ["Node.js", "Conhecimento em bancos de dados relacionais", "Git e metodologias ágeis"]
+        },
+        {
+            id: 2,
+            titulo: "Analista de Marketing Digital",
+            empresa: "InovaWeb Agency",
+            localizacao: "São Paulo, SP",
+            tipo_contrato: "PJ",
+            salario: "R$ 6.500,00",
+            descricao: "Planejamento e execução de campanhas digitais focadas em performance.",
+            requisitos: ["SEO", "Google Ads", "Meta Ads", "Excel avançado"]
+        },
+        {
+            id: 3,
+            titulo: "Engenheiro de Dados",
+            empresa: "DataFlow Corp",
+            localizacao: "Curitiba, PR",
+            tipo_contrato: "CLT",
+            salario: "R$ 12.000,00",
+            descricao: "Construção e otimização de pipelines de dados para análise em larga escala.",
+            requisitos: ["Python", "Spark", "AWS", "Modelagem de dados"]
         }
+    ];
 
-        function carregarFavoritos() {
-            const favoritosArmazenados = localStorage.getItem('vagas_favoritas');
-            if (favoritosArmazenados) {
-                favoritos = JSON.parse(favoritosArmazenados);
-            }
-        }
+    const container = document.getElementById('listavagas');
+    const input = document.getElementById('campopesquisa');
 
-        function salvarFavoritos() {
-            localStorage.setItem('vagas_favoritas', JSON.stringify(favoritos));
-        }
+    function render(filtro = "") {
+        container.innerHTML = "";
+        const termo = filtro.toLowerCase();
+        
+        vagas.filter(v => v.titulo.toLowerCase().includes(termo) || v.empresa.toLowerCase().includes(termo)).forEach(v => {
+            const div = document.createElement('div');
+            div.className = 'card-vaga';
+            
+            const tags = v.requisitos.map(r => `<span class="tag">${r}</span>`).join('');
+            
+            div.innerHTML = `
+                <h3>${v.titulo}</h3>
+                <p><strong>${v.empresa}</strong> - ${v.localizacao}</p>
+                <div class="info-linha"><b>Salário:</b> ${v.salario} | <b>Contrato:</b> ${v.tipo_contrato}</div>
+                <p style="font-size: 14px; margin: 10px 0;">${v.descricao}</p>
+                <div class="tag-container">${tags}</div>
+                <button class="btn" onclick="alert('Candidatura para: ${v.titulo}')">Candidatar-se</button>
+            `;
+            container.appendChild(div);
+        });
+    }
 
-        function renderizarVagas(vagasFiltradas = vagas) {
-            const container = document.getElementById('vagas-container');
-            container.innerHTML = '';
+    input.oninput = (e) => render(e.target.value);
+    render();
+</script>
 
-            if (vagasFiltradas.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #999;">Nenhuma vaga encontrada.</p>';
-                return;
-            }
-
-            vagasFiltradas.forEach(vaga => {
-                const isFavorito = favoritos.includes(vaga.id);
-                const vagaHTML = `
-                    <div class="vaga">
-                        <div class="vaga-header">
-                            <div class="vaga-info">
-                                <h3>${vaga.titulo}</h3>
-                                <div class="vaga-empresa">${vaga.empresa}</div>
-                                <div class="vaga-localizacao">📍 ${vaga.localizacao}</div>
-                            </div>
-                        </div>
-
-                        <div class="vaga-detalhes">
-                            <span class="vaga-tipo">${vaga.tipo_contrato}</span>
-                            <span class="vaga-salario">${vaga.salario}</span>
-                        </div>
-
-                        <div class="vaga-descricao">
-                            ${vaga.descricao}
-                        </div>
-
-                        <div class="vaga-requisitos">
-                            <strong>Requisitos:</strong>
-                            <ul>
-                                ${vaga.requisitos.map(req => `<li>${req}</li>`).join('')}
-                            </ul>
-                        </div>
-
-                        <div class="vaga-data">
-                            Publicado em: ${formatarData(vaga.data_publicacao)}
-                        </div>
-
-                        <div class="vaga-actions">
-                            <button class="botao-acesso" onclick="verDetalhes(${vaga.id})">Ver detalhes</button>
-                            <button class="botao-favorito ${isFavorito ? 'favorito' : ''}" onclick="toggleFavorito(${vaga.id})">
-                                ${isFavorito ? '⭐ Salvo' : '☆ Salvar'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                container.innerHTML += vagaHTML;
-            });
-        }
-
-        function formatarData(data) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric', locale: 'pt-BR' };
-            return new Date(data).toLocaleDateString('pt-BR', options);
-        }
-
-        function filtrarVagas() {
-            const termo = document.getElementById('pesquisa').value.toLowerCase();
-            const vagasFiltradas = vagas.filter(vaga => 
-                vaga.titulo.toLowerCase().includes(termo) ||
-                vaga.empresa.toLowerCase().includes(termo) ||
-                vaga.localizacao.toLowerCase().includes(termo)
-            );
-            renderizarVagas(vagasFiltradas);
-        }
-
-        function toggleFavorito(id) {
-            const index = favoritos.indexOf(id);
-            if (index > -1) {
-                favoritos.splice(index, 1);
-            } else {
-                favoritos.push(id);
-            }
-            salvarFavoritos();
-            renderizarVagas();
-        }
-
-        function verDetalhes(id) {
-            const vaga = vagas.find(v => v.id === id);
-            if (vaga) {
-                alert(`Vaga: ${vaga.titulo}\nEmpresa: ${vaga.empresa}\nSalário: ${vaga.salario}\n\nDescrição:\n${vaga.descricao}`);
-            }
-        }
-
-        document.getElementById('pesquisa').addEventListener('keyup', filtrarVagas);
-    </script>
 </body>
 </html>
