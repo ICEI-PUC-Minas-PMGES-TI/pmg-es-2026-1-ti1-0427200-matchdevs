@@ -1,3 +1,4 @@
+let userPosition = null;
 const GOOGLE_MAPS_CONFIG = {
   mapId: 'DEMO_MAP_ID',
   defaultCenter: { lat: -14.2350, lng: -51.9253 },
@@ -18,11 +19,94 @@ const els = {
   search: document.getElementById('searchInput'),
   type: document.getElementById('typeSelect'),
   location: document.getElementById('locationSelect'),
+  useLocationBtn: document.getElementById('useLocationBtn'),
   list: document.getElementById('jobsList'),
   empty: document.getElementById('emptyState'),
   modal: document.getElementById('detailsModal'),
   modalContent: document.getElementById('modalContent'),
 };
+
+function toRadians(value){
+  return value * Math.PI / 180;
+}
+
+function calculateDistanceKm(origin, destination){
+  const earthRadiusKm = 6371;
+
+  const dLat = toRadians(destination.lat - origin.lat);
+  const dLng = toRadians(destination.lng - origin.lng);
+
+  const lat1 = toRadians(origin.lat);
+  const lat2 = toRadians(destination.lat);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1) * Math.cos(lat2) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return earthRadiusKm * c;
+}
+
+function formatDistanceKm(distanceKm){
+  if(!Number.isFinite(distanceKm)){
+    return '—';
+  }
+
+  if(distanceKm < 1){
+    return `${Math.round(distanceKm * 1000)} m`;
+  }
+
+  return `${distanceKm.toFixed(1).replace('.', ',')} km`;
+}
+
+function getJobDistanceLabel(job){
+  if(!userPosition){
+    return 'Distância: permita sua localização';
+  }
+
+  if(!hasCoordinates(job)){
+    return 'Distância: coordenadas da vaga não informadas';
+  }
+
+  const destination = {
+    lat: Number(job.lat),
+    lng: Number(job.lng)
+  };
+
+  const distanceKm = calculateDistanceKm(userPosition, destination);
+
+  return `Distância aproximada: ${formatDistanceKm(distanceKm)}`;
+}
+
+function requestUserLocation(){
+  return new Promise((resolve, reject) => {
+    if(!navigator.geolocation){
+      reject(new Error('Geolocalização não suportada neste navegador.'));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        userPosition = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        resolve(userPosition);
+      },
+      error => {
+        reject(error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000
+      }
+    );
+  });
+}
 
 function normalize(str){
   return (str || '')
@@ -138,17 +222,22 @@ function renderJobs(jobs){
     info.className = 'job-info';
 
     info.innerHTML = `
-      <h3>${escapeHtml(job.titulo)}</h3>
-      <h4>${escapeHtml(job.empresa)}</h4>
-      <p>${escapeHtml(job.localizacao)}</p>
-      <div class="job-meta">
-        ${escapeHtml(job.tipo_contrato || '')}
-        •
-        ${escapeHtml(moneyOrDash(job.salario))}
-        •
-        ${escapeHtml(formatDateBR(job.data_publicacao))}
-      </div>
-    `;
+    <h3>${escapeHtml(job.titulo)}</h3>
+    <h4>${escapeHtml(job.empresa)}</h4>
+    <p>${escapeHtml(job.localizacao)}</p>
+
+    <div class="job-distance">
+      ${escapeHtml(getJobDistanceLabel(job))}
+    </div>
+
+    <div class="job-meta">
+      ${escapeHtml(job.tipo_contrato || '')}
+      •
+      ${escapeHtml(moneyOrDash(job.salario))}
+      •
+      ${escapeHtml(formatDateBR(job.data_publicacao))}
+    </div>
+  `;
 
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -462,6 +551,23 @@ async function loadJobs(){
     els.search.addEventListener('input', debounce(applyFilters, 200));
     els.type.addEventListener('change', applyFilters);
     els.location.addEventListener('change', applyFilters);
+    els.useLocationBtn.addEventListener('click', async () => {
+      try{
+        els.useLocationBtn.textContent = 'Obtendo localização...';
+        els.useLocationBtn.disabled = true;
+
+        await requestUserLocation();
+
+        els.useLocationBtn.textContent = 'Localização ativada';
+
+        renderJobs(filteredJobs);
+      }catch(err){
+        console.warn('Erro ao obter localização:', err);
+
+        els.useLocationBtn.textContent = 'Não foi possível obter sua localização';
+        els.useLocationBtn.disabled = false;
+      }
+    });
 
     applyFilters();
   }catch(err){
