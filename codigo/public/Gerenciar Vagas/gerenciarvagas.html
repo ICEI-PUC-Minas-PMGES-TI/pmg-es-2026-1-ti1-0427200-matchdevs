@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="gerenciarvagas.css">
+    <title>Gerenciar Vagas - BH Works</title>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-logo">BH<span>WORKS</span></div>
+        <div class="nav-links">
+            <a href="vagas.html">Vagas</a>
+            <a href="perfilempresa.html">Perfil</a>
+            <a href="gerenciarvagas.html">Gerenciar Vagas</a>
+        </div>
+    </nav>
+
+    <main class="main">
+        <h1 class="titulo-pagina">Gerenciar Vagas</h1>
+
+        <section class="form-card">
+            <h2 id="form-titulo">Nova Vaga</h2>
+            <form id="form-vaga">
+                <div class="form-grupo">
+                    <label for="vaga-titulo">Título</label>
+                    <input type="text" id="vaga-titulo" required>
+                </div>
+
+                <div class="form-linha">
+                    <div class="form-grupo">
+                        <label for="vaga-tipo">Tipo</label>
+                        <select id="vaga-tipo" required>
+                            <option value="CLT">CLT</option>
+                            <option value="PJ">PJ</option>
+                            <option value="Estágio">Estágio</option>
+                        </select>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="vaga-modelo">Modelo</label>
+                        <select id="vaga-modelo" required>
+                            <option value="Remoto">Remoto</option>
+                            <option value="Híbrido">Híbrido</option>
+                            <option value="Presencial">Presencial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="vaga-salario">Salário</label>
+                    <input type="text" id="vaga-salario" placeholder="R$ 4.000 – R$ 6.000" required>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="vaga-descricao">Descrição</label>
+                    <textarea id="vaga-descricao" rows="3" required></textarea>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="vaga-requisitos">Requisitos (separados por vírgula)</label>
+                    <input type="text" id="vaga-requisitos" placeholder="HTML, CSS, JavaScript" required>
+                </div>
+
+                <div class="form-botoes">
+                    <button type="submit" class="btn-nova" id="btn-salvar">Salvar Vaga</button>
+                    <button type="button" class="btn-cancelar" id="btn-cancelar" style="display:none;">Cancelar</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="secao">
+            <div class="secao-topo">
+                <h2>Vagas Publicadas</h2>
+            </div>
+            <div id="vagas-lista"></div>
+            <p id="vagas-vazio" class="vazio" style="display:none;">Nenhuma vaga publicada ainda.</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>BH<span>WORKS</span> · Painel de Gerenciamento de Vagas</p>
+    </footer>
+
+    <script src="gerenciarvagas.js"></script>
+</body>
+</html>
