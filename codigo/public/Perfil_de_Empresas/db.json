@@ -7,7 +7,10 @@
     "telefone": "(31) 98888-1111",
     "setor": "Tecnologia",
     "localizacao": "Belo Horizonte, MG",
-    "descricao": "Desenvolvimento de sistemas web e aplicativos modernos para empresas de todos os portes."
+    "descricao": "Desenvolvimento de sistemas web e aplicativos modernos para empresas de todos os portes.",
+    "website": "https://techminas.com",
+    "funcionarios": "51-200",
+    "fundacao": "2018"
   },
   "vagas": [
     {
@@ -18,7 +21,8 @@
       "salario": "R$ 4.000 – R$ 6.000",
       "descricao": "Buscamos desenvolvedor front-end com experiência em React e boas práticas de CSS.",
       "requisitos": ["HTML", "CSS", "JavaScript", "React"],
-      "data_publicacao": "2026-05-20"
+      "data_publicacao": "2026-05-20",
+      "ativa": true
     },
     {
       "id": 2,
@@ -28,7 +32,8 @@
       "salario": "R$ 6.000 – R$ 9.000",
       "descricao": "Vaga para desenvolvedor back-end com foco em Node.js e APIs REST.",
       "requisitos": ["Node.js", "SQL", "API REST", "Git"],
-      "data_publicacao": "2026-05-22"
+      "data_publicacao": "2026-05-22",
+      "ativa": true
     },
     {
       "id": 3,
@@ -38,7 +43,8 @@
       "salario": "R$ 4.500 – R$ 7.000",
       "descricao": "Criação de interfaces intuitivas e prototipagem de produtos digitais. Figma obrigatório.",
       "requisitos": ["Figma", "Prototipagem", "Design System", "UX Research"],
-      "data_publicacao": "2026-05-25"
+      "data_publicacao": "2026-05-25",
+      "ativa": true
     }
   ]
 }

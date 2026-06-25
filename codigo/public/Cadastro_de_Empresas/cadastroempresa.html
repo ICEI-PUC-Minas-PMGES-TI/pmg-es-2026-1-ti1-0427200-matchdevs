@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Cadastro de Empresa - BH Works</title>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <div class="logo">BH<span>WORKS</span></div>
+            <div class="form-header">
+                <h1>Cadastre sua empresa</h1>
+                <p class="subtitle">Preencha os dados abaixo e comece a encontrar talentos hoje.</p>
+            </div>
+
+            <div id="form-area">
+                <div id="error-msg" class="error-box" style="display:none;"></div>
+
+                <div class="fields-grid">
+                    <div class="field-group full">
+                        <label>Nome da Empresa</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">🏢</span>
+                            <input type="text" id="nome" placeholder="Digite o nome da empresa">
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label>CNPJ <span class="hint">(será sua senha)</span></label>
+                        <div class="input-wrap">
+                            <span class="input-icon">#</span>
+                            <input type="text" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18">
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label>Telefone</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">📞</span>
+                            <input type="text" id="telefone" placeholder="(31) 00000-0000" maxlength="15">
+                        </div>
+                    </div>
+
+                    <div class="field-group full">
+                        <label>E-mail</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">✉</span>
+                            <input type="email" id="email" placeholder="contato@suaempresa.com">
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label>Setor</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">📊</span>
+                            <select id="setor">
+                                <option value="">Selecione o setor</option>
+                                <option>Tecnologia</option>
+                                <option>Alimentação</option>
+                                <option>Saúde</option>
+                                <option>Educação</option>
+                                <option>Finanças</option>
+                                <option>Varejo</option>
+                                <option>Logística</option>
+                                <option>Construção Civil</option>
+                                <option>Energia</option>
+                                <option>Outro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label>Localização</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">📍</span>
+                            <input type="text" id="localizacao" placeholder="Cidade / Bairro">
+                        </div>
+                    </div>
+
+                    <div class="field-group full">
+                        <label>Descrição da Empresa</label>
+                        <textarea id="descricao" placeholder="Descreva brevemente sua empresa, missão e cultura..."></textarea>
+                    </div>
+                </div>
+
+                <button class="btn" id="btn-cadastrar">
+                    <span>Criar conta da empresa</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+                <p class="link-login">Já tem cadastro? <a href="Loginempresas.html">Entrar</a></p>
+            </div>
+
+            <div id="success-area" style="display:none;">
+                <div class="success-box">
+                    <div class="success-icon">✓</div>
+                    <h2>Cadastro realizado!</h2>
+                    <p>Sua empresa foi cadastrada com sucesso no BH Works.</p>
+                    <p class="success-hint">Use seu <strong>e-mail</strong> e <strong>CNPJ</strong> para acessar.</p>
+                    <a href="Loginempresas.html" class="btn">Ir para o Login</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="overlay">
+                <div class="overlay-badge">Comece agora</div>
+                <h2>Sua empresa no centro dos talentos de BH</h2>
+                <p>Publique vagas, gerencie candidatos e construa sua presença no maior portal de empregos de Belo Horizonte.</p>
+                <div class="stats-row">
+                    <div class="stat"><strong>Gratuito</strong><span>Cadastro</span></div>
+                    <div class="stat"><strong>Rápido</strong><span>2 minutos</span></div>
+                    <div class="stat"><strong>Simples</strong><span>Fácil uso</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="cadastroempresa.js"></script>
+</body>
+</html>

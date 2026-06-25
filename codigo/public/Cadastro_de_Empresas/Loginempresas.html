@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Login - BH Works</title>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <div class="logo">BH<span>WORKS</span></div>
+            <div class="form-header">
+                <h1>Bem-vindo de volta</h1>
+                <p class="subtitle">Acesse com o e-mail e CNPJ cadastrados.</p>
+            </div>
+
+            <div id="error-msg" class="error-box" style="display:none;"></div>
+
+            <div class="field-group">
+                <label>E-mail</label>
+                <div class="input-wrap">
+                    <span class="input-icon">✉</span>
+                    <input type="email" id="email" placeholder="Digite o e-mail cadastrado">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>CNPJ <span class="hint">(sua senha de acesso)</span></label>
+                <div class="input-wrap">
+                    <span class="input-icon">#</span>
+                    <input type="text" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18">
+                </div>
+            </div>
+
+            <button class="btn" id="btn-login">
+                <span>Entrar na plataforma</span>
+                <span class="btn-arrow">→</span>
+            </button>
+
+            <div class="demo-box">
+                <p class="demo-title">🔑 Conta de demonstração</p>
+                <p><strong>E-mail:</strong> contato@techminas.com</p>
+                <p><strong>CNPJ:</strong> 12.345.678/0001-95</p>
+            </div>
+
+            <p class="link-login">Não tem cadastro? <a href="cadastroempresa.html">Cadastrar empresa</a></p>
+        </div>
+
+        <div class="right">
+            <div class="overlay">
+                <div class="overlay-badge">Novo em BH Works</div>
+                <h2>Conectando empresas aos talentos de BH</h2>
+                <p>Publique vagas, encontre candidatos qualificados e gerencie seu processo seletivo em um só lugar.</p>
+                <div class="stats-row">
+                    <div class="stat"><strong>+1.200</strong><span>Empresas</span></div>
+                    <div class="stat"><strong>+8.500</strong><span>Candidatos</span></div>
+                    <div class="stat"><strong>+3.000</strong><span>Vagas</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="loginempresas.js"></script>
+</body>
+</html>
