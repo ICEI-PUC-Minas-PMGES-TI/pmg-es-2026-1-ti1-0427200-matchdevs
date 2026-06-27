@@ -28,10 +28,8 @@ document.getElementById("btn-login").addEventListener("click", async function ()
         }
 
         const empresa = empresas[0];
-        // Salva sessão no localStorage
         localStorage.setItem("empresaLogada", JSON.stringify(empresa));
 
-        // Redireciona para o perfil
         window.location.href = "../Perfil_de_Empresas/perfilempresa.html";
 
     } catch (err) {

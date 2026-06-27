@@ -23,7 +23,6 @@ body {
     min-height: 100vh;
 }
 
-/* ═══ NAV ═══ */
 .nav {
     background: var(--white);
     border-bottom: 1px solid var(--border);
@@ -54,10 +53,8 @@ body {
 }
 .nav-nome { font-size: 14px; font-weight: 600; color: var(--text); }
 
-/* ═══ MAIN ═══ */
 .main { max-width: 1020px; margin: 0 auto 40px; padding: 0 24px; }
 
-/* ═══ COVER BANNER ═══ */
 .cover-wrapper { position: relative; margin-bottom: 0; }
 
 .cover-banner {
@@ -96,7 +93,6 @@ body {
 }
 .btn-cover-edit:hover { background: rgba(255,255,255,0.28); }
 
-/* ═══ PERFIL CARD ═══ */
 .perfil-card {
     background: var(--white);
     border: 1px solid var(--border);
@@ -110,7 +106,6 @@ body {
     position: relative;
 }
 
-/* avatar flutuando sobre o banner */
 .perfil-avatar-wrapper {
     position: relative;
     flex-shrink: 0;
@@ -176,7 +171,6 @@ body {
     margin-bottom: 12px;
 }
 
-/* ═══ TAGS DE CULTURA ═══ */
 .tags-cultura { display: flex; flex-wrap: wrap; gap: 6px; min-height: 22px; }
 
 .tag-cultura {
@@ -189,7 +183,6 @@ body {
     letter-spacing: 0.2px;
 }
 
-/* ═══ BOTÃO DE AÇÕES ═══ */
 .acoes-wrapper { position: relative; flex-shrink: 0; padding-top: 14px; }
 
 .btn-acoes {
@@ -227,7 +220,6 @@ body {
 .menu-danger:hover { background: #fff5f5; }
 .menu-danger strong { color: var(--error); }
 
-/* ═══ MÉTRICAS ═══ */
 .metricas-row {
     background: var(--white);
     border: 1px solid var(--border);
@@ -245,10 +237,8 @@ body {
 .metrica-label { font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; display: block; }
 .metrica-sep { width: 1px; height: 36px; background: var(--border); flex-shrink: 0; }
 
-/* ═══ GRID ═══ */
 .grid { display: grid; grid-template-columns: 1fr 280px; gap: 22px; align-items: start; }
 
-/* ═══ SEÇÃO VAGAS ═══ */
 .secao { display: flex; flex-direction: column; gap: 14px; }
 
 .secao-topo {
@@ -286,7 +276,6 @@ body {
 }
 .btn-nova:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-/* VAGA CARD */
 .vaga-card {
     background: var(--white); border: 1.5px solid var(--border);
     border-radius: var(--radius); padding: 20px 22px;
@@ -343,7 +332,6 @@ body {
 .btn-vaga-excluir { color: var(--error); border-color: #fca5a5; background: #fff5f5; }
 .btn-vaga-excluir:hover { background: var(--error); color: #fff; border-color: var(--error); }
 
-/* ═══ ESTADO VAZIO ═══ */
 .vazio {
     background: var(--white);
     border: 1.5px dashed var(--border);
@@ -357,7 +345,6 @@ body {
 .vazio-sub { font-size: 13px; color: var(--text-muted); line-height: 1.6; max-width: 340px; margin: 0 auto 22px; }
 .vazio-acoes { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
-/* ═══ SIDEBAR ═══ */
 .card {
     background: var(--white); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 20px 22px;
@@ -380,7 +367,6 @@ body {
 .sobre-item span { color: var(--text-muted); }
 .sobre-item strong { color: var(--text); }
 
-/* ═══ BOTÃO MAPA ═══ */
 .mapa-redirect-box {
     display: flex; flex-direction: column; align-items: center;
     gap: 8px; padding: 16px 12px 8px; text-align: center;
@@ -404,7 +390,6 @@ body {
 }
 .btn-mapa-redirect:active { transform: translateY(0); }
 
-/* ═══ FOOTER ═══ */
 .footer {
     background: var(--text); color: #9ca3af;
     text-align: center; padding: 28px 24px;
@@ -413,7 +398,6 @@ body {
 .footer span { color: var(--primary); }
 .footer-copy { font-size: 11px; color: #4b5563; margin-top: 4px; }
 
-/* ═══ MODALS ═══ */
 .modal-overlay {
     position: fixed; inset: 0;
     background: rgba(26,26,46,0.55);
@@ -495,7 +479,6 @@ body {
 }
 .btn-salvar:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(76,76,214,0.35); }
 
-/* ═══ COR LOGO ═══ */
 .logo-preview {
     width: 80px; height: 80px; background: var(--primary); color: #fff;
     border-radius: var(--radius); font-size: 34px; font-weight: 700;
@@ -512,7 +495,6 @@ body {
 .cor-btn:hover { transform: scale(1.15); }
 .cor-btn.selecionada { border-color: var(--text); transform: scale(1.15); }
 
-/* ═══ CAPA MODAL ═══ */
 .capa-preview {
     height: 80px; border-radius: 10px;
     background: linear-gradient(135deg, #4c4cd6, #7c5cfc);
@@ -528,7 +510,6 @@ body {
 .capa-btn:hover { transform: scale(1.05); }
 .capa-btn.selecionada { border-color: var(--text); transform: scale(1.05); }
 
-/* ═══ CULTURA MODAL ═══ */
 .cultura-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 .cultura-tag-btn {
     font-size: 12px; font-weight: 700;
@@ -540,7 +521,6 @@ body {
 .cultura-tag-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
 .cultura-tag-btn.ativa { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-/* ═══ TOAST ═══ */
 .toast {
     position: fixed; bottom: 28px; left: 50%;
     transform: translateX(-50%) translateY(20px);
@@ -554,7 +534,6 @@ body {
 .toast.ativo { opacity: 1; transform: translateX(-50%) translateY(0); }
 .toast.toast-erro { background: var(--error); }
 
-/* ═══ RESPONSIVE ═══ */
 @media (max-width: 760px) {
     .nav { padding: 0 16px; }
     .nav-links { display: none; }
@@ -572,4 +551,47 @@ body {
     .secao-acoes { flex-wrap: wrap; }
     .cover-banner { height: 110px; }
     .capa-opcoes { grid-template-columns: repeat(4,1fr); }
+}
+
+.capa-upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 16px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    margin-top: 4px;
+    text-align: center;
+}
+
+.btn-upload-capa {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+.btn-upload-capa:hover { background: var(--primary-dark); }
+
+.upload-hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.upload-filename {
+    font-size: 0.82rem;
+    color: var(--primary);
+    font-weight: 500;
+    word-break: break-all;
+    margin: 0;
 }

@@ -54,11 +54,11 @@ function renderizarEmpresa(empresa) {
     setTexto("nav-nome",           empresa.nome);
     setTexto("empresa-nome",       empresa.nome);
     setTexto("empresa-setor",      empresa.setor);
-    setTexto("empresa-local",      `📍 ${empresa.localizacao}`);
+    setTexto("empresa-local",      empresa.localizacao);
     setTexto("empresa-descricao",  empresa.descricao);
-    setTexto("empresa-site",       empresa.website ? `🌐 ${empresa.website}` : "🌐 —");
-    setTexto("empresa-funcionarios", empresa.funcionarios ? `👥 ${empresa.funcionarios} funcionários` : "👥 —");
-    setTexto("empresa-fundacao",   empresa.fundacao ? `📅 Fundada em ${empresa.fundacao}` : "📅 —");
+    setTexto("empresa-site",       empresa.website ? empresa.website : "—");
+    setTexto("empresa-funcionarios", empresa.funcionarios ? `${empresa.funcionarios} funcionários` : "—");
+    setTexto("empresa-fundacao",   empresa.fundacao ? `Fundada em ${empresa.fundacao}` : "—");
 
     setTexto("contato-email", empresa.email    || "—");
     setTexto("contato-tel",   empresa.telefone || "—");
@@ -191,12 +191,20 @@ function abrirModal(id) {
     }
 
     if (id === "modal-capa") {
-        const capaAtual = localStorage.getItem("capaBg") || "linear-gradient(135deg,#4c4cd6,#7c5cfc)";
-        document.getElementById("capa-preview").style.background = capaAtual;
-        capaSelecionada = capaAtual;
-        document.querySelectorAll(".capa-btn").forEach(b => {
-            b.classList.toggle("selecionada", b.dataset.bg === capaAtual);
-        });
+        const capaAtual = localStorage.getItem("capaBg") || "";
+        const preview = document.getElementById("capa-preview");
+        if (capaAtual.startsWith("data:image") || capaAtual.startsWith("http")) {
+            preview.style.background = "";
+            preview.style.backgroundImage = `url('${capaAtual}')`;
+            preview.style.backgroundSize = "cover";
+            preview.style.backgroundPosition = "center";
+        } else if (capaAtual) {
+            preview.style.backgroundImage = "";
+            preview.style.background = capaAtual;
+        }
+        capaSelecionada = capaAtual || null;
+        const fname = document.getElementById("upload-filename");
+        if (fname) fname.textContent = "";
     }
 
     if (id === "modal-cultura") {
@@ -254,7 +262,7 @@ async function salvarVaga() {
         fecharModal("modal-vaga");
         limparFormVaga();
         await carregarVagas();
-        mostrarToast("Vaga publicada com sucesso! 🎉");
+        mostrarToast("Vaga publicada com sucesso!");
     } catch {
         mostrarToast("Erro ao publicar a vaga.", "erro");
     }
@@ -308,7 +316,7 @@ async function editarVaga(id) {
                 });
                 fecharModal("modal-vaga");
                 await carregarVagas();
-                mostrarToast("Vaga atualizada! ✅");
+                mostrarToast("Vaga atualizada!");
                 btn.textContent = "Publicar Vaga";
                 btn.onclick = salvarVaga;
             } catch {
@@ -343,7 +351,7 @@ async function salvarEdicao() {
         empresaAtual = { ...empresaAtual, ...dados };
         renderizarEmpresa(empresaAtual);
         fecharModal("modal-editar");
-        mostrarToast("Perfil atualizado com sucesso! ✅");
+        mostrarToast("Perfil atualizado com sucesso!");
     } catch {
         mostrarToast("Erro ao salvar alterações.", "erro");
     }
@@ -364,7 +372,7 @@ async function salvarContato() {
         empresaAtual = { ...empresaAtual, ...dados };
         renderizarEmpresa(empresaAtual);
         fecharModal("modal-contato");
-        mostrarToast("Contato atualizado! ✅");
+        mostrarToast("Contato atualizado!");
     } catch {
         mostrarToast("Erro ao salvar contato.", "erro");
     }
@@ -383,7 +391,7 @@ function salvarCor() {
         aplicarCor(corSelecionada);
     }
     fecharModal("modal-foto");
-    mostrarToast("Logo atualizada! 🎨");
+    mostrarToast("Logo atualizada!");
 }
 
 function aplicarCor(cor) {
@@ -391,9 +399,24 @@ function aplicarCor(cor) {
 }
 
 function renderizarCapaOpcoes() {
-    document.querySelectorAll(".capa-btn").forEach(btn => {
-        btn.style.background = btn.dataset.bg;
-    });
+    // Nada a renderizar — agora a capa é via upload de imagem
+}
+
+function previewCapaImagem(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        capaSelecionada = e.target.result;
+        const preview = document.getElementById("capa-preview");
+        preview.style.background = "";
+        preview.style.backgroundImage = `url('${e.target.result}')`;
+        preview.style.backgroundSize = "cover";
+        preview.style.backgroundPosition = "center";
+        const fname = document.getElementById("upload-filename");
+        if (fname) fname.textContent = file.name;
+    };
+    reader.readAsDataURL(file);
 }
 
 function definirCapa(btn) {
@@ -409,12 +432,21 @@ function salvarCapa() {
         aplicarCapaBanner(capaSelecionada);
     }
     fecharModal("modal-capa");
-    mostrarToast("Capa atualizada! 🎨");
+    mostrarToast("Capa atualizada!");
 }
 
 function aplicarCapaBanner(bg) {
     const banner = document.getElementById("cover-banner");
-    if (banner) banner.style.background = bg;
+    if (!banner) return;
+    if (bg.startsWith("data:image") || bg.startsWith("http") || bg.startsWith("blob:")) {
+        banner.style.background = "";
+        banner.style.backgroundImage = `url('${bg}')`;
+        banner.style.backgroundSize = "cover";
+        banner.style.backgroundPosition = "center";
+    } else {
+        banner.style.backgroundImage = "";
+        banner.style.background = bg;
+    }
 }
 
 function renderizarTagsCulturaOpcoes() {
@@ -447,7 +479,7 @@ function salvarCultura() {
     localStorage.setItem("tagsCultura", JSON.stringify(ativas));
     renderizarTagsNoPerfil(ativas);
     fecharModal("modal-cultura");
-    mostrarToast("Tags de cultura atualizadas! 🏷️");
+    mostrarToast("Tags de cultura atualizadas!");
 }
 
 function renderizarTagsNoPerfil(tags) {

@@ -39,7 +39,6 @@ body {
     box-shadow: var(--shadow);
 }
 
-/* ---- LEFT PANEL ---- */
 .left {
     width: 46%;
     padding: 48px 52px;
@@ -74,7 +73,6 @@ h1 {
     line-height: 1.6;
 }
 
-/* ---- FIELDS ---- */
 .fields-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -163,7 +161,6 @@ select.invalido {
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.10);
 }
 
-/* ---- BUTTON ---- */
 .btn {
     width: 100%;
     padding: 15px 20px;
@@ -196,7 +193,6 @@ select.invalido {
 
 .btn:hover .btn-arrow { transform: translateX(4px); }
 
-/* ---- DEMO BOX ---- */
 .demo-box {
     margin-top: 20px;
     background: var(--primary-light);
@@ -215,7 +211,6 @@ select.invalido {
 
 .demo-box p { margin-bottom: 3px; line-height: 1.6; }
 
-/* ---- LINKS ---- */
 .link-login {
     text-align: center;
     margin-top: 18px;
@@ -231,7 +226,6 @@ select.invalido {
 
 .link-login a:hover { text-decoration: underline; }
 
-/* ---- MESSAGES ---- */
 .error-box {
     background: #fff5f5;
     border: 1.5px solid #fca5a5;
@@ -247,7 +241,6 @@ select.invalido {
 
 .error-box::before { content: "⚠"; font-size: 15px; }
 
-/* ---- SUCCESS ---- */
 .success-box {
     text-align: center;
     padding: 30px 0;
@@ -286,7 +279,6 @@ select.invalido {
     margin-bottom: 28px !important;
 }
 
-/* ---- RIGHT PANEL ---- */
 .right {
     width: 54%;
     background:
@@ -381,7 +373,6 @@ select.invalido {
     margin-top: 2px;
 }
 
-/* ---- RESPONSIVE ---- */
 @media (max-width: 980px) {
     .container { flex-direction: column; }
     .left, .right { width: 100%; }

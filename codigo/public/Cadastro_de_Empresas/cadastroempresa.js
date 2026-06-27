@@ -66,7 +66,6 @@ document.getElementById("btn-cadastrar").addEventListener("click", async functio
     if (!localizacao)       return mostrarErro("Informe a localização.", "localizacao");
 
     try {
-        // Verifica duplicidade
         const checkRes = await fetch(`${API_URL}/empresas?email=${encodeURIComponent(email)}`);
         const existentes = await checkRes.json();
         const cnpjLimpo = cnpj.replace(/\D/g, "");
@@ -76,7 +75,6 @@ document.getElementById("btn-cadastrar").addEventListener("click", async functio
             return mostrarErro("Já existe uma empresa cadastrada com este e-mail ou CNPJ.");
         }
 
-        // Cadastra no JSON Server
         const novaEmpresa = {
             nome, cnpj: cnpjLimpo, email, telefone, setor, localizacao, descricao
         };
@@ -90,7 +88,6 @@ document.getElementById("btn-cadastrar").addEventListener("click", async functio
         if (!postRes.ok) throw new Error("Erro ao salvar.");
 
         const empresaSalva = await postRes.json();
-        // Já salva sessão para o usuário poder usar a conta criada
         localStorage.setItem("empresaLogada", JSON.stringify(empresaSalva));
 
         document.getElementById("form-area").style.display    = "none";
