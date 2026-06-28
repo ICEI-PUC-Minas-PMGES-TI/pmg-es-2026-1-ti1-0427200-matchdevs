@@ -1,0 +1,106 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "login": "admin",
+      "senha": "123",
+      "nome": "Administrador do Sistema",
+      "email": "admin@abc.com"
+    },
+    {
+      "id": 2,
+      "login": "user",
+      "senha": "123",
+      "nome": "Usuario Comum",
+      "email": "user@abc.com"
+    },
+    {
+      "id": 3,
+      "login": "rommel",
+      "senha": "123",
+      "nome": "Rommel",
+      "email": "rommel@gmail.com"
+    }
+  ],
+
+  "empresas": [
+    {
+      "id": 1,
+      "nome": "BhTech Solutions",
+      "localizacao": "Belo Horizonte, MG",
+      "setor": "Tecnologia",
+      "descricao": "Empresa focada em soluções backend."
+    },
+    {
+      "id": 2,
+      "nome": "InovaWeb Agency",
+      "localizacao": "Belo Horizonte, MG",
+      "setor": "Marketing Digital",
+      "descricao": "Agência especializada em campanhas digitais."
+    },
+    {
+      "id": 3,
+      "nome": "Sabor Mineiro",
+      "cnpj": "91031284591233",
+      "email": "atendimento@sabormineiro.com",
+      "telefone": "(31) 97777-2222",
+      "setor": "Alimentação",
+      "localizacao": "Contagem, MG"
+    },
+    {
+      "id": 4,
+      "nome": "Eco Energia Brasil",
+      "cnpj": "78935412334782",
+      "email": "suporte@ecoenergia.com",
+      "telefone": "(11) 96666-3333",
+      "setor": "Energia Sustentável",
+      "localizacao": "São Paulo, SP"
+    }
+  ],
+
+  "vagas": [
+    {
+      "id": 1,
+      "titulo": "Desenvolvedor Front-end",
+      "tipo": "CLT",
+      "modelo": "Híbrido",
+      "salario": "R$ 4.000 – R$ 6.000",
+      "ativa": true
+    },
+    {
+      "id": 2,
+      "titulo": "Desenvolvedor Back-end",
+      "tipo": "PJ",
+      "modelo": "Remoto",
+      "salario": "R$ 6.000 – R$ 9.000",
+      "ativa": true
+    },
+    {
+      "id": 3,
+      "titulo": "Designer UI/UX",
+      "tipo": "PJ",
+      "modelo": "Remoto",
+      "salario": "R$ 4.500 – R$ 7.000",
+      "ativa": true
+    }
+  ],
+
+  "candidatos": [
+    {
+      "id": "A",
+      "nome": "Ana Carolina Silva",
+      "cidade": "São Paulo, SP",
+      "compatibilidade": 85,
+      "experiencia": "5 anos e 3 meses",
+      "habilidades": ["Marketing Digital", "SEO", "Google Ads"]
+    },
+    {
+      "id": "B",
+      "nome": "Lucas Fernandes",
+      "cidade": "São Paulo, SP",
+      "compatibilidade": 72,
+      "experiencia": "3 anos e 8 meses",
+      "habilidades": ["Marketing Digital", "SEO", "Redes Sociais"]
+    }
+  ]
+}

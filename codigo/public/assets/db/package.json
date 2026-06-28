@@ -1,9 +1,8 @@
 {
-  "name": "perfil-de-usuario",
+  "name": "json-server-api",
   "version": "1.0.0",
-  "description": "BH Works - Perfil de Usuários",
-  "main": "perfilusuario.html",
-
+  "description": "API fake com JSON Server",
+  "main": "index.js",
   "scripts": {
     "start": "json-server --watch db.json --port 3000"
   },
