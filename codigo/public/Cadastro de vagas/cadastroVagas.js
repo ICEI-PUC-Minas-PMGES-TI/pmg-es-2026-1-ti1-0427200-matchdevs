@@ -1,77 +1,98 @@
-// URL da API REST (Aponta para o servidor Node.js na porta 3000)
 const API_URL = '/vagas';
+const LOCAL_JOBS_KEY = 'vagas_bhworks_local';
 
-// Função para mostrar feedback visual ao usuário
-function mostrarMensagem(texto, tipo) {
-    const mensagemDiv = document.getElementById('mensagem');
-    mensagemDiv.textContent = texto;
-    mensagemDiv.style.display = 'block';
-    
-    if (tipo === 'sucesso') {
-        mensagemDiv.style.backgroundColor = '#d4edda';
-        mensagemDiv.style.color = '#155724';
-        mensagemDiv.style.border = '1px solid #c3e6cb';
-    } else {
-        mensagemDiv.style.backgroundColor = '#f8d7da';
-        mensagemDiv.style.color = '#721c24';
-        mensagemDiv.style.border = '1px solid #f5c6cb';
-    }
+const empresaLogada = JSON.parse(localStorage.getItem('empresaLogada') || 'null');
+const areaFormulario = document.getElementById('area-formulario');
+const areaBloqueio = document.getElementById('area-bloqueio');
+const form = document.getElementById('vagaForm');
+const mensagem = document.getElementById('mensagem');
 
-    setTimeout(() => {
-        mensagemDiv.style.display = 'none';
-    }, 5000);
+function mostrarMensagem(texto, tipo = 'erro') {
+    mensagem.textContent = texto;
+    mensagem.className = `mensagem ${tipo}`;
 }
 
-// Manipulação do Formulário
-document.getElementById('vagaForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+function getValor(id) {
+    return document.getElementById(id).value.trim();
+}
 
-    // Captura de dados
-    const titulo = document.getElementById('titulo').value.trim();
-    const empresa = document.getElementById('empresa').value.trim();
-    const localizacao = document.getElementById('localizacao').value.trim();
-    const descricao = document.getElementById('descricao').value.trim();
-    const requisitosTexto = document.getElementById('requisitos').value.trim();
-    const salario = document.getElementById('salario').value.trim();
-    const tipoContrato = document.getElementById('tipoContrato').value;
+function salvarVagaLocal(vaga) {
+    const vagasLocais = JSON.parse(localStorage.getItem(LOCAL_JOBS_KEY) || '[]');
+    const vagaLocal = { ...vaga, id: Date.now() };
+    vagasLocais.push(vagaLocal);
+    localStorage.setItem(LOCAL_JOBS_KEY, JSON.stringify(vagasLocais));
+    return vagaLocal;
+}
 
-    
-    const requisitos = requisitosTexto
+function configurarAcessoEmpresa() {
+    if (!empresaLogada) {
+        areaFormulario.style.display = 'none';
+        areaBloqueio.style.display = 'flex';
+        return;
+    }
+
+    const nomeEmpresa = empresaLogada.nome || empresaLogada.razaoSocial || 'Empresa logada';
+    const localizacaoEmpresa = empresaLogada.localizacao || '';
+
+    document.getElementById('empresa-logada-nome').textContent = nomeEmpresa;
+    document.getElementById('empresa').value = nomeEmpresa;
+
+    if (localizacaoEmpresa) {
+        document.getElementById('localizacao').value = localizacaoEmpresa;
+    }
+}
+
+async function salvarVaga(vaga) {
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(vaga)
+        });
+
+        if (!response.ok) throw new Error('Falha ao salvar no servidor.');
+        return await response.json();
+    } catch (error) {
+        mostrarMensagem('Vaga salva em modo local. Para gravar no servidor, rode o JSON Server.', 'aviso');
+        return salvarVagaLocal(vaga);
+    }
+}
+
+form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    if (!empresaLogada) {
+        mostrarMensagem('Faça login como empresa para cadastrar vagas.');
+        return;
+    }
+
+    const requisitos = getValor('requisitos')
         .split('\n')
-        .map(r => r.trim())
-        .filter(r => r.length > 0);
+        .map(item => item.trim())
+        .filter(item => item.length > 0);
 
-    
     const novaVaga = {
-        titulo: titulo,
-        empresa: empresa,
-        localizacao: localizacao,
-        tipo_contrato: tipoContrato,
-        salario: salario,
-        descricao: descricao,
-        requisitos: requisitos,
+        titulo: getValor('titulo'),
+        empresa: getValor('empresa'),
+        empresaId: empresaLogada.id || null,
+        localizacao: getValor('localizacao'),
+        tipo_contrato: document.getElementById('tipoContrato').value,
+        salario: getValor('salario'),
+        descricao: getValor('descricao'),
+        requisitos,
         data_publicacao: new Date().toISOString().split('T')[0]
     };
 
-    try {
-        // Envio para o servidor via API REST
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(novaVaga)
-        });
-
-        if (response.ok) {
-            const vagaCriada = await response.json();
-            mostrarMensagem(`Sucesso! Vaga "${vagaCriada.titulo}" cadastrada.`, 'sucesso');
-            document.getElementById('vagaForm').reset();
-        } else {
-            throw new Error('Falha ao salvar no servidor.');
-        }
-    } catch (error) {
-        console.error('Erro:', error);
-        mostrarMensagem('Erro: O servidor Node.js (npm start) está rodando?', 'erro');
+    if (!novaVaga.titulo || !novaVaga.empresa || !novaVaga.localizacao || !novaVaga.tipo_contrato || !novaVaga.descricao || requisitos.length === 0) {
+        mostrarMensagem('Preencha todos os campos obrigatórios.');
+        return;
     }
+
+    const vagaCriada = await salvarVaga(novaVaga);
+
+    form.reset();
+    configurarAcessoEmpresa();
+    mostrarMensagem(`Vaga "${vagaCriada.titulo}" cadastrada com sucesso.`, 'sucesso');
 });
+
+document.addEventListener('DOMContentLoaded', configurarAcessoEmpresa);

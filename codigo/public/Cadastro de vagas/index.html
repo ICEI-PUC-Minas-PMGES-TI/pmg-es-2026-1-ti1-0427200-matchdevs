@@ -4,52 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
-    <title>BH WORKS - Cadastro de Vagas</title>
+    <title>Cadastro de Vaga - BH Works</title>
 </head>
 <body>
-    
-<div class="container">
-    <div class="logo">BH WORKS</div>
+    <main class="main-wrapper">
+        <section class="form-area" id="area-formulario">
+            <div class="logo">BH WORKS</div>
 
-    <h2>Cadastro de Vaga</h2>
+            <h1>Cadastro de Vaga</h1>
+            <p class="sub-header">Publique uma oportunidade vinculada à empresa logada na plataforma.</p>
 
-    <form id="vagaForm">
-        <label for="titulo">Título da Vaga:</label>
-        <input type="text" id="titulo" placeholder="Ex: Desenvolvedor Backend" required>
+            <div id="empresa-box" class="empresa-box">
+                <span>Empresa logada</span>
+                <strong id="empresa-logada-nome">Carregando...</strong>
+            </div>
 
-        <label for="empresa">Empresa:</label>
-        <input type="text" id="empresa" placeholder="Ex: BhTech Solutions" required>
+            <div id="mensagem" class="mensagem" aria-live="polite"></div>
 
-        <label for="localizacao">Localização:</label>
-        <input type="text" id="localizacao" placeholder="Ex: Belo Horizonte, MG" required>
+            <form id="vagaForm">
+                <div class="fields-grid">
+                    <div class="field full">
+                        <label for="titulo">Título da vaga</label>
+                        <input type="text" id="titulo" placeholder="Ex: Desenvolvedor Backend" required>
+                    </div>
 
-        <label for="descricao">Descrição:</label>
-        <textarea id="descricao" placeholder="Descreva as responsabilidades e atividades"></textarea>
+                    <div class="field">
+                        <label for="empresa">Empresa</label>
+                        <input type="text" id="empresa" placeholder="Empresa logada" readonly required>
+                    </div>
 
-        <label for="requisitos">Requisitos:</label>
-        <textarea id="requisitos" placeholder="Liste os requisitos (um por linha)"></textarea>
+                    <div class="field">
+                        <label for="localizacao">Localização</label>
+                        <input type="text" id="localizacao" placeholder="Ex: Belo Horizonte, MG" required>
+                    </div>
 
-        <label for="salario">Salário (R$):</label>
-        <input type="text" id="salario" placeholder="Ex: R$ 8.000,00">
+                    <div class="field">
+                        <label for="salario">Salário</label>
+                        <input type="text" id="salario" placeholder="Ex: R$ 8.000,00">
+                    </div>
 
-        <label for="tipoContrato">Tipo de Contrato:</label>
-        <select id="tipoContrato">
-            <option value="">Selecione</option>
-            <option value="CLT">CLT</option>
-            <option value="PJ">PJ</option>
-            <option value="Temporário">Temporário</option>
-            <option value="Estágio">Estágio</option>
-            <option value="Aprendiz">Aprendiz</option>
-        </select>
+                    <div class="field">
+                        <label for="tipoContrato">Tipo de contrato</label>
+                        <select id="tipoContrato" required>
+                            <option value="">Selecione</option>
+                            <option value="CLT">CLT</option>
+                            <option value="PJ">PJ</option>
+                            <option value="Temporário">Temporário</option>
+                            <option value="Estágio">Estágio</option>
+                            <option value="Aprendiz">Aprendiz</option>
+                        </select>
+                    </div>
 
-        <button type="submit" class="btn">Cadastrar Vaga</button>
-    </form>
+                    <div class="field full">
+                        <label for="descricao">Descrição</label>
+                        <textarea id="descricao" placeholder="Descreva as responsabilidades e atividades" required></textarea>
+                    </div>
 
-    <div id="mensagem" style="margin-top: 20px; padding: 10px; display: none; border-radius: 5px; text-align: center; font-size: 14px;"></div>
-</div>
+                    <div class="field full">
+                        <label for="requisitos">Requisitos <span>um por linha</span></label>
+                        <textarea id="requisitos" placeholder="Node.js&#10;Banco de dados&#10;Git e metodologias ágeis" required></textarea>
+                    </div>
+                </div>
 
+                <div class="botoes-container">
+                    <button type="submit" class="btn">Cadastrar vaga</button>
+                    <a class="btn btn-secundario" href="../index.html">Voltar para home</a>
+                </div>
+            </form>
+        </section>
 
-<script src="cadastroVagas.js"></script>
-    
+        <section class="bloqueio-area" id="area-bloqueio" style="display:none;">
+            <div class="logo">BH WORKS</div>
+            <h1>Acesso de empresa necessário</h1>
+            <p class="sub-header">O cadastro de vagas aparece apenas para empresas cadastradas e logadas.</p>
+            <div class="botoes-container">
+                <a class="btn" href="../Cadastro_de_Empresas/Loginempresas.html">Login de empresa</a>
+                <a class="btn btn-secundario" href="../Cadastro_de_Empresas/cadastroempresa.html">Cadastrar empresa</a>
+            </div>
+        </section>
+
+        <section class="banner-area">
+            <div class="banner-topo">
+                <a class="banner-link" href="../index.html">Home</a>
+                <a class="banner-link" href="../ListadeVagas/listaVagas.html">Vagas</a>
+                <a class="banner-link" href="../listadeempresas/index.html">Empresas</a>
+            </div>
+
+            <div class="banner-conteudo">
+                <h2>Publique oportunidades com a cara da sua empresa.</h2>
+                <p>Cadastre vagas com descrição, requisitos, salário e contrato para atrair candidatos mais alinhados.</p>
+                <div class="tag-container">
+                    <span class="tag">Empresas</span>
+                    <span class="tag">Vagas</span>
+                    <span class="tag">Contratação</span>
+                    <span class="tag">BH Works</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="cadastroVagas.js"></script>
 </body>
 </html>

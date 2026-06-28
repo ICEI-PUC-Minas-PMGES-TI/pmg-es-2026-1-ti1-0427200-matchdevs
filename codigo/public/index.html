@@ -1,78 +1,549 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="./assets/css/styles.css" />
-    <script src="./assets/js/login.js"></script>
-  </head>
-  <body>
-    <header>
-      <div class="banner">
-        <img src="./assets/images/banner_ti.png" alt="" />
-      </div>
-      <div class="barra-info">
-        <nav class="menu">
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">Sobre nós</a></li>
-          </ul>
-        </nav>
-        <div class="dados-usuario">
-          <span id="userInfo"></span>
-        </div>
-      </div>
-    </header>
-    <main>
-        <h3>Boas vindas</h3>
-        <p>Sejam bem-vindos à home-page do projeto de TI 1 - Trabalho
-        Interdisciplinar</p>
-        <p>Esse conteúdo que você está lendo foi criado para exemplificar como
-        criar o seu site integrado com o ambiente de login e o back end que
-        utiliza o JSON Server.</p>
-        <p>Ao criar o seu site, você deve adaptar esse código para sua neessidade ou começar do zero, excluindo todo esse conteúdo.
-        </p>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BH Works - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-        <h3>Arquivos do site (Front End)</h3>
-        <p>Para montar seu site, edite os arquivos existentes e crie novos arquivos na pasta <code>public</code> que mantem todos os arquivos da parte de Front End do site, a interface que é vista pelo usuário no navegador.</p>
+        body {
+            background: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            color: #333;
+        }
 
-        <p>Nesta pasta <code>public</code>, sugerimos que você organize os arquivos do seu site da seguinte maneira:</p>
-        <ul>
-            <li><strong>Pasta <code>assets</code></strong>: os arquivos de formatação (CSS), os scripts (JS), as imagens utilizadas no site (JPG, PNG, GIF, SVG, etc), fontes (TTF) e outros arquivos gerais utilizados por todo o site.</li>
-            <li><strong>Pasta <code>modulos</code></strong>: os arquivos utilizados na implementação das funcionalidades do site. Separe uma sub-pasta para cada novo módulo ou funcionalidade. Pode também ser utilizado para dividir o trabalho de cada membro do grupo.</li>
-            <li><strong>Arquivo <code>index.html</code></strong>: arquivo que representa a "home page" do site.</li>
-        </ul>
+        .main-wrapper {
+            width: 100%;
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        }
 
-        <h3>Módulo de Login</h3>
-        <p>O módulo de login de usuário traz uma funcionalidade completa de registro de usuários e validação de login e senha.</p>
-        <h4>Integração do site com módulo de Login</h4>
-        <p>Para utilizar o módulo de login, basta incluir o script na sua página colocando a seguinte tag no HEAD</p>
-        <pre>&lt;script src="./assets/js/login.js"&gt&lt;script&gt;</pre>
-        <p>Ao incluir o script de login na sua página, caso o usuário ainda não tenha efetuado login, ao acessar a home-page do site, o navegador será direcionado para o formulário de <strong>Identificação de Usuário</strong>. Se o usuário informar corretamente o login e a senha, o navegador será direcionado para a Home-Page.</p>
-        <h4>Sessão do usuário logado</h4>
-        <p>Assim que o usuário se identifica e acessa a parte privada do site, o módulo de login cria uma chave do sessionStorage do navegador com o título <strong>usuarioCorrente</strong> e cujo conteúdo é um objeto com os atributos: id, nome, login, senha e email. </p>
-        <h4>Base de dados de usuários</h4>
-        <p>Inicialmente o módulo de login é configurado com dois usuários: </p>
-        <ul>
-            <li>admin - Senha: 123</li>
-            <li>user - Senha: 123</li>
-        </ul>
+        .banner-topo {
+            width: 100%;
+            min-height: 260px;
+            background: linear-gradient(rgba(76, 76, 214, 0.66), rgba(76, 76, 214, 0.56)), url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1200');
+            background-size: cover;
+            background-position: center;
+            padding: 28px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: white;
+        }
 
-        <h3>Servidor Web e API baseada no JSON Server (Back end)</h3>
-        <p>O ambiente de trabalho disponibilizado para suportar o Trabalho Interdisciplinar 1 é baseado no Node.js. A aplicação de back end utiliza o módulo JSON Server para criar um Servidor Web que prove duas estruturas separadas:
-        <ul>
-            <li><strong>Arquivos estáticos (Pasta <code>public</code>)</strong>: da acesso aos arquivos utilizados no front end (HTML, CSS e JavaScript).</li>
-            <li><strong>API RESTful (pasta <code>db</code>)</strong>: uma interface para acesso aos dados definidos no arquivo db.json.</li>
-        </ul></p>
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
 
-        <h4>Arquitetura do site</h4>
-        <p>A imagem que se segue apresenta a arquitetura desse ambiente, mostrando as duas refletindo as pastas desse ambiente.</p>
-        <p><img class="img-fluid d-block w-75 m-auto" src="./assets/images/servidor.png" alt=""></p>
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 0;
+        }
 
-        <h4>Arquivo db.json</h4>
-        <p>O arquivo JSON utilizado para definição das estruturas dos dados providos pela aplicação é localizado na pasta db e tem um formato como o mostrado no exemplo da figura a seguir. Esse arquivo define uma estrutura hipotética de contatos que descreve itens com os seguintes atributos: <code>id</code>, <code>nome</code> e <code>cidade</code>. para o JSON Server, é fundamental que toda estrutura tenha um atributo de identificador de nome <code>id</code>.</p>
-        <p><img class="img-fluid d-block w-50 m-auto" src="./assets/images/arquivo_json.png" alt=""></p>
-    </main>
-  </body>
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 9px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.38);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.12);
+            transition: all 0.3s ease;
+        }
+
+        .menu a:hover {
+            background: white;
+            color: #4c4cd6;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            max-width: 680px;
+            padding-top: 50px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            line-height: 1.15;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 17px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .conteudo {
+            padding: 34px 40px 40px;
+        }
+
+        .acoes-principais {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #4c4cd6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #3a3ab8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 76, 214, 0.3);
+        }
+
+        .btn-secundario {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #d0d0d0;
+        }
+
+        .btn-secundario:hover {
+            background: #e8e8e8;
+            border-color: #4c4cd6;
+            color: #4c4cd6;
+        }
+
+        .secao {
+            margin-top: 28px;
+        }
+
+        .area-login {
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 10px;
+            background: #fafafa;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 18px;
+            align-items: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .area-login:hover {
+            box-shadow: 0 4px 12px rgba(76, 76, 214, 0.15);
+            border-color: #d0d0ff;
+            background: #fcfcff;
+        }
+
+        .area-login h2 {
+            color: #4c4cd6;
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .area-login p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .login-botoes {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .secao h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .secao > p {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 18px;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 10px;
+            background: #fafafa;
+            transition: all 0.3s ease;
+            min-height: 190px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .empresa-only {
+            display: none;
+        }
+
+        .empresa-only.visivel {
+            display: flex;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(76, 76, 214, 0.15);
+            border-color: #d0d0ff;
+            background: #fcfcff;
+            transform: translateY(-2px);
+        }
+
+        .card h3 {
+            color: #4c4cd6;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.5;
+            font-size: 14px;
+            margin-bottom: 14px;
+            flex: 1;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e0e0ff;
+            color: #4c4cd6;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .link-card {
+            color: #4c4cd6;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .link-card:hover {
+            color: #3a3ab8;
+        }
+
+        .sobre-projeto {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 22px;
+            background: #fafafa;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .sobre-projeto p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .metricas {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .metrica {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .metrica strong {
+            display: block;
+            color: #4c4cd6;
+            font-size: 26px;
+            margin-bottom: 4px;
+        }
+
+        .metrica span {
+            color: #666;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .rodape {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #777;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card,
+        .area-login,
+        .sobre-projeto {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @media (max-width: 900px) {
+            .grid-cards,
+            .area-login,
+            .sobre-projeto {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .banner-topo {
+                padding: 22px 20px;
+                min-height: 320px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .menu {
+                justify-content: flex-start;
+            }
+
+            .hero {
+                padding-top: 34px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .conteudo {
+                padding: 24px 20px 30px;
+            }
+
+            .acoes-principais,
+            .login-botoes,
+            .metricas {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <header class="banner-topo">
+            <div class="topbar">
+                <div class="logo">BH WORKS</div>
+                <nav class="menu">
+                    <a href="ListadeVagas/listaVagas.html">Vagas</a>
+                    <a href="listadeempresas/index.html">Empresas</a>
+                    <a href="pesquisa.html">Mapa</a>
+                    <a href="modulos/login/login.html">Login</a>
+                    <a href="about.html">Sobre</a>
+                </nav>
+            </div>
+
+            <section class="hero">
+                <h1>Conectando talentos e empresas em Belo Horizonte.</h1>
+                <p>Uma plataforma para encontrar vagas, conhecer empresas, cadastrar oportunidades e aproximar candidatos do mercado de trabalho.</p>
+            </section>
+        </header>
+
+        <main class="conteudo">
+            <div class="acoes-principais">
+                <a class="btn" href="ListadeVagas/listaVagas.html">Ver vagas disponíveis</a>
+                <a class="btn btn-secundario" href="listadeempresas/index.html">Conhecer empresas</a>
+            </div>
+
+            <section class="area-login">
+                <div>
+                    <h2>Área de Login</h2>
+                    <p>Entre na sua conta para acessar os recursos do projeto ou use o login de empresa para gerenciar o perfil e as oportunidades.</p>
+                </div>
+                <div class="login-botoes">
+                    <a class="btn" href="modulos/login/login.html">Login de candidato</a>
+                    <a class="btn btn-secundario" href="Cadastro_de_Empresas/Loginempresas.html">Login de empresa</a>
+                </div>
+            </section>
+
+            <section class="secao">
+                <h2>Acesse as principais áreas</h2>
+                <p>Escolha uma opção para navegar pelo projeto.</p>
+
+                <div class="grid-cards">
+                    <article class="card">
+                        <h3>Lista de Vagas</h3>
+                        <p>Veja oportunidades cadastradas, filtre por cargo ou empresa e salve vagas favoritas.</p>
+                        <div class="tag-container">
+                            <span class="tag">Busca</span>
+                            <span class="tag">Favoritos</span>
+                        </div>
+                        <a class="link-card" href="ListadeVagas/listaVagas.html">Abrir vagas</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Lista de Empresas</h3>
+                        <p>Conheça empresas participantes, áreas de atuação, porte e especialidades.</p>
+                        <div class="tag-container">
+                            <span class="tag">Empresas</span>
+                            <span class="tag">Perfis</span>
+                        </div>
+                        <a class="link-card" href="listadeempresas/index.html">Abrir empresas</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Mapa de Vagas</h3>
+                        <p>Explore oportunidades por localização em uma visualização geográfica.</p>
+                        <div class="tag-container">
+                            <span class="tag">Mapa</span>
+                            <span class="tag">Localização</span>
+                        </div>
+                        <a class="link-card" href="pesquisa.html">Abrir mapa</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Cadastrar Candidato</h3>
+                        <p>Área para candidatos registrarem informações e iniciarem sua jornada na plataforma.</p>
+                        <div class="tag-container">
+                            <span class="tag">Candidato</span>
+                            <span class="tag">Cadastro</span>
+                        </div>
+                        <a class="link-card" href="cadastro%20de%20candidatos/index.html">Abrir cadastro</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Cadastrar Empresa</h3>
+                        <p>Crie o cadastro de empresa para publicar oportunidades e apresentar o perfil institucional.</p>
+                        <div class="tag-container">
+                            <span class="tag">Empresa</span>
+                            <span class="tag">Cadastro</span>
+                        </div>
+                        <a class="link-card" href="Cadastro_de_Empresas/cadastroempresa.html">Abrir cadastro</a>
+                    </article>
+
+                    <article class="card empresa-only">
+                        <h3>Cadastrar Vaga</h3>
+                        <p>Publique uma nova oportunidade vinculada à empresa que está logada.</p>
+                        <div class="tag-container">
+                            <span class="tag">Empresa</span>
+                            <span class="tag">Publicação</span>
+                        </div>
+                        <a class="link-card" href="Cadastro%20de%20vagas/index.html">Abrir cadastro</a>
+                    </article>
+
+                    <article class="card empresa-only">
+                        <h3>Gerenciar Vagas</h3>
+                        <p>Publique, edite e organize vagas cadastradas pela empresa dentro do projeto.</p>
+                        <div class="tag-container">
+                            <span class="tag">Gestão</span>
+                            <span class="tag">Vagas</span>
+                        </div>
+                        <a class="link-card" href="Gerenciar%20Vagas/gerenciarvagas.html">Abrir gestão</a>
+                    </article>
+                </div>
+            </section>
+
+            <section class="secao">
+                <h2>Sobre o projeto</h2>
+                <div class="sobre-projeto">
+                    <p>O BH Works é uma aplicação web criada para facilitar a conexão entre pessoas em busca de emprego e empresas que precisam encontrar talentos. O projeto reúne listagens, cadastros, mapa de vagas e áreas de gerenciamento em uma experiência simples e organizada.</p>
+                    <div class="metricas">
+                        <div class="metrica">
+                            <strong>6</strong>
+                            <span>áreas principais</span>
+                        </div>
+                        <div class="metrica">
+                            <strong>BH</strong>
+                            <span>foco local</span>
+                        </div>
+                        <div class="metrica">
+                            <strong>TI 1</strong>
+                            <span>trabalho interdisciplinar</span>
+                        </div>
+                        <div class="metrica">
+                            <strong>Web</strong>
+                            <span>HTML, CSS e JS</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="rodape">
+                BH Works - Plataforma de vagas, empresas e candidatos
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const empresaLogada = JSON.parse(localStorage.getItem('empresaLogada') || 'null');
+
+            if (empresaLogada) {
+                document.querySelectorAll('.empresa-only').forEach(elemento => {
+                    elemento.classList.add('visivel');
+                });
+            }
+        });
+    </script>
+</body>
 </html>

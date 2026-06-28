@@ -3,36 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Comparação de Candidatos</title>
+  <title>Comparação de Candidatos - BH Works</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <header class="topo">
-    <div class="logo">Sua Empresa</div>
+    <div class="logo">BH WORKS</div>
     <nav class="menu">
-      <a href="#">Dashboard</a>
-      <a href="#">Vagas</a>
-      <a href="#">Candidatos</a>
-      <a href="#">Entrevistas</a>
-      <a href="#">Relatórios</a>
+      <a href="../index.html">Home</a>
+      <a href="../ListadeVagas/listaVagas.html">Vagas</a>
+      <a href="../listadeempresas/index.html">Empresas</a>
+      <a href="../Gerenciar%20Vagas/gerenciarvagas.html">Gerenciar</a>
     </nav>
-    <div class="usuario">Recrutador</div>
+    <div class="usuario">Painel da empresa</div>
   </header>
 
   <main class="container">
-
     <section class="principal">
-      <a href="#" class="voltar">← Voltar para candidatos</a>
-      <h1>Comparação de candidatos</h1>
-      <p class="subtitulo">Compare os candidatos lado a lado para a vaga abaixo.</p>
+      <a href="../Gerenciar%20Vagas/gerenciarvagas.html" class="voltar">Voltar para vagas</a>
+
+      <div class="hero-comparacao">
+        <div>
+          <span class="tag">Seleção</span>
+          <h1>Comparação de candidatos</h1>
+          <p class="subtitulo">Compare os principais dados lado a lado e escolha quem avança no processo seletivo.</p>
+        </div>
+      </div>
 
       <div class="comparacao">
-
-        <!-- topo: cabeçalhos dos candidatos -->
         <div class="linha topo-candidatos">
           <div class="candidato">
-            <div class="avatar"></div>
+            <div class="avatar avatar-a"></div>
             <div>
               <h2 id="nome-a"></h2>
               <p id="nomecompleto-a"></p>
@@ -44,7 +45,7 @@
           <div class="vs">VS</div>
 
           <div class="candidato">
-            <div class="avatar"></div>
+            <div class="avatar avatar-b"></div>
             <div>
               <h2 id="nome-b"></h2>
               <p id="nomecompleto-b"></p>
@@ -54,14 +55,11 @@
           </div>
         </div>
 
-        <!-- linhas geradas pelo app.js -->
         <div id="linhas-comparacao"></div>
-
       </div>
     </section>
 
     <aside class="sidebar">
-
       <div class="card">
         <h3>Vaga</h3>
         <p id="vaga-titulo"></p>
@@ -85,16 +83,9 @@
         <h3>Próximos passos</h3>
         <button id="btn-avancar-a" class="btn-escuro"></button>
         <button id="btn-avancar-b" class="btn-claro"></button>
-        <!-- link para a página de perfil ideal -->
-        <a href="perfil.html">
-          <button class="btn-claro" style="margin-top:5px;">
-            Ver perfil ideal →
-          </button>
-        </a>
+        <a href="perfil.html" class="btn-claro link-botao">Ver perfil ideal</a>
       </div>
-
     </aside>
-
   </main>
 
   <script src="app.js"></script>
