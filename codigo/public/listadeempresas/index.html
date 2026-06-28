@@ -3,28 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Empresas - BH Works</title>
+    <title>Lista de Empresas - BH Works</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="stylesheet" href="listaEmpresas.css">
 </head>
 <body>
 
 <div class="main-wrapper">
-    <div class="banner-topo"></div>
+    <header class="banner-topo">
+        <div class="topbar">
+            <a href="../pagina principal/index.html" class="logo">BH WORKS</a>
+            <nav class="menu">
+                <a href="../ListadeVagas/listaVagas.html">Vagas</a>
+                <a href="index.html">Empresas</a>
+                <a href="../mapa.html">Mapa</a>
+                <a id="login-link" href="../modulos/login/login.html">Login</a>
+                <a href="../about.html">Sobre</a>
+            </nav>
+        </div>
+    </header>
 
-    <div class="logo-area">
-        <div class="logo">BH WORKS</div>
-    </div>
-
-    <div class="conteudo">
-        <h1>Nossas Empresas</h1>
-        <p class="sub-header">Conheça as empresas que impulsionam o mercado.</p>
-        <input type="text" id="campopesquisa" placeholder="Pesquisar por nome ou setor...">
-        <div id="listaempresas"></div>
-    </div>
+    <main class="conteudo">
+        <section class="secao">
+            <h2>Nossas Empresas</h2>
+            <p>Conheça as empresas que impulsionam o mercado em Belo Horizonte e região.</p>
+            <input type="text" id="campopesquisa" class="campo-pesquisa-grande" placeholder="Pesquisar por nome ou setor...">
+        </section>
+        <section id="listaempresas" class="grid-empresas"></section>
+    </main>
+    <footer class="rodape">BH Works - Plataforma de vagas, empresas e candidatos</footer>
 </div>
 
-<script src="empresas.json"></script>
 <script src="listaEmpresas.js"></script>
+<script src="../assets/js/menu.js"></script>
 
 </body>
 </html>

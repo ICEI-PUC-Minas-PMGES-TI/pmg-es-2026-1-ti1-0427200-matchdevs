@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Vagas - BH Works</title>
+    <title>Empresas Favoritas - BH Works</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="listaVagas.css">
+    <link rel="stylesheet" href="../listadeempresas/listaEmpresas.css"> 
 </head>
 <body>
 
@@ -14,7 +14,7 @@
         <div class="topbar">
             <a href="../pagina principal/index.html" class="logo">BH WORKS</a>
             <nav class="menu">
-                <a href="listaVagas.html">Vagas</a>
+                <a href="../ListadeVagas/listaVagas.html">Vagas</a>
                 <a href="../listadeempresas/index.html">Empresas</a>
                 <a href="../mapa.html">Mapa</a>
                 <a id="login-link" href="../modulos/login/login.html">Login</a>
@@ -25,17 +25,16 @@
 
     <main class="conteudo">
         <section class="secao">
-            <h2>Vagas Disponíveis</h2>
-            <p>Encontre a sua próxima oportunidade. Filtre por cargo, empresa ou tecnologia.</p>
-            <input type="text" id="campopesquisa" class="campo-pesquisa-grande" placeholder="Pesquisar por cargo, empresa ou tecnologia...">
+            <h2>Minhas Empresas Favoritas</h2>
+            <p>Aqui estão todas as empresas que você salvou para referência.</p>
         </section>
-        <section id="listavagas" class="grid-vagas"></section>
+        <section id="listaempresas" class="grid-empresas"></section>
     </main>
     <footer class="rodape">BH Works - Plataforma de vagas, empresas e candidatos</footer>
 </div>
 
-<script src="listaVagas.js"></script>
+<script src="../listadeempresas/listaEmpresas.js"></script> 
+<script src="empresas.js"></script>
 <script src="../assets/js/menu.js"></script>
-
 </body>
 </html>

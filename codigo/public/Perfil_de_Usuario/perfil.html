@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - BH Works</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="perfil.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <header class="banner-topo">
+            <div class="topbar">
+                <a href="../pagina principal/index.html" class="logo">BH WORKS</a>
+                <nav class="menu">
+                    <a href="../ListadeVagas/listaVagas.html">Vagas</a>
+                    <a href="../listadeempresas/index.html">Empresas</a>
+                    <a href="../mapa.html">Mapa</a>
+                    <a id="login-link" href="../modulos/login/login.html">Login</a>
+                    <a href="../about.html">Sobre</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="conteudo-perfil">
+            <header id="perfil-header" class="perfil-header">
+                <div class="perfil-banner">
+                    <img id="banner-img" src="https://images.unsplash.com/photo-1535957998253-26ae1ef29506?q=80&w=1935" alt="Banner do perfil">
+                </div>
+                <div class="perfil-info">
+                    <div class="perfil-foto">
+                        <img id="foto-perfil" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1780" alt="Foto do usuário">
+                    </div>
+                    <div class="perfil-texto">
+                        <h1 id="nome-usuario"></h1>
+                        <p id="cargo-usuario"></p>
+                        <span id="local-usuario"></span>
+                    </div>
+                    <div class="perfil-acoes">
+                        <button class="btn">Editar Perfil</button>
+                        <button class="btn btn-secundario">Ver Vagas Salvas</button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="perfil-grid">
+                <div class="coluna-esquerda">
+                    <section class="card-perfil">
+                        <h2>Sobre</h2>
+                        <p id="sobre-usuario"></p>
+                    </section>
+
+                    <section class="card-perfil">
+                        <h2>Experiência</h2>
+                        <div id="lista-experiencias"></div>
+                    </section>
+
+                    <section class="card-perfil">
+                        <h2>Formação Acadêmica</h2>
+                        <div id="lista-educacao"></div>
+                    </section>
+                </div>
+
+                <div class="coluna-direita">
+                    <section class="card-perfil">
+                        <h2>Contato</h2>
+                        <ul id="lista-contato" class="lista-contato"></ul>
+                    </section>
+
+                    <section class="card-perfil">
+                        <h2>Habilidades</h2>
+                        <div id="lista-habilidades" class="lista-habilidades"></div>
+                    </section>
+
+                    <section class="card-perfil">
+                        <h2>Certificações</h2>
+                        <div id="lista-certificacoes"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <footer class="rodape">BH Works - Plataforma de vagas, empresas e candidatos</footer>
+    </div>
+
+    <script src="perfil.js"></script>
+    <script src="../assets/js/menu.js"></script>
+</body>
+</html>

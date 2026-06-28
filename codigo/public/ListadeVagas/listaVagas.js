@@ -1,7 +1,3 @@
-// ============================================
-// SISTEMA DE GERENCIAMENTO DE VAGAS COM FAVORITOS
-// ============================================
-
 class GerenciadorVagas {
     constructor() {
         this.vagas = [
@@ -44,48 +40,31 @@ class GerenciadorVagas {
         this.inicializar();
     }
 
-    // ============================================
-    // GERENCIAMENTO DE FAVORITOS
-    // ============================================
-
-    /**
-     * Carrega os favoritos do localStorage
-     * @returns {Array} Array com IDs das vagas favoritadas
-     */
     carregarFavoritos() {
         const favoritosArmazenados = localStorage.getItem('vagas_favoritas_v2');
         return favoritosArmazenados ? JSON.parse(favoritosArmazenados) : [];
     }
 
-    /**
-     * Salva os favoritos no localStorage
-     */
     salvarFavoritos() {
         localStorage.setItem('vagas_favoritas_v2', JSON.stringify(this.favoritos));
     }
 
-    /**
-     * Verifica se uma vaga é favorita
-     * @param {number} id - ID da vaga
-     * @returns {boolean} true se é favorita, false caso contrário
-     */
     ehFavorita(id) {
         return this.favoritos.includes(id);
     }
 
-    /**
-     * Adiciona ou remove uma vaga dos favoritos
-     * @param {number} id - ID da vaga
-     */
     toggleFavorito(id) {
+        if (!sessionStorage.getItem('usuarioCorrente')) {
+            sessionStorage.setItem('returnURL', window.location.href);
+            window.location.href = '../modulos/login/login.html';
+            return;
+        }
         const index = this.favoritos.indexOf(id);
         
         if (index > -1) {
-            // Remove dos favoritos
             this.favoritos.splice(index, 1);
             this.mostrarNotificacao(`Vaga removida dos favoritos!`, 'remover');
         } else {
-            // Adiciona aos favoritos
             this.favoritos.push(id);
             this.mostrarNotificacao(`Vaga adicionada aos favoritos!`, 'adicionar');
         }
@@ -94,14 +73,6 @@ class GerenciadorVagas {
         this.renderizar(this.input.value);
     }
 
-    // ============================================
-    // RENDERIZAÇÃO
-    // ============================================
-
-    /**
-     * Renderiza as vagas na página
-     * @param {string} filtro - Termo de busca
-     */
     renderizar(filtro = "") {
         this.container.innerHTML = "";
         const termo = filtro.toLowerCase();
@@ -113,24 +84,17 @@ class GerenciadorVagas {
             v.localizacao.toLowerCase().includes(termo)
         );
 
-        // Se não encontrar vagas
         if (vagasFiltradas.length === 0) {
             this.container.innerHTML = '<div class="vaga-nao-encontrada">Nenhuma vaga encontrada para sua busca.</div>';
             return;
         }
 
-        // Renderiza cada vaga
         vagasFiltradas.forEach(vaga => {
             const card = this.criarCardVaga(vaga);
             this.container.appendChild(card);
         });
     }
 
-    /**
-     * Cria o elemento HTML de uma vaga
-     * @param {object} vaga - Objeto da vaga
-     * @returns {HTMLElement} Elemento da vaga
-     */
     criarCardVaga(vaga) {
         const div = document.createElement('div');
         div.className = 'card-vaga';
@@ -177,14 +141,6 @@ class GerenciadorVagas {
         return div;
     }
 
-    // ============================================
-    // AÇÕES
-    // ============================================
-
-    /**
-     * Simula candidatura a uma vaga
-     * @param {number} id - ID da vaga
-     */
     candidatar(id) {
         const vaga = this.vagas.find(v => v.id === id);
         if (vaga) {
@@ -192,10 +148,6 @@ class GerenciadorVagas {
         }
     }
 
-    /**
-     * Mostra detalhes da vaga
-     * @param {number} id - ID da vaga
-     */
     verDetalhes(id) {
         const vaga = this.vagas.find(v => v.id === id);
         if (vaga) {
@@ -216,11 +168,6 @@ ${vaga.requisitos.map((r, i) => `${i + 1}. ${r}`).join('\n')}
         }
     }
 
-    /**
-     * Mostra notificação na tela
-     * @param {string} mensagem - Mensagem da notificação
-     * @param {string} tipo - Tipo da notificação (sucesso, adicionar, remover)
-     */
     mostrarNotificacao(mensagem, tipo = 'sucesso') {
         const notif = document.createElement('div');
         notif.style.cssText = `
@@ -245,29 +192,16 @@ ${vaga.requisitos.map((r, i) => `${i + 1}. ${r}`).join('\n')}
         }, 3000);
     }
 
-    // ============================================
-    // INICIALIZAÇÃO
-    // ============================================
-
-    /**
-     * Inicializa o gerenciador
-     */
     inicializar() {
-        // Renderiza as vagas ao carregar
         this.renderizar();
 
-        // Adiciona evento de busca
         this.input.addEventListener('input', (e) => {
             this.renderizar(e.target.value);
         });
 
-        // Adiciona estilos de animação
         this.adicionarEstilosAnimacao();
     }
 
-    /**
-     * Adiciona estilos de animação ao documento
-     */
     adicionarEstilosAnimacao() {
         const style = document.createElement('style');
         style.textContent = `
@@ -296,10 +230,6 @@ ${vaga.requisitos.map((r, i) => `${i + 1}. ${r}`).join('\n')}
         document.head.appendChild(style);
     }
 }
-
-// ============================================
-// INICIALIZAÇÃO GLOBAL
-// ============================================
 
 let gerenciador;
 

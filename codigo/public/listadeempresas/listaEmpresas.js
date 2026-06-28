@@ -74,6 +74,11 @@ class GerenciadorEmpresas {
     }
 
     toggleFavorito(id) {
+        if (!sessionStorage.getItem('usuarioCorrente')) {
+            sessionStorage.setItem('returnURL', window.location.href);
+            window.location.href = '../modulos/login/login.html';
+            return;
+        }
         const index = this.favoritos.indexOf(id);
         
         if (index > -1) {
