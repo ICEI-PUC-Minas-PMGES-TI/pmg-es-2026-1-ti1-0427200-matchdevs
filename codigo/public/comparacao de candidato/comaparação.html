@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comparação de Candidatos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topo">
+    <div class="logo">Sua Empresa</div>
+    <nav class="menu">
+      <a href="#">Dashboard</a>
+      <a href="#">Vagas</a>
+      <a href="#">Candidatos</a>
+      <a href="#">Entrevistas</a>
+      <a href="#">Relatórios</a>
+    </nav>
+    <div class="usuario">Recrutador</div>
+  </header>
+
+  <main class="container">
+
+    <section class="principal">
+      <a href="#" class="voltar">← Voltar para candidatos</a>
+      <h1>Comparação de candidatos</h1>
+      <p class="subtitulo">Compare os candidatos lado a lado para a vaga abaixo.</p>
+
+      <div class="comparacao">
+
+        <!-- topo: cabeçalhos dos candidatos -->
+        <div class="linha topo-candidatos">
+          <div class="candidato">
+            <div class="avatar"></div>
+            <div>
+              <h2 id="nome-a"></h2>
+              <p id="nomecompleto-a"></p>
+              <span id="cidade-a"></span>
+            </div>
+            <button id="btn-perfil-a">Ver perfil</button>
+          </div>
+
+          <div class="vs">VS</div>
+
+          <div class="candidato">
+            <div class="avatar"></div>
+            <div>
+              <h2 id="nome-b"></h2>
+              <p id="nomecompleto-b"></p>
+              <span id="cidade-b"></span>
+            </div>
+            <button id="btn-perfil-b">Ver perfil</button>
+          </div>
+        </div>
+
+        <!-- linhas geradas pelo app.js -->
+        <div id="linhas-comparacao"></div>
+
+      </div>
+    </section>
+
+    <aside class="sidebar">
+
+      <div class="card">
+        <h3>Vaga</h3>
+        <p id="vaga-titulo"></p>
+        <span id="vaga-publicado"></span>
+      </div>
+
+      <div class="card">
+        <h3>Resumo da comparação</h3>
+        <div class="recomendado">
+          <strong id="recomendado-nome"></strong>
+          <p>Mais alinhado à vaga</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Destaques</h3>
+        <ul id="lista-destaques"></ul>
+      </div>
+
+      <div class="card">
+        <h3>Próximos passos</h3>
+        <button id="btn-avancar-a" class="btn-escuro"></button>
+        <button id="btn-avancar-b" class="btn-claro"></button>
+        <!-- link para a página de perfil ideal -->
+        <a href="perfil.html">
+          <button class="btn-claro" style="margin-top:5px;">
+            Ver perfil ideal →
+          </button>
+        </a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
