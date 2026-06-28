@@ -1,0 +1,59 @@
+body {
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 22px;
+  color: var(--text);
+}
+
+h3 {
+  font-size: 18px;
+  color: var(--primary);
+}
+
+.logo,
+.nav-logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.5px;
+}
+
+.logo span,
+.nav-logo span,
+.footer span,
+.rodape span {
+  color: var(--primary);
+}
+
+.sub-header,
+.subtitle,
+.subtitulo,
+.secao-sub {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-center {
+  text-align: center;
+}

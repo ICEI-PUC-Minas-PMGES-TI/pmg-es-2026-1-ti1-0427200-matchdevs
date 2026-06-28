@@ -1,0 +1,44 @@
+:root {
+  --primary: #4c4cd6;
+  --primary-dark: #3939b9;
+  --primary-light: #eef0ff;
+  --primary-soft: #e0e0ff;
+
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+
+  --text: #1a1a2e;
+  --text-secondary: #333333;
+  --text-muted: #6b7280;
+  --text-soft: #888888;
+
+  --bg: #f4f6fb;
+  --white: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+
+  --border: #e5e7eb;
+  --border-strong: #d0d0d0;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 2px 8px rgba(26, 26, 46, 0.06);
+  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(76, 76, 214, 0.12);
+  --shadow-hover: 0 8px 24px rgba(76, 76, 214, 0.18);
+
+  --font-main: "Segoe UI", Arial, sans-serif;
+  --transition: 0.25s ease;
+
+  --container-sm: 760px;
+  --container-md: 900px;
+  --container-lg: 1040px;
+  --container-xl: 1180px;
+
+  --hero-image: url("https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1200");
+}
