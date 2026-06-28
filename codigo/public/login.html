@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login de Candidato - BH Works</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+    <main class="main-wrapper">
+        <section class="login-area">
+            <div class="logo">BH WORKS</div>
+
+            <h1>Login de Candidato</h1>
+            <p class="sub-header">Entre para acompanhar vagas, salvar oportunidades e acessar sua área de candidato dentro da plataforma.</p>
+
+            <div id="mensagem" class="mensagem" aria-live="polite"></div>
+
+            <form id="login-form" method="post">
+                <div class="form-group">
+                    <label for="username">Login</label>
+                    <input type="text" name="username" id="username" placeholder="Digite seu login" autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" name="password" id="password" placeholder="Digite sua senha" autocomplete="current-password">
+                </div>
+
+                <div class="botoes-container">
+                    <button type="submit" class="btn">Entrar</button>
+                    <a class="btn btn-secundario" href="../../cadastro%20de%20candidatos/index.html">Cadastrar candidato</a>
+                </div>
+            </form>
+
+            <div class="atalhos">
+                <a class="link-simples" href="../../index.html">Voltar para home</a>
+                <a class="link-simples" href="../../Cadastro_de_Empresas/Loginempresas.html">Login de empresa</a>
+            </div>
+
+            <div class="demo-box">
+                <p><strong>Conta de candidato para teste</strong></p>
+                <p>Login: <strong>admin</strong> | Senha: <strong>123</strong></p>
+                <p>Login: <strong>user</strong> | Senha: <strong>123</strong></p>
+            </div>
+        </section>
+
+        <section class="banner-area">
+            <div class="banner-topo">
+                <a class="banner-link" href="../../ListadeVagas/listaVagas.html">Vagas</a>
+                <a class="banner-link" href="../../listadeempresas/index.html">Empresas</a>
+                <a class="banner-link" href="../../mapa.html">Mapa</a>
+            </div>
+
+            <div class="banner-conteudo">
+                <h2>Encontre sua próxima oportunidade em BH.</h2>
+                <p>Use a plataforma para explorar vagas, conhecer empresas e manter seu acesso pronto para acompanhar novas oportunidades.</p>
+                <div class="tag-container">
+                    <span class="tag">Candidatos</span>
+                    <span class="tag">Vagas</span>
+                    <span class="tag">Empresas</span>
+                    <span class="tag">BH Works</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = '/usuarios';
+        const RETURN_URL = sessionStorage.getItem('returnURL') || '../../pagina principal/index.html';
+        const USUARIOS_DEMO = [
+            { id: 1, login: 'admin', senha: '123', nome: 'Administrador do Sistema', email: 'admin@abc.com' },
+            { id: 2, login: 'user', senha: '123', nome: 'Candidato Comum', email: 'user@abc.com' }
+        ];
+
+        let db_usuarios = carregarUsuariosLocais();
+
+        function mostrarMensagem(texto, tipo = 'erro') {
+            const mensagem = document.getElementById('mensagem');
+            mensagem.textContent = texto;
+            mensagem.className = `mensagem ${tipo}`;
+        }
+
+        function limparMensagem() {
+            const mensagem = document.getElementById('mensagem');
+            mensagem.textContent = '';
+            mensagem.className = 'mensagem';
+        }
+
+        function carregarUsuariosLocais() {
+            const usuariosLocais = JSON.parse(localStorage.getItem('usuarios_locais_bhworks') || '[]');
+            return [...USUARIOS_DEMO, ...usuariosLocais];
+        }
+
+        async function carregarUsuarios() {
+            try {
+                const resposta = await fetch(API_URL);
+                if (!resposta.ok) throw new Error('Falha ao buscar candidatos.');
+                db_usuarios = await resposta.json();
+            } catch (erro) {
+                db_usuarios = carregarUsuariosLocais();
+                mostrarMensagem('Modo local ativo: use admin/123, user/123 ou cadastre um candidato pela tela de cadastro.', 'aviso');
+            }
+        }
+
+        function loginUser(login, senha) {
+            const usuario = db_usuarios.find(item => item.login === login && item.senha === senha);
+
+            if (!usuario) return false;
+
+            sessionStorage.setItem('usuarioCorrente', JSON.stringify({
+                id: usuario.id,
+                login: usuario.login,
+                email: usuario.email,
+                nome: usuario.nome
+            }));
+
+            return true;
+        }
+
+        function processaFormLogin(event) {
+            event.preventDefault();
+            limparMensagem();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                mostrarMensagem('Preencha login e senha para entrar.');
+                return;
+            }
+
+            if (loginUser(username, password)) {
+                window.location.href = RETURN_URL;
+                return;
+            }
+
+            mostrarMensagem('Login ou senha incorretos.');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarUsuarios();
+
+            document.getElementById('login-form').addEventListener('submit', processaFormLogin);
+        });
+    </script>
+</body>
+</html>
