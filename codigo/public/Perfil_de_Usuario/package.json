@@ -1,0 +1,13 @@
+{
+  "name": "perfil-de-usuario",
+  "version": "1.0.0",
+  "description": "BH Works - Perfil de Usuários",
+  "main": "perfilusuario.html",
+
+  "scripts": {
+    "start": "json-server --watch db.json --port 3000"
+  },
+  "dependencies": {
+    "json-server": "^0.17.4"
+  }
+}
