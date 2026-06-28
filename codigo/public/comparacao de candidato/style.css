@@ -1,232 +1,296 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body{
+body {
   font-family: Arial, sans-serif;
   background: #f5f5f5;
   color: #333;
 }
 
-/* TOPO */
-
-.topo{
+/* ── TOPO ── */
+.topo {
   height: 70px;
   background: white;
   border-bottom: 1px solid #dcdcdc;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 0 30px;
 }
 
-.logo{
+.logo {
   font-size: 20px;
   font-weight: bold;
 }
 
-.menu{
+.menu {
   display: flex;
   gap: 25px;
 }
 
-.menu a{
+.menu a {
   text-decoration: none;
   color: #555;
   font-size: 14px;
 }
 
-.usuario{
+.menu a:hover {
+  color: #333;
+}
+
+.usuario {
   font-size: 14px;
 }
 
-/* LAYOUT */
-
-.container{
+/* ── LAYOUT ── */
+.container {
   max-width: 1300px;
   margin: 30px auto;
-
   display: grid;
   grid-template-columns: 1fr 320px;
   gap: 25px;
-
   padding: 0 20px;
 }
 
-.principal h1{
+.principal h1 {
   margin-top: 15px;
   margin-bottom: 8px;
 }
 
-.subtitulo{
+.subtitulo {
   margin-bottom: 25px;
   color: #666;
 }
 
-.voltar{
+.voltar {
   text-decoration: none;
   color: #666;
   font-size: 14px;
 }
 
-/* TABELA */
+.voltar:hover {
+  color: #333;
+}
 
-.comparacao{
+/* ── TABELA DE COMPARAÇÃO ── */
+.comparacao {
   background: white;
   border: 1px solid #dcdcdc;
 }
 
-.linha{
+.linha {
   display: grid;
   grid-template-columns: 1fr 180px 1fr;
-
   border-bottom: 1px solid #dcdcdc;
 }
 
-.linha:last-child{
+.linha:last-child {
   border-bottom: none;
 }
 
-.info{
+.info {
   padding: 20px;
 }
 
-.info p{
+.info p {
   margin-top: 5px;
   color: #666;
   font-size: 14px;
 }
 
-.titulo{
+.titulo {
   border-left: 1px solid #dcdcdc;
   border-right: 1px solid #dcdcdc;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 14px;
   color: #555;
+  text-align: center;
+  padding: 10px;
 }
 
-/* TOPO CANDIDATOS */
-
-.topo-candidatos{
+/* ── TOPO CANDIDATOS ── */
+.topo-candidatos {
   background: #fafafa;
 }
 
-.candidato{
+.candidato {
   padding: 25px;
-
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.avatar{
+.avatar {
   width: 60px;
   height: 60px;
   border-radius: 50%;
   background: #cfcfcf;
+  flex-shrink: 0;
 }
 
-.candidato h2{
+.candidato h2 {
   font-size: 18px;
   margin-bottom: 5px;
 }
 
-.candidato p{
+.candidato p {
   margin-bottom: 4px;
 }
 
-.candidato span{
+.candidato span {
   font-size: 13px;
   color: #666;
 }
 
-.candidato button{
+.candidato button {
   margin-left: auto;
-
   padding: 8px 14px;
-
   border: 1px solid #cfcfcf;
   background: white;
-
   cursor: pointer;
+  white-space: nowrap;
 }
 
-.vs{
+.candidato button:hover {
+  background: #f5f5f5;
+}
+
+.vs {
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-left: 1px solid #dcdcdc;
   border-right: 1px solid #dcdcdc;
-
   font-weight: bold;
 }
 
-/* SIDEBAR */
-
-.sidebar{
+/* ── SIDEBAR ── */
+.sidebar {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.card{
+.card {
   background: white;
   border: 1px solid #dcdcdc;
   padding: 20px;
 }
 
-.card h3{
-  margin-bottom: 20px;
+.card h3 {
+  margin-bottom: 15px;
 }
 
-.card span{
+.card span {
   color: #666;
   font-size: 14px;
 }
 
-.recomendado{
+.recomendado {
   border: 1px solid #dcdcdc;
   padding: 15px;
 }
 
-.recomendado p{
+.recomendado p {
   margin-top: 5px;
   color: #666;
+  font-size: 14px;
 }
 
-.card ul{
+.card ul {
   padding-left: 18px;
 }
 
-.card li{
+.card li {
   margin-bottom: 10px;
+  font-size: 14px;
 }
 
+/* ── BOTÕES ── */
 .btn-escuro,
-.btn-claro{
+.btn-claro {
   width: 100%;
   padding: 12px;
   margin-bottom: 10px;
-
   cursor: pointer;
+  font-size: 14px;
 }
 
-.btn-escuro{
+.btn-escuro {
   background: #666;
   color: white;
   border: none;
 }
 
-.btn-claro{
+.btn-escuro:hover {
+  background: #444;
+}
+
+.btn-claro {
   background: white;
   border: 1px solid #cfcfcf;
+}
+
+.btn-claro:hover {
+  background: #f5f5f5;
+}
+
+/* ── BADGE (perfil ideal) ── */
+.badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 8px;
+  background: #e8f0fb;
+  color: #3a6bbf;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+/* ── BARRAS DE SCORE ── */
+.score-barras {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.score-item {
+  text-align: center;
+  width: 52px;
+}
+
+.score-label {
+  font-size: 10px;
+  color: #888;
+  margin-bottom: 3px;
+}
+
+.score-trilho {
+  height: 6px;
+  background: #eee;
+  border-radius: 3px;
+}
+
+.score-barra {
+  height: 6px;
+  background: #4a90d9;
+  border-radius: 3px;
+}
+
+.score-valor {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* ── TABELA DE PESOS ── */
+.peso-linha {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
 }

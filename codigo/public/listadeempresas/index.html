@@ -4,102 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empresas - BH Works</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background: #f4f4f4; padding: 20px; display: flex; justify-content: center; }
-
-        .main-wrapper { width: 100%; max-width: 800px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 50px; }
-
-        .banner-topo { 
-            width: 100%; height: 200px; 
-            background: linear-gradient(rgba(76,76,214,0.6), rgba(76,76,214,0.6)), url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1200'); 
-            background-size: cover; background-position: center;
-        }
-
-        .logo-area { padding: 30px 40px 10px; }
-        .logo { font-size: 32px; font-weight: bold; color: #4c4cd6; }
-
-        .conteudo { padding: 20px 40px 40px; }
-
-        h1 { margin-bottom: 5px; font-size: 28px; color: #333; }
-        .sub-header { color: #666; margin-bottom: 20px; font-size: 16px; }
-
-        input { 
-            width: 100%; padding: 12px; border: 1px solid #ccc; 
-            border-radius: 8px; margin-bottom: 20px; font-size: 15px; outline: none;
-        }
-        input:focus { border-color: #4c4cd6; }
-
-        .card { 
-            border: 1px solid #eee; padding: 20px; border-radius: 10px; 
-            margin-bottom: 15px; background: #fafafa; transition: 0.3s; 
-        }
-        .card:hover { border-color: #4c4cd6; }
-
-        .card h3 { color: #4c4cd6; margin-bottom: 5px; font-size: 20px; }
-        .card-meta { margin: 4px 0; font-size: 14px; color: #333; font-weight: 600; }
-        .card-desc { font-size: 14px; color: #555; margin: 10px 0; line-height: 1.4; }
-
-        .tag-container { margin: 12px 0; display: flex; flex-wrap: wrap; gap: 6px; }
-        .tag { 
-            display: inline-block; background: #e0e0ff; color: #4c4cd6; 
-            padding: 4px 10px; border-radius: 6px; font-size: 11px; 
-            font-weight: bold; text-transform: uppercase;
-        }
-
-        .btn { 
-            display: inline-block; padding: 10px 20px; background: #4c4cd6; 
-            color: white; border: none; border-radius: 8px; cursor: pointer; 
-            text-decoration: none; font-size: 14px; font-weight: bold; transition: 0.2s;
-        }
-        .btn:hover { background: #3a3aae; }
-    </style>
+    <link rel="stylesheet" href="listaEmpresas.css">
 </head>
 <body>
 
 <div class="main-wrapper">
     <div class="banner-topo"></div>
-    <div class="logo-area"><div class="logo">BH WORKS</div></div>
-    
+
+    <div class="logo-area">
+        <div class="logo">BH WORKS</div>
+    </div>
+
     <div class="conteudo">
         <h1>Nossas Empresas</h1>
         <p class="sub-header">Conheça as empresas que impulsionam o mercado.</p>
         <input type="text" id="campopesquisa" placeholder="Pesquisar por nome ou setor...">
-        <div id="lista"></div>
+        <div id="listaempresas"></div>
     </div>
 </div>
 
-<script>
-    const empresas = [
-        { nome: "BhTech Solutions", localizacao: "Belo Horizonte, MG", setor: "Tecnologia", descricao: "Empresa focada em soluções backend escaláveis.", tags: ["Node.js", "Cloud"], porte: "Médio", fundacao: 2018 },
-        { nome: "InovaWeb Agency", localizacao: "Belo Horizonte, MG", setor: "Marketing Digital", descricao: "Agência especializada em campanhas digitais.", tags: ["SEO", "Performance"], porte: "Pequeno", fundacao: 2021 },
-        { nome: "Eco Energia Brasil", localizacao: "São Paulo, SP", setor: "Energia Sustentável", descricao: "Soluções em energia solar.", tags: ["Sustentabilidade", "Inovação"], porte: "Grande", fundacao: 2015 }
-    ];
-
-    function render(filtro = "") {
-        const container = document.getElementById('lista');
-        container.innerHTML = "";
-        
-        empresas.filter(e => e.nome.toLowerCase().includes(filtro.toLowerCase()) || e.setor.toLowerCase().includes(filtro.toLowerCase())).forEach(e => {
-            const div = document.createElement('div');
-            div.className = 'card';
-            div.innerHTML = `
-                <h3>${e.nome}</h3>
-                <p class="card-meta">${e.setor} | Local: ${e.localizacao}</p>
-                <p class="card-meta" style="font-weight: normal; font-size: 13px;">Porte: ${e.porte} | Fundação: ${e.fundacao}</p>
-                <p class="card-desc">${e.descricao}</p>
-                <div class="tag-container">
-                    ${e.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-                </div>
-                <button class="btn" onclick="alert('Contato: ${e.nome}')">Ver Perfil</button>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    document.getElementById('campopesquisa').oninput = (e) => render(e.target.value);
-    render();
-</script>
+<script src="empresas.json"></script>
+<script src="listaEmpresas.js"></script>
 
 </body>
 </html>
