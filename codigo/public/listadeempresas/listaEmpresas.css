@@ -15,6 +15,7 @@ body {
 .main-wrapper {
     width: 100%;
     max-width: 900px;
+    zoom: 1.11;
     background: white;
     border-radius: 20px;
     overflow: hidden;
@@ -214,6 +215,7 @@ input:focus {
     font-size: 16px;
 }
 
+/* Animações */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -229,6 +231,7 @@ input:focus {
     animation: fadeIn 0.3s ease;
 }
 
+/* Responsivo */
 @media (max-width: 768px) {
     .main-wrapper {
         max-width: 100%;
