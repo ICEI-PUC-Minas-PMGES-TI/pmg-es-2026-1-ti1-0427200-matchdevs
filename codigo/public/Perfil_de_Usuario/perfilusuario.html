@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil — BH Works</title>
+<link rel="stylesheet" href="perfilusuario.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="#">BH<span>WORKS</span></a>
+  <div class="nav-links">
+    <a href="#" class="active">Início</a>
+    <a href="#">Vagas</a>
+    <a href="#">Rede</a>
+    <a href="#">Mensagens</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-nome" id="nav-nome"></span>
+    <div class="nav-avatar" id="nav-avatar-wrap">
+      <span id="nav-inicial">L</span>
+    </div>
+    <a class="nav-btn" href="#">✉ Mensagens</a>
+  </div>
+</nav>
+
+<main class="main">
+
+  <div class="cover-wrapper">
+    <div class="cover-banner" id="cover-banner" onclick="document.getElementById('inp-banner').click()" title="Clique para alterar o banner">
+      <img id="banner-img" src="" alt="" style="display:none;">
+      <div class="cover-overlay">
+        <div class="cover-edit-hint">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Alterar banner
+        </div>
+      </div>
+      <input type="file" id="inp-banner" accept="image/*" style="display:none" onchange="carregarBanner(this)">
+    </div>
+
+    <div class="perfil-card">
+
+      <div class="perfil-avatar-wrapper" onclick="document.getElementById('inp-foto').click()" title="Clique para alterar a foto">
+        <div class="perfil-avatar" id="perfil-avatar">
+          <span id="avatar-inicial">L</span>
+          <img id="avatar-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+          <div class="perfil-avatar-overlay">
+            <span class="avatar-edit-icon">📷</span>
+          </div>
+        </div>
+        <div class="online-dot"></div>
+        <input type="file" id="inp-foto" accept="image/*" style="display:none" onchange="carregarFoto(this)">
+      </div>
+
+      <div class="perfil-info">
+        <div class="perfil-nome-row">
+          <h1 id="usuario-nome"></h1>
+          <span class="badge badge-success" id="badge-disp">● Disponível</span>
+          <span class="badge badge-premium">⭐ Premium</span>
+        </div>
+        <div class="perfil-cargo" id="usuario-cargo"></div>
+        <div class="perfil-meta">
+          <span>📍 <span id="usuario-local"></span></span>
+          <a class="perfil-conexoes" href="#">487 conexões</a>
+        </div>
+        <div class="perfil-tags" id="tags-destaque">
+          <span class="tag-skill">React</span>
+          <span class="tag-skill">Node.js</span>
+          <span class="tag-skill">TypeScript</span>
+          <span class="tag-skill">AWS</span>
+          <span class="tag-skill">PostgreSQL</span>
+        </div>
+      </div>
+
+      <div class="acoes">
+        <button class="btn-primary" id="btn-conectar" onclick="conectar()">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Conectar
+        </button>
+        <button class="btn-outline" onclick="abrirModal('modal-msg')">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Mensagem
+        </button>
+        <button class="btn-ghost" onclick="abrirModal('modal-editar')">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Editar perfil
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="metricas-row">
+    <div class="metrica-item"><span class="metrica-num" id="met-exp"></span><span class="metrica-label">Anos de experiência</span></div>
+    <div class="metrica-sep"></div>
+    <div class="metrica-item"><span class="metrica-num" id="met-proj"></span><span class="metrica-label">Projetos concluídos</span></div>
+    <div class="metrica-sep"></div>
+    <div class="metrica-item"><span class="metrica-num" id="met-rec"></span><span class="metrica-label">Recomendações</span></div>
+    <div class="metrica-sep"></div>
+    <div class="metrica-item"><span class="metrica-num" id="met-match"></span><span class="metrica-label">Match de vagas</span></div>
+  </div>
+
+  <div class="grid">
+    <div>
+
+      <div class="secao">
+        <div class="secao-topo">
+          <h2>Sobre</h2>
+          <button class="btn-sec" onclick="abrirModal('modal-sobre')">Editar</button>
+        </div>
+        <p class="sobre-texto truncado" id="sobre-texto"></p>
+        <button class="btn-ver-mais" id="btn-ver-mais" onclick="verMais()">Ver mais ▾</button>
+      </div>
+
+      <div class="secao">
+        <div class="secao-topo">
+          <div><h2>Experiência</h2><p id="exp-count"></p></div>
+          <button class="btn-sec" onclick="abrirModal('modal-exp')">+ Adicionar</button>
+        </div>
+        <div id="exp-lista"></div>
+      </div>
+
+      <div class="secao">
+        <div class="secao-topo">
+          <h2>Educação</h2>
+          <button class="btn-sec" onclick="abrirModal('modal-edu')">+ Adicionar</button>
+        </div>
+        <div id="edu-lista"></div>
+      </div>
+
+      <div class="secao">
+        <div class="secao-topo">
+          <h2>Habilidades</h2>
+          <button class="btn-sec" onclick="abrirModal('modal-hab')">+ Adicionar</button>
+        </div>
+        <div class="hab-grid" id="hab-grid"></div>
+      </div>
+
+      <div class="secao">
+        <div class="secao-topo">
+          <h2>Certificações</h2>
+          <button class="btn-sec" onclick="abrirModal('modal-cert')">+ Adicionar</button>
+        </div>
+        <div id="cert-lista"></div>
+      </div>
+    </div>
+
+    <aside>
+
+      <div class="card">
+        <h3>Contato</h3>
+        <div class="contato-item"><span class="contato-icon">✉️</span><a href="#" id="contato-email"></a></div>
+        <div class="contato-item"><span class="contato-icon">📞</span><span id="contato-tel"></span></div>
+        <div class="contato-item"><span class="contato-icon">🔗</span><a href="#" id="contato-linkedin"></a></div>
+        <div class="contato-item"><span class="contato-icon">💻</span><a href="#" id="contato-github"></a></div>
+      </div>
+
+      <div class="card">
+        <h3>Vagas para você</h3>
+        <div class="vaga-item">
+          <div class="vaga-titulo">Dev Full Stack Sênior</div>
+          <div class="vaga-empresa">Tech Minas · Belo Horizonte</div>
+          <div class="vaga-badges"><span class="vbadge vbadge-hybrid">Híbrido</span><span class="vbadge vbadge-match">97% match</span></div>
+          <button class="btn-candidatar" onclick="toast('Candidatura enviada!')">Candidatar-se</button>
+        </div>
+        <div class="vaga-item">
+          <div class="vaga-titulo">Engenheiro de Software</div>
+          <div class="vaga-empresa">Startup BH · Remoto</div>
+          <div class="vaga-badges"><span class="vbadge vbadge-remote">Remoto</span><span class="vbadge vbadge-match">91% match</span></div>
+          <button class="btn-candidatar" onclick="toast('Candidatura enviada!')">Candidatar-se</button>
+        </div>
+        <div class="vaga-item">
+          <div class="vaga-titulo">Tech Lead</div>
+          <div class="vaga-empresa">Digital Minas · BH</div>
+          <div class="vaga-badges"><span class="vbadge vbadge-onsite">Presencial</span><span class="vbadge vbadge-match">88% match</span></div>
+          <button class="btn-candidatar" onclick="toast('Candidatura enviada!')">Candidatar-se</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Pessoas que você pode conhecer</h3>
+        <div class="conexao-item">
+          <div class="conexao-av" style="background:#10b981;">A</div>
+          <div class="conexao-info"><div class="conexao-nome">Ana Lima</div><div class="conexao-cargo">UX Designer · Startup BH</div></div>
+          <button class="btn-add" onclick="toast('Convite enviado para Ana Lima!')">+</button>
+        </div>
+        <div class="conexao-item">
+          <div class="conexao-av" style="background:#f59e0b;">C</div>
+          <div class="conexao-info"><div class="conexao-nome">Carlos Souza</div><div class="conexao-cargo">Dev Back-end · Tech Minas</div></div>
+          <button class="btn-add" onclick="toast('Convite enviado para Carlos Souza!')">+</button>
+        </div>
+        <div class="conexao-item">
+          <div class="conexao-av" style="background:#8b5cf6;">M</div>
+          <div class="conexao-info"><div class="conexao-nome">Mariana Costa</div><div class="conexao-cargo">Product Manager · Digital Minas</div></div>
+          <button class="btn-add" onclick="toast('Convite enviado para Mariana Costa!')">+</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer">
+  BH<span>WORKS</span> · Conectando talentos de Minas Gerais
+  <small>© 2026 BH Works. Todos os direitos reservados.</small>
+</footer>
+
+<div class="modal-overlay" id="modal-editar">
+  <div class="modal">
+    <div class="modal-header"><h3>Editar Perfil</h3><button class="modal-close" onclick="fecharModal('modal-editar')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg-grid">
+        <div class="fg"><label>Nome completo</label><input type="text" id="edit-nome"></div>
+        <div class="fg"><label>Cargo atual</label><input type="text" id="edit-cargo"></div>
+        <div class="fg"><label>Empresa atual</label><input type="text" id="edit-empresa"></div>
+        <div class="fg"><label>Localização</label><input type="text" id="edit-local"></div>
+        <div class="fg"><label>E-mail</label><input type="email" id="edit-email"></div>
+        <div class="fg"><label>Telefone</label><input type="text" id="edit-tel"></div>
+        <div class="fg"><label>LinkedIn URL</label><input type="text" id="edit-linkedin"></div>
+        <div class="fg"><label>GitHub URL</label><input type="text" id="edit-github"></div>
+      </div>
+      <div class="fg"><label>Disponibilidade</label>
+        <select id="edit-disp">
+          <option value="disponivel">● Disponível — aberto a oportunidades</option>
+          <option value="passivo">◐ Aberto passivamente</option>
+          <option value="nao">○ Não disponível</option>
+        </select>
+      </div>
+      <div class="fg-grid">
+        <div class="fg"><label>Anos de experiência</label><input type="number" id="edit-exp" min="0"></div>
+        <div class="fg"><label>Projetos concluídos</label><input type="number" id="edit-proj" min="0"></div>
+        <div class="fg"><label>Recomendações</label><input type="number" id="edit-rec" min="0"></div>
+        <div class="fg"><label>Match de vagas (%)</label><input type="text" id="edit-match"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modal-editar')">Cancelar</button>
+      <button class="btn-salvar" onclick="salvarPerfil()">Salvar Alterações</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-sobre">
+  <div class="modal sm">
+    <div class="modal-header"><h3>Editar Sobre</h3><button class="modal-close" onclick="fecharModal('modal-sobre')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Sobre você</label><textarea id="edit-sobre" style="height:150px;"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modal-sobre')">Cancelar</button>
+      <button class="btn-salvar" onclick="salvarSobre()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-msg">
+  <div class="modal sm">
+    <div class="modal-header"><h3>Enviar Mensagem</h3><button class="modal-close" onclick="fecharModal('modal-msg')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Para</label><input type="text" id="msg-para" readonly style="background:var(--bg);color:var(--text-muted);"></div>
+      <div class="fg"><label>Mensagem</label><textarea id="msg-texto" style="height:130px;" placeholder="Olá Lucas, vi seu perfil e gostaria de conversar sobre uma oportunidade..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modal-msg')">Cancelar</button>
+      <button class="btn-salvar" onclick="enviarMsg()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-exp">
+  <div class="modal">
+    <div class="modal-header"><h3>Adicionar Experiência</h3><button class="modal-close" onclick="fecharModal('modal-exp')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg-grid">
+        <div class="fg"><label>Cargo</label><input type="text" id="exp-cargo" placeholder="Ex: Desenvolvedor Sênior"></div>
+        <div class="fg"><label>Empresa</label><input type="text" id="exp-empresa" placeholder="Ex: Tech Minas"></div>
+        <div class="fg"><label>Início</label><input type="month" id="exp-inicio"></div>
+        <div class="fg"><label>Fim (deixe vazio se atual)</label><input type="month" id="exp-fim"></div>
+        <div class="fg"><label>Localização</label><input type="text" id="exp-local" placeholder="Ex: Belo Horizonte, MG"></div>
+        <div class="fg"><label>Modalidade</label>
+          <select id="exp-modo">
+            <option>Presencial</option><option>Remoto</option><option>Híbrido</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>Descrição</label><textarea id="exp-desc" placeholder="Descreva suas principais responsabilidades e conquistas..."></textarea></div>
+      <div class="fg"><label>Habilidades usadas (separadas por vírgula)</label><input type="text" id="exp-tags" placeholder="React, Node.js, PostgreSQL"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modal-exp')">Cancelar</button>
+      <button class="btn-salvar" onclick="adicionarExp()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-edu">
+  <div class="modal sm">
+    <div class="modal-header"><h3>Adicionar Educação</h3><button class="modal-close" onclick="fecharModal('modal-edu')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Curso / Grau</label><input type="text" id="edu-curso" placeholder="Ex: Bacharelado em Ciência da Computação"></div>
+      <div class="fg"><label>Instituição</label><input type="text" id="edu-inst" placeholder="Ex: UFMG"></div>
+      <div class="fg-grid">
+        <div class="fg"><label>Início</label><input type="number" id="edu-inicio" placeholder="2020" min="1950" max="2099"></div>
+        <div class="fg"><label>Fim</label><input type="number" id="edu-fim" placeholder="2024" min="1950" max="2099"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modal-edu')">Cancelar</button>
+      <button class="btn-salvar" onclick="adicionarEdu()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-hab">
+  <div class="modal sm">
+    <div class="modal-header"><h3>Adicionar Habilidade</h3><button class="modal-close" onclick="fecharModal('modal-hab')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Habilidade</label><input type="text" id="hab-nome" placeholder="Ex: Vue.js, Python, Docker..."></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modal-hab')">Cancelar</button>
+      <button class="btn-salvar" onclick="adicionarHab()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cert">
+  <div class="modal sm">
+    <div class="modal-header"><h3>Adicionar Certificação</h3><button class="modal-close" onclick="fecharModal('modal-cert')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Nome da certificação</label><input type="text" id="cert-nome" placeholder="Ex: AWS Certified Developer"></div>
+      <div class="fg-grid">
+        <div class="fg"><label>Emissor</label><input type="text" id="cert-emissor" placeholder="Ex: Amazon Web Services"></div>
+        <div class="fg"><label>Ano</label><input type="number" id="cert-ano" placeholder="2024" min="2000" max="2099"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modal-cert')">Cancelar</button>
+      <button class="btn-salvar" onclick="adicionarCert()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="perfilusuario.js"></script>
+</body>
+</html>
