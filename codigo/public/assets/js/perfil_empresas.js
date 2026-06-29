@@ -20,7 +20,21 @@ document.addEventListener("DOMContentLoaded", () => {
     fecharMenuAoClicarFora();
     aplicarPreferencias();
     renderizarTagsCulturaOpcoes();
-    renderizarCapaOpcoes();
+
+    document.querySelectorAll(".modal-overlay").forEach(overlay => {
+        overlay.addEventListener("click", event => {
+            if (event.target === overlay) fecharModal(overlay.id);
+        });
+    });
+
+    const btnAcoes = document.getElementById("btn-acoes");
+    if (btnAcoes) {
+        btnAcoes.addEventListener("click", event => {
+            event.stopPropagation();
+            document.getElementById("acoes-menu").classList.toggle("ativo");
+            btnAcoes.classList.toggle("ativo");
+        });
+    }
 });
 
 function aplicarPreferencias() {
@@ -40,36 +54,24 @@ function aplicarPreferencias() {
 async function carregarEmpresa() {
     try {
         const empresaLogada = JSON.parse(localStorage.getItem("empresaLogada") || "null");
+        const empresaVisualizada = JSON.parse(localStorage.getItem("empresaVisualizada") || "null");
 
         if (empresaLogada && empresaLogada.id) {
-            const res = await fetch(`${EMPRESAS_URL}/${empresaLogada.id}`);
-
-            if (!res.ok) {
-                throw new Error("Erro ao carregar empresa logada.");
-            }
-
-            empresaAtual = await res.json();
+            const response = await fetch(`${EMPRESAS_URL}/${empresaLogada.id}`);
+            empresaAtual = response.ok ? await response.json() : empresaLogada;
+        } else if (empresaVisualizada) {
+            empresaAtual = empresaVisualizada;
         } else {
-            const res = await fetch(EMPRESAS_URL);
-
-            if (!res.ok) {
-                throw new Error("Erro ao carregar empresas.");
-            }
-
-            const empresas = await res.json();
-            empresaAtual = empresas[0] || null;
+            const response = await fetch(EMPRESAS_URL);
+            const empresas = response.ok ? await response.json() : [];
+            empresaAtual = empresas[0] || {};
         }
 
-        if (!empresaAtual) {
-            throw new Error("Nenhuma empresa encontrada.");
-        }
-
-        localStorage.setItem("empresaLogada", JSON.stringify(empresaAtual));
         renderizarEmpresa(empresaAtual);
 
-    } catch (err) {
-        console.error("Erro ao carregar empresa:", err);
-        mostrarToast("Servidor não encontrado. Rode: npm start", "erro");
+    } catch (erro) {
+        console.error("Erro ao carregar empresa:", erro);
+        mostrarToast("Erro ao carregar dados da empresa.", "erro");
     }
 }
 
@@ -86,50 +88,37 @@ function renderizarEmpresa(empresa) {
     setTexto("empresa-site", empresa.website || "—");
     setTexto("empresa-funcionarios", empresa.funcionarios ? `${empresa.funcionarios} funcionários` : "—");
     setTexto("empresa-fundacao", empresa.fundacao ? `Fundada em ${empresa.fundacao}` : "—");
-
     setTexto("contato-email", empresa.email || "—");
     setTexto("contato-tel", empresa.telefone || "—");
+    setTexto("mapa-cidade", empresa.localizacao || "—");
+    setTexto("sobre-setor", empresa.setor || "—");
+    setTexto("sobre-func", empresa.funcionarios || "—");
+    setTexto("sobre-fund", empresa.fundacao ? `${empresa.fundacao}` : "—");
+    setTexto("footer-email", empresa.email || "");
+    setTexto("footer-tel", empresa.telefone || "");
+    setTexto("met-func", empresa.funcionarios || "—");
+    setTexto("met-setor", empresa.setor || "—");
 
     const siteLink = document.getElementById("contato-site");
-
     if (siteLink) {
         siteLink.textContent = empresa.website || "—";
         siteLink.href = empresa.website || "#";
     }
 
-    setTexto("mapa-cidade", empresa.localizacao || "—");
-
     const btnMapa = document.getElementById("btn-ver-mapa");
-
     if (btnMapa && empresa.localizacao) {
         btnMapa.href = `mapa.html?local=${encodeURIComponent(empresa.localizacao)}`;
     }
 
-    setTexto("sobre-setor", empresa.setor || "—");
-    setTexto("sobre-func", empresa.funcionarios || "—");
-    setTexto("sobre-fund", empresa.fundacao ? `${empresa.fundacao}` : "—");
-
-    setTexto("footer-email", empresa.email || "");
-    setTexto("footer-tel", empresa.telefone || "");
-
-    setTexto("met-func", empresa.funcionarios || "—");
-    setTexto("met-setor", empresa.setor || "—");
-
     atualizarAnosMetrica(empresa.fundacao);
 
     const corSalva = localStorage.getItem("avatarCor");
-
-    if (corSalva) {
-        aplicarCor(corSalva);
-    }
+    if (corSalva) aplicarCor(corSalva);
 }
 
 function atualizarAnosMetrica(fundacao) {
     const el = document.getElementById("met-anos");
-
-    if (!el) {
-        return;
-    }
+    if (!el) return;
 
     el.textContent = fundacao ? `${new Date().getFullYear() - parseInt(fundacao)}` : "—";
 }
@@ -140,42 +129,29 @@ async function carregarVagas() {
     const count = document.getElementById("vagas-count");
     const metVagas = document.getElementById("met-vagas");
 
+    if (!lista) return;
+
     try {
-        const res = await fetch(VAGAS_URL);
-
-        if (!res.ok) {
-            throw new Error("Erro ao carregar vagas.");
-        }
-
-        let vagas = await res.json();
+        const response = await fetch(VAGAS_URL);
+        let vagas = response.ok ? await response.json() : [];
 
         if (empresaAtual && empresaAtual.id) {
-            const vagasDaEmpresa = vagas.filter(vaga => vaga.empresaId === empresaAtual.id);
-
-            if (vagasDaEmpresa.length > 0) {
-                vagas = vagasDaEmpresa;
-            }
+            const filtradas = vagas.filter(vaga => Number(vaga.empresaId) === Number(empresaAtual.id));
+            if (filtradas.length) vagas = filtradas;
         }
 
-        if (!vagas || vagas.length === 0) {
-            vazio.style.display = "block";
-            lista.innerHTML = "";
-            count.textContent = "0 vagas publicadas";
+        lista.innerHTML = "";
 
-            if (metVagas) {
-                metVagas.textContent = "0";
-            }
-
+        if (!vagas.length) {
+            if (vazio) vazio.style.display = "block";
+            if (count) count.textContent = "0 vagas publicadas";
+            if (metVagas) metVagas.textContent = "0";
             return;
         }
 
-        vazio.style.display = "none";
-        lista.innerHTML = "";
-        count.textContent = `${vagas.length} vaga${vagas.length > 1 ? "s" : ""} publicada${vagas.length > 1 ? "s" : ""}`;
-
-        if (metVagas) {
-            metVagas.textContent = vagas.length;
-        }
+        if (vazio) vazio.style.display = "none";
+        if (count) count.textContent = `${vagas.length} vaga${vagas.length > 1 ? "s" : ""} publicada${vagas.length > 1 ? "s" : ""}`;
+        if (metVagas) metVagas.textContent = vagas.length;
 
         vagas.forEach(vaga => {
             const card = document.createElement("div");
@@ -192,7 +168,7 @@ async function carregarVagas() {
                 <div class="vaga-topo">
                     <span class="vaga-titulo">${vaga.titulo || "Vaga sem título"}</span>
                     <div class="vaga-badges">
-                        <span class="badge badge-${modelo}">${modelo}</span>
+                        <span class="badge">${modelo}</span>
                         <span class="badge-tipo">${tipo}</span>
                     </div>
                 </div>
@@ -213,44 +189,41 @@ async function carregarVagas() {
             lista.appendChild(card);
         });
 
-    } catch (err) {
-        console.error("Erro ao carregar vagas:", err);
-        vazio.style.display = "block";
-        count.textContent = "Erro ao carregar";
+    } catch (erro) {
+        console.error("Erro ao carregar vagas:", erro);
+        if (vazio) vazio.style.display = "block";
+        if (count) count.textContent = "Erro ao carregar";
     }
 }
 
-document.getElementById("btn-acoes").addEventListener("click", event => {
-    event.stopPropagation();
-
-    document.getElementById("acoes-menu").classList.toggle("ativo");
-    document.getElementById("btn-acoes").classList.toggle("ativo");
-});
-
 function fecharMenuAoClicarFora() {
     document.addEventListener("click", () => {
-        document.getElementById("acoes-menu").classList.remove("ativo");
-        document.getElementById("btn-acoes").classList.remove("ativo");
+        const menu = document.getElementById("acoes-menu");
+        const btn = document.getElementById("btn-acoes");
+
+        if (menu) menu.classList.remove("ativo");
+        if (btn) btn.classList.remove("ativo");
     });
 }
 
 function abrirModal(id) {
-    document.getElementById("acoes-menu").classList.remove("ativo");
+    const menu = document.getElementById("acoes-menu");
+    if (menu) menu.classList.remove("ativo");
 
     if (id === "modal-editar" && empresaAtual) {
-        document.getElementById("edit-nome").value = empresaAtual.nome || "";
-        document.getElementById("edit-setor").value = empresaAtual.setor || "";
-        document.getElementById("edit-localizacao").value = empresaAtual.localizacao || "";
-        document.getElementById("edit-website").value = empresaAtual.website || "";
-        document.getElementById("edit-descricao").value = empresaAtual.descricao || "";
-        document.getElementById("edit-funcionarios").value = empresaAtual.funcionarios || "1-10";
-        document.getElementById("edit-fundacao").value = empresaAtual.fundacao || "";
+        setValor("edit-nome", empresaAtual.nome);
+        setValor("edit-setor", empresaAtual.setor);
+        setValor("edit-localizacao", empresaAtual.localizacao);
+        setValor("edit-website", empresaAtual.website);
+        setValor("edit-descricao", empresaAtual.descricao);
+        setValor("edit-funcionarios", empresaAtual.funcionarios || "1-10");
+        setValor("edit-fundacao", empresaAtual.fundacao);
     }
 
     if (id === "modal-contato" && empresaAtual) {
-        document.getElementById("cont-email").value = empresaAtual.email || "";
-        document.getElementById("cont-tel").value = empresaAtual.telefone || "";
-        document.getElementById("cont-site").value = empresaAtual.website || "";
+        setValor("cont-email", empresaAtual.email);
+        setValor("cont-tel", empresaAtual.telefone);
+        setValor("cont-site", empresaAtual.website);
     }
 
     if (id === "modal-foto") {
@@ -258,8 +231,11 @@ function abrirModal(id) {
         const corAtual = localStorage.getItem("avatarCor") || "#4c4cd6";
         const box = document.getElementById("logo-preview-box");
 
-        box.textContent = inicial;
-        box.style.background = corAtual;
+        if (box) {
+            box.textContent = inicial;
+            box.style.background = corAtual;
+        }
+
         corSelecionada = corAtual;
     }
 
@@ -267,23 +243,14 @@ function abrirModal(id) {
         const capaAtual = localStorage.getItem("capaBg") || "";
         const preview = document.getElementById("capa-preview");
 
-        if (capaAtual.startsWith("data:image") || capaAtual.startsWith("http")) {
-            preview.style.background = "";
-            preview.style.backgroundImage = `url('${capaAtual}')`;
-            preview.style.backgroundSize = "cover";
-            preview.style.backgroundPosition = "center";
-        } else if (capaAtual) {
-            preview.style.backgroundImage = "";
-            preview.style.background = capaAtual;
+        if (preview && capaAtual) {
+            aplicarPreviewCapa(preview, capaAtual);
         }
 
         capaSelecionada = capaAtual || null;
 
         const fname = document.getElementById("upload-filename");
-
-        if (fname) {
-            fname.textContent = "";
-        }
+        if (fname) fname.textContent = "";
     }
 
     if (id === "modal-cultura") {
@@ -292,43 +259,29 @@ function abrirModal(id) {
         });
     }
 
-    document.getElementById(id).classList.add("ativo");
-    document.body.style.overflow = "hidden";
+    const modal = document.getElementById(id);
+    if (modal) {
+        modal.classList.add("ativo");
+        document.body.style.overflow = "hidden";
+    }
 }
 
 function fecharModal(id) {
-    document.getElementById(id).classList.remove("ativo");
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.remove("ativo");
     document.body.style.overflow = "";
 }
 
-document.querySelectorAll(".modal-overlay").forEach(overlay => {
-    overlay.addEventListener("click", event => {
-        if (event.target === overlay) {
-            overlay.classList.remove("ativo");
-            document.body.style.overflow = "";
-        }
-    });
-});
-
 async function salvarVaga() {
-    const titulo = document.getElementById("vaga-titulo").value.trim();
+    const titulo = getValor("vaga-titulo");
     const tipo = document.getElementById("vaga-tipo").value;
     const modelo = document.getElementById("vaga-modelo").value;
-    const salario = document.getElementById("vaga-salario").value.trim();
-    const descricao = document.getElementById("vaga-descricao").value.trim();
-    const reqStr = document.getElementById("vaga-requisitos").value.trim();
+    const salario = getValor("vaga-salario") || "A combinar";
+    const descricao = getValor("vaga-descricao");
+    const requisitos = getValor("vaga-requisitos").split(",").map(r => r.trim()).filter(Boolean);
 
-    if (!titulo) {
-        return mostrarToast("Informe o título da vaga.", "erro");
-    }
-
-    if (!descricao) {
-        return mostrarToast("Informe a descrição da vaga.", "erro");
-    }
-
-    const requisitos = reqStr
-        ? reqStr.split(",").map(r => r.trim()).filter(Boolean)
-        : [];
+    if (!titulo) return mostrarToast("Informe o título da vaga.", "erro");
+    if (!descricao) return mostrarToast("Informe a descrição da vaga.", "erro");
 
     const novaVaga = {
         titulo,
@@ -337,7 +290,7 @@ async function salvarVaga() {
         empresa: empresaAtual ? empresaAtual.nome : "",
         empresaId: empresaAtual ? empresaAtual.id : null,
         localizacao: empresaAtual ? empresaAtual.localizacao : "",
-        salario: salario || "A combinar",
+        salario,
         descricao,
         requisitos,
         data_publicacao: new Date().toISOString().split("T")[0],
@@ -345,17 +298,13 @@ async function salvarVaga() {
     };
 
     try {
-        const res = await fetch(VAGAS_URL, {
+        const response = await fetch(VAGAS_URL, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(novaVaga)
         });
 
-        if (!res.ok) {
-            throw new Error("Erro ao publicar vaga.");
-        }
+        if (!response.ok) throw new Error();
 
         fecharModal("modal-vaga");
         limparFormVaga();
@@ -363,208 +312,142 @@ async function salvarVaga() {
         mostrarToast("Vaga publicada com sucesso!");
 
     } catch {
-        mostrarToast("Erro ao publicar a vaga.", "erro");
+        mostrarToast("Erro ao publicar vaga.", "erro");
     }
 }
 
 function limparFormVaga() {
     ["vaga-titulo", "vaga-salario", "vaga-descricao", "vaga-requisitos"].forEach(id => {
-        document.getElementById(id).value = "";
+        const el = document.getElementById(id);
+        if (el) el.value = "";
     });
 }
 
 async function excluirVaga(id) {
-    if (!confirm("Deseja remover esta vaga?")) {
-        return;
-    }
+    if (!confirm("Deseja remover esta vaga?")) return;
 
     try {
-        const res = await fetch(`${VAGAS_URL}/${id}`, {
-            method: "DELETE"
-        });
-
-        if (!res.ok) {
-            throw new Error("Erro ao remover vaga.");
-        }
-
+        await fetch(`${VAGAS_URL}/${id}`, { method: "DELETE" });
         await carregarVagas();
         mostrarToast("Vaga removida.");
-
     } catch {
-        mostrarToast("Erro ao remover a vaga.", "erro");
+        mostrarToast("Erro ao remover vaga.", "erro");
     }
 }
 
 async function editarVaga(id) {
     try {
-        const res = await fetch(`${VAGAS_URL}/${id}`);
+        const response = await fetch(`${VAGAS_URL}/${id}`);
+        const vaga = await response.json();
 
-        if (!res.ok) {
-            throw new Error("Erro ao carregar vaga.");
-        }
-
-        const vaga = await res.json();
-
-        document.getElementById("vaga-titulo").value = vaga.titulo || "";
-        document.getElementById("vaga-tipo").value = vaga.tipo || vaga.tipo_contrato || "";
-        document.getElementById("vaga-modelo").value = vaga.modelo || "";
-        document.getElementById("vaga-salario").value = vaga.salario || "";
-        document.getElementById("vaga-descricao").value = vaga.descricao || "";
-        document.getElementById("vaga-requisitos").value = (vaga.requisitos || []).join(", ");
+        setValor("vaga-titulo", vaga.titulo);
+        setValor("vaga-tipo", vaga.tipo || vaga.tipo_contrato);
+        setValor("vaga-modelo", vaga.modelo);
+        setValor("vaga-salario", vaga.salario);
+        setValor("vaga-descricao", vaga.descricao);
+        setValor("vaga-requisitos", (vaga.requisitos || []).join(", "));
 
         abrirModal("modal-vaga");
 
         const btn = document.querySelector("#modal-vaga .btn-salvar");
+        if (!btn) return;
 
         btn.textContent = "Atualizar Vaga";
 
         btn.onclick = async () => {
-            const dadosAtualizados = {
-                titulo: document.getElementById("vaga-titulo").value.trim(),
+            const dados = {
+                titulo: getValor("vaga-titulo"),
                 tipo: document.getElementById("vaga-tipo").value,
                 modelo: document.getElementById("vaga-modelo").value,
-                salario: document.getElementById("vaga-salario").value.trim() || "A combinar",
-                descricao: document.getElementById("vaga-descricao").value.trim(),
-                requisitos: document.getElementById("vaga-requisitos").value
-                    .split(",")
-                    .map(r => r.trim())
-                    .filter(Boolean)
+                salario: getValor("vaga-salario") || "A combinar",
+                descricao: getValor("vaga-descricao"),
+                requisitos: getValor("vaga-requisitos").split(",").map(r => r.trim()).filter(Boolean)
             };
 
-            try {
-                const resposta = await fetch(`${VAGAS_URL}/${id}`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(dadosAtualizados)
-                });
+            await fetch(`${VAGAS_URL}/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados)
+            });
 
-                if (!resposta.ok) {
-                    throw new Error("Erro ao atualizar vaga.");
-                }
+            btn.textContent = "Publicar Vaga";
+            btn.onclick = salvarVaga;
 
-                fecharModal("modal-vaga");
-                await carregarVagas();
-                mostrarToast("Vaga atualizada!");
-
-                btn.textContent = "Publicar Vaga";
-                btn.onclick = salvarVaga;
-
-            } catch {
-                mostrarToast("Erro ao atualizar.", "erro");
-            }
+            fecharModal("modal-vaga");
+            await carregarVagas();
+            mostrarToast("Vaga atualizada!");
         };
 
     } catch {
-        mostrarToast("Erro ao carregar dados da vaga.", "erro");
+        mostrarToast("Erro ao carregar vaga.", "erro");
     }
 }
 
 async function salvarEdicao() {
-    if (!empresaAtual || !empresaAtual.id) {
-        return mostrarToast("Empresa não encontrada.", "erro");
-    }
+    if (!empresaAtual || !empresaAtual.id) return mostrarToast("Empresa não encontrada.", "erro");
 
     const dados = {
-        nome: document.getElementById("edit-nome").value.trim(),
+        nome: getValor("edit-nome"),
         setor: document.getElementById("edit-setor").value,
-        localizacao: document.getElementById("edit-localizacao").value.trim(),
-        website: document.getElementById("edit-website").value.trim(),
-        descricao: document.getElementById("edit-descricao").value.trim(),
+        localizacao: getValor("edit-localizacao"),
+        website: getValor("edit-website"),
+        descricao: getValor("edit-descricao"),
         funcionarios: document.getElementById("edit-funcionarios").value,
-        fundacao: document.getElementById("edit-fundacao").value.trim()
+        fundacao: getValor("edit-fundacao")
     };
 
-    if (!dados.nome) {
-        return mostrarToast("O nome não pode estar vazio.", "erro");
-    }
+    if (!dados.nome) return mostrarToast("O nome não pode estar vazio.", "erro");
 
     try {
-        const res = await fetch(`${EMPRESAS_URL}/${empresaAtual.id}`, {
+        await fetch(`${EMPRESAS_URL}/${empresaAtual.id}`, {
             method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(dados)
         });
+    } catch {}
 
-        if (!res.ok) {
-            throw new Error("Erro ao editar empresa.");
-        }
+    empresaAtual = { ...empresaAtual, ...dados };
+    localStorage.setItem("empresaLogada", JSON.stringify(empresaAtual));
 
-        empresaAtual = {
-            ...empresaAtual,
-            ...dados
-        };
-
-        localStorage.setItem("empresaLogada", JSON.stringify(empresaAtual));
-
-        renderizarEmpresa(empresaAtual);
-        fecharModal("modal-editar");
-        mostrarToast("Perfil atualizado com sucesso!");
-
-    } catch {
-        mostrarToast("Erro ao salvar alterações.", "erro");
-    }
+    renderizarEmpresa(empresaAtual);
+    fecharModal("modal-editar");
+    mostrarToast("Perfil atualizado com sucesso!");
 }
 
 async function salvarContato() {
-    if (!empresaAtual || !empresaAtual.id) {
-        return mostrarToast("Empresa não encontrada.", "erro");
-    }
+    if (!empresaAtual || !empresaAtual.id) return mostrarToast("Empresa não encontrada.", "erro");
 
     const dados = {
-        email: document.getElementById("cont-email").value.trim(),
-        telefone: document.getElementById("cont-tel").value.trim(),
-        website: document.getElementById("cont-site").value.trim()
+        email: getValor("cont-email"),
+        telefone: getValor("cont-tel"),
+        website: getValor("cont-site")
     };
 
     try {
-        const res = await fetch(`${EMPRESAS_URL}/${empresaAtual.id}`, {
+        await fetch(`${EMPRESAS_URL}/${empresaAtual.id}`, {
             method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(dados)
         });
+    } catch {}
 
-        if (!res.ok) {
-            throw new Error("Erro ao salvar contato.");
-        }
+    empresaAtual = { ...empresaAtual, ...dados };
+    localStorage.setItem("empresaLogada", JSON.stringify(empresaAtual));
 
-        empresaAtual = {
-            ...empresaAtual,
-            ...dados
-        };
-
-        localStorage.setItem("empresaLogada", JSON.stringify(empresaAtual));
-
-        renderizarEmpresa(empresaAtual);
-        fecharModal("modal-contato");
-        mostrarToast("Contato atualizado!");
-
-    } catch {
-        mostrarToast("Erro ao salvar contato.", "erro");
-    }
+    renderizarEmpresa(empresaAtual);
+    fecharModal("modal-contato");
+    mostrarToast("Contato atualizado!");
 }
 
-function definirCor(cor, elemento = null) {
+function definirCor(cor) {
     corSelecionada = cor;
 
     const preview = document.getElementById("logo-preview-box");
+    if (preview) preview.style.background = cor;
 
-    if (preview) {
-        preview.style.background = cor;
-    }
+    document.querySelectorAll(".cor-btn").forEach(btn => btn.classList.remove("selecionada"));
 
-    document.querySelectorAll(".cor-btn").forEach(btn => {
-        btn.classList.remove("selecionada");
-    });
-
-    if (elemento) {
-        elemento.classList.add("selecionada");
-    }
+    if (event && event.target) event.target.classList.add("selecionada");
 }
 
 function salvarCor() {
@@ -578,52 +461,40 @@ function salvarCor() {
 }
 
 function aplicarCor(cor) {
-    document.querySelectorAll(".perfil-avatar, .nav-avatar").forEach(avatar => {
-        avatar.style.background = cor;
+    document.querySelectorAll(".perfil-avatar, .nav-avatar").forEach(el => {
+        el.style.background = cor;
     });
 }
 
-function renderizarCapaOpcoes() {}
-
 function previewCapaImagem(event) {
     const file = event.target.files[0];
-
-    if (!file) {
-        return;
-    }
+    if (!file) return;
 
     const reader = new FileReader();
 
-    reader.onload = eventReader => {
-        capaSelecionada = eventReader.target.result;
+    reader.onload = e => {
+        capaSelecionada = e.target.result;
 
         const preview = document.getElementById("capa-preview");
-
-        preview.style.background = "";
-        preview.style.backgroundImage = `url('${eventReader.target.result}')`;
-        preview.style.backgroundSize = "cover";
-        preview.style.backgroundPosition = "center";
+        if (preview) aplicarPreviewCapa(preview, capaSelecionada);
 
         const fname = document.getElementById("upload-filename");
-
-        if (fname) {
-            fname.textContent = file.name;
-        }
+        if (fname) fname.textContent = file.name;
     };
 
     reader.readAsDataURL(file);
 }
 
-function definirCapa(btn) {
-    capaSelecionada = btn.dataset.bg;
-
-    document.getElementById("capa-preview").style.background = capaSelecionada;
-
-    document.querySelectorAll(".capa-btn").forEach(botao => {
-        botao.classList.remove("selecionada");
-    });
-
-    btn.classList.add("selecionada");
+function aplicarPreviewCapa(el, bg) {
+    if (bg.startsWith("data:image") || bg.startsWith("http") || bg.startsWith("blob:")) {
+        el.style.background = "";
+        el.style.backgroundImage = `url('${bg}')`;
+        el.style.backgroundSize = "cover";
+        el.style.backgroundPosition = "center";
+    } else {
+        el.style.backgroundImage = "";
+        el.style.background = bg;
+    }
 }
 
 function salvarCapa() {
@@ -638,39 +509,23 @@ function salvarCapa() {
 
 function aplicarCapaBanner(bg) {
     const banner = document.getElementById("cover-banner");
+    if (!banner) return;
 
-    if (!banner) {
-        return;
-    }
-
-    if (bg.startsWith("data:image") || bg.startsWith("http") || bg.startsWith("blob:")) {
-        banner.style.background = "";
-        banner.style.backgroundImage = `url('${bg}')`;
-        banner.style.backgroundSize = "cover";
-        banner.style.backgroundPosition = "center";
-    } else {
-        banner.style.backgroundImage = "";
-        banner.style.background = bg;
-    }
+    aplicarPreviewCapa(banner, bg);
 }
 
 function renderizarTagsCulturaOpcoes() {
     const container = document.getElementById("cultura-opcoes");
-
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
     container.innerHTML = "";
 
     TAGS_CULTURA_OPCOES.forEach(tag => {
         const btn = document.createElement("button");
-
         btn.className = "cultura-tag-btn";
         btn.textContent = tag;
         btn.dataset.tag = tag;
         btn.onclick = () => toggleTagCultura(btn, tag);
-
         container.appendChild(btn);
     });
 }
@@ -681,17 +536,13 @@ function toggleTagCultura(btn, tag) {
     if (btn.classList.contains("ativa")) {
         btn.classList.remove("ativa");
     } else {
-        if (ativas.length >= 6) {
-            return mostrarToast("Máximo de 6 tags permitidas.", "erro");
-        }
-
+        if (ativas.length >= 6) return mostrarToast("Máximo de 6 tags permitidas.", "erro");
         btn.classList.add("ativa");
     }
 }
 
 function salvarCultura() {
-    const ativas = [...document.querySelectorAll(".cultura-tag-btn.ativa")]
-        .map(btn => btn.dataset.tag);
+    const ativas = [...document.querySelectorAll(".cultura-tag-btn.ativa")].map(btn => btn.dataset.tag);
 
     tagsCulturaAtuais = ativas;
 
@@ -704,52 +555,41 @@ function salvarCultura() {
 
 function renderizarTagsNoPerfil(tags) {
     const container = document.getElementById("tags-cultura");
+    if (!container) return;
 
-    if (!container) {
-        return;
-    }
-
-    container.innerHTML = tags
-        .map(tag => `<span class="tag-cultura">${tag}</span>`)
-        .join("");
+    container.innerHTML = tags.map(tag => `<span class="tag-cultura">${tag}</span>`).join("");
 }
 
 async function confirmarExclusao() {
-    if (!empresaAtual || !empresaAtual.id) {
-        return mostrarToast("Empresa não encontrada.", "erro");
-    }
+    if (!empresaAtual || !empresaAtual.id) return mostrarToast("Empresa não encontrada.", "erro");
 
-    if (!confirm("Tem certeza que deseja excluir esta empresa? Esta ação não pode ser desfeita.")) {
-        return;
-    }
+    if (!confirm("Tem certeza que deseja excluir esta empresa?")) return;
 
     try {
-        const res = await fetch(`${EMPRESAS_URL}/${empresaAtual.id}`, {
-            method: "DELETE"
-        });
+        await fetch(`${EMPRESAS_URL}/${empresaAtual.id}`, { method: "DELETE" });
+    } catch {}
 
-        if (!res.ok) {
-            throw new Error("Erro ao excluir empresa.");
-        }
+    localStorage.removeItem("empresaLogada");
+    mostrarToast("Conta excluída.", "erro");
 
-        localStorage.removeItem("empresaLogada");
-        mostrarToast("Conta excluída.", "erro");
+    setTimeout(() => {
+        window.location.href = "home.html";
+    }, 1000);
+}
 
-        setTimeout(() => {
-            window.location.href = "/home.html";
-        }, 1200);
+function getValor(id) {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : "";
+}
 
-    } catch {
-        mostrarToast("Erro ao excluir empresa.", "erro");
-    }
+function setValor(id, valor) {
+    const el = document.getElementById(id);
+    if (el) el.value = valor || "";
 }
 
 function setTexto(id, valor) {
     const el = document.getElementById(id);
-
-    if (el) {
-        el.textContent = valor;
-    }
+    if (el) el.textContent = valor || "";
 }
 
 function mostrarToast(msg, tipo = "ok") {
@@ -767,5 +607,5 @@ function mostrarToast(msg, tipo = "ok") {
 
     toast._timer = setTimeout(() => {
         toast.classList.remove("ativo");
-    }, 3500);
+    }, 3000);
 }

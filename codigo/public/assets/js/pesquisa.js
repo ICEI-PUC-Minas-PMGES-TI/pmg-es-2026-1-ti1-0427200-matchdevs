@@ -5,9 +5,9 @@ const VAGAS_URL = `${API_URL}/vagas`;
 
 const GOOGLE_MAPS_CONFIG = {
   mapId: "DEMO_MAP_ID",
-  defaultCenter: { lat: -14.2350, lng: -51.9253 },
-  defaultZoom: 4,
-  minFocusZoom: 11
+  defaultCenter: { lat: -19.9167, lng: -43.9345 },
+  defaultZoom: 11,
+  minFocusZoom: 13
 };
 
 let allJobs = [];
@@ -50,6 +50,30 @@ function escapeHtml(value) {
   }[char]));
 }
 
+function moneyOrDash(value) {
+  return value || "—";
+}
+
+function formatDateBR(value) {
+  if (!value) return "—";
+
+  const date = new Date(value + "T00:00:00");
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleDateString("pt-BR");
+}
+
+function getTipoContrato(job) {
+  return job.tipo_contrato || job.tipo || "—";
+}
+
+function hasCoordinates(job) {
+  return Number.isFinite(Number(job.lat)) && Number.isFinite(Number(job.lng));
+}
+
 function toRadians(value) {
   return value * Math.PI / 180;
 }
@@ -74,9 +98,7 @@ function calculateDistanceKm(origin, destination) {
 }
 
 function formatDistanceKm(distanceKm) {
-  if (!Number.isFinite(distanceKm)) {
-    return "—";
-  }
+  if (!Number.isFinite(distanceKm)) return "—";
 
   if (distanceKm < 1) {
     return `${Math.round(distanceKm * 1000)} m`;
@@ -104,32 +126,13 @@ function getJobDistanceLabel(job) {
   return `Distância aproximada: ${formatDistanceKm(distanceKm)}`;
 }
 
-function moneyOrDash(value) {
-  return value || "—";
-}
+async function initMap() {
+  const mapElement = document.getElementById("map");
 
-function formatDateBR(value) {
-  if (!value) return "—";
-
-  const date = new Date(value + "T00:00:00");
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
+  if (!mapElement) {
+    throw new Error("Elemento #map não encontrado no HTML.");
   }
 
-  return date.toLocaleDateString("pt-BR");
-}
-
-function getTipoContrato(job) {
-  return job.tipo_contrato || job.tipo || "—";
-}
-
-function hasCoordinates(job) {
-  return Number.isFinite(Number(job.lat)) &&
-         Number.isFinite(Number(job.lng));
-}
-
-async function initMap() {
   const [{ Map, InfoWindow }, markerLibrary, geocodingLibrary] = await Promise.all([
     google.maps.importLibrary("maps"),
     google.maps.importLibrary("marker"),
@@ -140,7 +143,7 @@ async function initMap() {
   PinElement = markerLibrary.PinElement;
   geocoder = new geocodingLibrary.Geocoder();
 
-  map = new Map(document.getElementById("map"), {
+  map = new Map(mapElement, {
     center: GOOGLE_MAPS_CONFIG.defaultCenter,
     zoom: GOOGLE_MAPS_CONFIG.defaultZoom,
     mapId: GOOGLE_MAPS_CONFIG.mapId,
@@ -150,6 +153,11 @@ async function initMap() {
   });
 
   infoWindow = new InfoWindow();
+
+  setTimeout(() => {
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(GOOGLE_MAPS_CONFIG.defaultCenter);
+  }, 300);
 }
 
 function populateFilters(jobs) {
@@ -185,12 +193,14 @@ function applyFilters() {
   const location = els.location.value;
 
   filteredJobs = allJobs.filter(job => {
+    const requisitos = Array.isArray(job.requisitos) ? job.requisitos : [];
+
     const matchText =
       !search ||
       normalize(job.titulo).includes(search) ||
       normalize(job.empresa).includes(search) ||
       normalize(job.descricao).includes(search) ||
-      (job.requisitos || []).some(req => normalize(req).includes(search));
+      requisitos.some(req => normalize(req).includes(search));
 
     const matchType = !type || getTipoContrato(job) === type;
     const matchLocation = !location || job.localizacao === location;
@@ -292,7 +302,7 @@ function focusJob(jobId) {
 
   const markerData = markerById.get(jobId);
 
-  if (markerData) {
+  if (markerData && map && infoWindow) {
     infoWindow.setContent(markerData.content);
 
     infoWindow.open({
@@ -308,11 +318,7 @@ function focusJob(jobId) {
 
 function removeAllMarkers() {
   for (const markerData of markerById.values()) {
-    if (markerData.marker.map !== undefined) {
-      markerData.marker.map = null;
-    } else {
-      markerData.marker.setMap(null);
-    }
+    markerData.marker.map = null;
   }
 
   markerById.clear();
@@ -322,26 +328,19 @@ function removeAllMarkers() {
   }
 }
 
-function geocodeCacheKey(address) {
-  return `geocode:${normalize(address)}`;
-}
+function createRedMarker(position, job) {
+  const pin = new PinElement({
+    background: "#ef4444",
+    borderColor: "#b91c1c",
+    glyphColor: "#ffffff"
+  });
 
-function readCachedGeocode(address) {
-  try {
-    const raw = sessionStorage.getItem(geocodeCacheKey(address));
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeCachedGeocode(address, position) {
-  try {
-    sessionStorage.setItem(
-      geocodeCacheKey(address),
-      JSON.stringify(position)
-    );
-  } catch {}
+  return new AdvancedMarkerElement({
+    map,
+    position,
+    title: `${job.titulo || "Vaga"} - ${job.empresa || ""}`,
+    content: pin.element
+  });
 }
 
 async function getJobPosition(job) {
@@ -356,12 +355,6 @@ async function getJobPosition(job) {
     return null;
   }
 
-  const cached = readCachedGeocode(job.localizacao);
-
-  if (cached && Number.isFinite(cached.lat) && Number.isFinite(cached.lng)) {
-    return cached;
-  }
-
   try {
     const response = await geocoder.geocode({
       address: job.localizacao,
@@ -372,48 +365,22 @@ async function getJobPosition(job) {
 
     const location = response.results?.[0]?.geometry?.location;
 
-    if (!location) {
-      return null;
-    }
+    if (!location) return null;
 
-    const position = {
+    return {
       lat: location.lat(),
       lng: location.lng()
     };
 
-    writeCachedGeocode(job.localizacao, position);
-
-    return position;
   } catch (error) {
     console.warn(`Não foi possível geocodificar: ${job.localizacao}`, error);
     return null;
   }
 }
 
-function createRedMarker(position, job) {
-  if (AdvancedMarkerElement && PinElement) {
-    const pin = new PinElement({
-      background: "#ef4444",
-      borderColor: "#b91c1c",
-      glyphColor: "#ffffff"
-    });
-
-    return new AdvancedMarkerElement({
-      map,
-      position,
-      title: `${job.titulo || "Vaga"} - ${job.empresa || ""}`,
-      content: pin.element
-    });
-  }
-
-  return new google.maps.Marker({
-    map,
-    position,
-    title: `${job.titulo || "Vaga"} - ${job.empresa || ""}`
-  });
-}
-
 async function renderMarkers(jobs) {
+  if (!map) return;
+
   const currentRunId = ++renderMarkersRunId;
 
   removeAllMarkers();
@@ -424,13 +391,8 @@ async function renderMarkers(jobs) {
   for (const job of jobs) {
     const position = await getJobPosition(job);
 
-    if (currentRunId !== renderMarkersRunId) {
-      return;
-    }
-
-    if (!position) {
-      continue;
-    }
+    if (currentRunId !== renderMarkersRunId) return;
+    if (!position) continue;
 
     const marker = createRedMarker(position, job);
     const content = buildInfoWindowContent(job);
@@ -453,7 +415,7 @@ async function renderMarkers(jobs) {
     map.setCenter(bounds.getCenter());
     map.setZoom(GOOGLE_MAPS_CONFIG.minFocusZoom);
   } else if (markerCount > 1) {
-    map.fitBounds(bounds, 20);
+    map.fitBounds(bounds, 60);
   } else {
     map.setCenter(GOOGLE_MAPS_CONFIG.defaultCenter);
     map.setZoom(GOOGLE_MAPS_CONFIG.defaultZoom);
@@ -467,20 +429,9 @@ function openDetails(job) {
     <h2>${escapeHtml(job.titulo || "Vaga sem título")}</h2>
     <h3>${escapeHtml(job.empresa || "Empresa não informada")} — ${escapeHtml(job.localizacao || "Localização não informada")}</h3>
 
-    <p>
-      <b>Tipo de contrato:</b>
-      ${escapeHtml(getTipoContrato(job))}
-    </p>
-
-    <p>
-      <b>Salário:</b>
-      ${escapeHtml(moneyOrDash(job.salario))}
-    </p>
-
-    <p>
-      <b>Publicado em:</b>
-      ${escapeHtml(formatDateBR(job.data_publicacao))}
-    </p>
+    <p><b>Tipo de contrato:</b> ${escapeHtml(getTipoContrato(job))}</p>
+    <p><b>Salário:</b> ${escapeHtml(moneyOrDash(job.salario))}</p>
+    <p><b>Publicado em:</b> ${escapeHtml(formatDateBR(job.data_publicacao))}</p>
 
     <p>
       <b>Descrição:</b><br>
@@ -557,9 +508,7 @@ async function requestUserLocation() {
 
         resolve(userPosition);
       },
-      error => {
-        reject(error);
-      },
+      error => reject(error),
       {
         enableHighAccuracy: true,
         timeout: 10000,
@@ -604,6 +553,7 @@ async function loadJobs() {
 
         renderJobs(filteredJobs);
         renderMarkers(filteredJobs);
+
       } catch (error) {
         console.warn("Erro ao obter localização:", error);
 
@@ -620,7 +570,7 @@ async function loadJobs() {
     if (els.empty) {
       els.empty.hidden = false;
       els.empty.textContent =
-        "Erro ao carregar as vagas ou o Google Maps. Verifique se o JSON Server está rodando e se a API do Google Maps está ativa.";
+        "Erro ao carregar as vagas ou o Google Maps. Verifique a API key, o JSON Server e o elemento #map.";
     }
   }
 })();

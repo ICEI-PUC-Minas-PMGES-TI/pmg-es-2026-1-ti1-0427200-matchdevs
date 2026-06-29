@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".modal-overlay").forEach(overlay => {
         overlay.addEventListener("click", event => {
             if (event.target === overlay) {
-                overlay.classList.remove("ativo");
+                fecharModal(overlay.id);
             }
         });
     });
@@ -21,24 +21,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function init() {
-    try {
-        await carregarPerfil();
-        await carregarExperiencias();
-        await carregarEducacoes();
-        await carregarHabilidades();
-        await carregarCertificacoes();
-    } catch (erro) {
-        console.error("Erro ao inicializar perfil:", erro);
-        toast("Erro ao carregar perfil.", "erro");
-    }
+    await carregarPerfil();
+    await carregarExperiencias();
+    await carregarEducacoes();
+    await carregarHabilidades();
+    await carregarCertificacoes();
 }
 
 async function getJSON(url, fallback = []) {
     try {
         const response = await fetch(url);
-
         if (!response.ok) return fallback;
-
         return await response.json();
     } catch {
         return fallback;
@@ -47,36 +40,38 @@ async function getJSON(url, fallback = []) {
 
 async function carregarPerfil() {
     const data = await getJSON(PERFIL_URL, null);
+    const usuario = JSON.parse(sessionStorage.getItem("usuarioCorrente") || "null");
+    const localPerfil = JSON.parse(localStorage.getItem("perfil_usuario_local") || "null");
 
-    if (Array.isArray(data)) {
+    if (localPerfil) {
+        perfil = localPerfil;
+    } else if (Array.isArray(data)) {
         perfil = data[0] || {};
     } else {
         perfil = data || {};
     }
 
-    if (!perfil.nome) {
-        const usuario = JSON.parse(sessionStorage.getItem("usuarioCorrente") || "null");
-
-        perfil = {
-            id: perfil.id || 1,
-            nome: usuario ? usuario.nome : "Usuário",
-            cargo: perfil.cargo || "Candidato",
-            empresa: perfil.empresa || "BH Works",
-            local: perfil.local || "Belo Horizonte, MG",
-            email: usuario ? usuario.email : "",
-            tel: perfil.tel || "",
-            linkedin: perfil.linkedin || "",
-            github: perfil.github || "",
-            sobre: perfil.sobre || "Perfil em construção.",
-            disponibilidade: perfil.disponibilidade || "disponivel",
-            metricas: perfil.metricas || {
-                exp: 0,
-                proj: 0,
-                rec: 0,
-                match: "0%"
-            }
-        };
-    }
+    perfil = {
+        id: perfil.id || 1,
+        nome: perfil.nome || (usuario ? usuario.nome : "Usuário"),
+        cargo: perfil.cargo || "Candidato",
+        empresa: perfil.empresa || "BH Works",
+        local: perfil.local || "Belo Horizonte, MG",
+        email: perfil.email || (usuario ? usuario.email : ""),
+        tel: perfil.tel || "",
+        linkedin: perfil.linkedin || "",
+        github: perfil.github || "",
+        sobre: perfil.sobre || "Perfil em construção.",
+        disponibilidade: perfil.disponibilidade || "disponivel",
+        metricas: perfil.metricas || {
+            exp: 0,
+            proj: 0,
+            rec: 0,
+            match: "0%"
+        },
+        fotoPerfil: perfil.fotoPerfil || "",
+        bannerImg: perfil.bannerImg || ""
+    };
 
     renderPerfil();
 }
@@ -139,14 +134,13 @@ function renderPerfil() {
     setValor("edit-match", metricas.match || "0%");
     setValor("edit-sobre", perfil.sobre);
 
-    const avatarInicial = document.getElementById("avatar-inicial");
-    const navInicial = document.getElementById("nav-inicial");
+    const inicial = perfil.nome ? perfil.nome.charAt(0).toUpperCase() : "U";
 
-    if (avatarInicial) avatarInicial.textContent = perfil.nome ? perfil.nome.charAt(0).toUpperCase() : "U";
-    if (navInicial) navInicial.textContent = perfil.nome ? perfil.nome.charAt(0).toUpperCase() : "U";
+    setTexto("avatar-inicial", inicial);
+    setTexto("nav-inicial", inicial);
 
     const msgPara = document.getElementById("msg-para");
-    if (msgPara) msgPara.value = perfil.nome || "";
+    if (msgPara) msgPara.value = perfil.nome;
 
     renderBadgeDisp(perfil.disponibilidade);
 
@@ -161,37 +155,33 @@ function normalizarUrl(valor) {
 }
 
 async function atualizarPerfil(dados) {
-    let url = PERFIL_URL;
+    perfil = {
+        ...perfil,
+        ...dados
+    };
 
-    if (perfil.id) {
-        url = `${PERFIL_URL}/${perfil.id}`;
-    }
+    localStorage.setItem("perfil_usuario_local", JSON.stringify(perfil));
 
     try {
-        const response = await fetch(url, {
+        await fetch(`${PERFIL_URL}/${perfil.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(dados)
         });
-
-        if (response.ok) {
-            const atualizado = await response.json();
-            perfil = { ...perfil, ...atualizado };
-            return atualizado;
-        }
     } catch {}
 
-    perfil = { ...perfil, ...dados };
-    localStorage.setItem("perfil_usuario_local", JSON.stringify(perfil));
     return perfil;
 }
 
 async function salvarPerfil() {
     const nome = document.getElementById("edit-nome").value.trim();
 
-    if (!nome) return toast("Informe o nome.", "erro");
+    if (!nome) {
+        toast("Informe o nome.", "erro");
+        return;
+    }
 
     const dados = {
         nome,
@@ -212,7 +202,6 @@ async function salvarPerfil() {
     };
 
     await atualizarPerfil(dados);
-
     renderPerfil();
     fecharModal("modal-editar");
     toast("Perfil atualizado!", "sucesso");
@@ -237,9 +226,11 @@ async function salvarSobre() {
 }
 
 async function carregarExperiencias() {
-    const lista = await getJSON(EXPERIENCIAS_URL, []);
-    const container = document.getElementById("exp-lista");
+    const listaLocal = JSON.parse(localStorage.getItem("experiencias_usuario_local") || "[]");
+    const listaApi = await getJSON(EXPERIENCIAS_URL, []);
+    const lista = listaLocal.length ? listaLocal : listaApi;
 
+    const container = document.getElementById("exp-lista");
     if (!container) return;
 
     container.innerHTML = lista.map(exp => htmlExp(exp)).join("");
@@ -275,9 +266,13 @@ async function adicionarExp() {
     const cargo = document.getElementById("exp-cargo").value.trim();
     const empresa = document.getElementById("exp-empresa").value.trim();
 
-    if (!cargo || !empresa) return toast("Informe cargo e empresa.", "erro");
+    if (!cargo || !empresa) {
+        toast("Informe cargo e empresa.", "erro");
+        return;
+    }
 
     const nova = {
+        id: Date.now(),
         cargo,
         empresa,
         modalidade: document.getElementById("exp-modo").value,
@@ -289,11 +284,17 @@ async function adicionarExp() {
         cor: `hsl(${Math.round(Math.random() * 360)},60%,50%)`
     };
 
-    await fetch(EXPERIENCIAS_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nova)
-    }).catch(() => {});
+    const lista = JSON.parse(localStorage.getItem("experiencias_usuario_local") || "[]");
+    lista.push(nova);
+    localStorage.setItem("experiencias_usuario_local", JSON.stringify(lista));
+
+    try {
+        await fetch(EXPERIENCIAS_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(nova)
+        });
+    } catch {}
 
     await carregarExperiencias();
     fecharModal("modal-exp");
@@ -306,9 +307,11 @@ async function adicionarExp() {
 }
 
 async function carregarEducacoes() {
-    const lista = await getJSON(EDUCACOES_URL, []);
-    const container = document.getElementById("edu-lista");
+    const listaLocal = JSON.parse(localStorage.getItem("educacoes_usuario_local") || "[]");
+    const listaApi = await getJSON(EDUCACOES_URL, []);
+    const lista = listaLocal.length ? listaLocal : listaApi;
 
+    const container = document.getElementById("edu-lista");
     if (!container) return;
 
     container.innerHTML = lista.map(edu => `
@@ -327,18 +330,30 @@ async function adicionarEdu() {
     const curso = document.getElementById("edu-curso").value.trim();
     const instituicao = document.getElementById("edu-inst").value.trim();
 
-    if (!curso || !instituicao) return toast("Informe curso e instituição.", "erro");
+    if (!curso || !instituicao) {
+        toast("Informe curso e instituição.", "erro");
+        return;
+    }
 
-    await fetch(EDUCACOES_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            curso,
-            instituicao,
-            inicio: document.getElementById("edu-inicio").value,
-            fim: document.getElementById("edu-fim").value || null
-        })
-    }).catch(() => {});
+    const nova = {
+        id: Date.now(),
+        curso,
+        instituicao,
+        inicio: document.getElementById("edu-inicio").value,
+        fim: document.getElementById("edu-fim").value || null
+    };
+
+    const lista = JSON.parse(localStorage.getItem("educacoes_usuario_local") || "[]");
+    lista.push(nova);
+    localStorage.setItem("educacoes_usuario_local", JSON.stringify(lista));
+
+    try {
+        await fetch(EDUCACOES_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(nova)
+        });
+    } catch {}
 
     await carregarEducacoes();
     fecharModal("modal-edu");
@@ -351,9 +366,11 @@ async function adicionarEdu() {
 }
 
 async function carregarHabilidades() {
-    const lista = await getJSON(HABILIDADES_URL, []);
-    const container = document.getElementById("hab-grid");
+    const listaLocal = JSON.parse(localStorage.getItem("habilidades_usuario_local") || "[]");
+    const listaApi = await getJSON(HABILIDADES_URL, []);
+    const lista = listaLocal.length ? listaLocal : listaApi;
 
+    const container = document.getElementById("hab-grid");
     if (!container) return;
 
     container.innerHTML = lista.map(hab => `
@@ -367,13 +384,28 @@ async function carregarHabilidades() {
 async function adicionarHab() {
     const nome = document.getElementById("hab-nome").value.trim();
 
-    if (!nome) return toast("Informe uma habilidade.", "erro");
+    if (!nome) {
+        toast("Informe uma habilidade.", "erro");
+        return;
+    }
 
-    await fetch(HABILIDADES_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, endossos: 0 })
-    }).catch(() => {});
+    const nova = {
+        id: Date.now(),
+        nome,
+        endossos: 0
+    };
+
+    const lista = JSON.parse(localStorage.getItem("habilidades_usuario_local") || "[]");
+    lista.push(nova);
+    localStorage.setItem("habilidades_usuario_local", JSON.stringify(lista));
+
+    try {
+        await fetch(HABILIDADES_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(nova)
+        });
+    } catch {}
 
     await carregarHabilidades();
     fecharModal("modal-hab");
@@ -383,9 +415,11 @@ async function adicionarHab() {
 }
 
 async function carregarCertificacoes() {
-    const lista = await getJSON(CERTIFICACOES_URL, []);
-    const container = document.getElementById("cert-lista");
+    const listaLocal = JSON.parse(localStorage.getItem("certificacoes_usuario_local") || "[]");
+    const listaApi = await getJSON(CERTIFICACOES_URL, []);
+    const lista = listaLocal.length ? listaLocal : listaApi;
 
+    const container = document.getElementById("cert-lista");
     if (!container) return;
 
     container.innerHTML = lista.map(cert => `
@@ -403,18 +437,30 @@ async function carregarCertificacoes() {
 async function adicionarCert() {
     const nome = document.getElementById("cert-nome").value.trim();
 
-    if (!nome) return toast("Informe o nome da certificação.", "erro");
+    if (!nome) {
+        toast("Informe o nome da certificação.", "erro");
+        return;
+    }
 
-    await fetch(CERTIFICACOES_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            nome,
-            emissor: document.getElementById("cert-emissor").value.trim(),
-            ano: document.getElementById("cert-ano").value,
-            icone: "🏅"
-        })
-    }).catch(() => {});
+    const nova = {
+        id: Date.now(),
+        nome,
+        emissor: document.getElementById("cert-emissor").value.trim(),
+        ano: document.getElementById("cert-ano").value,
+        icone: "🏅"
+    };
+
+    const lista = JSON.parse(localStorage.getItem("certificacoes_usuario_local") || "[]");
+    lista.push(nova);
+    localStorage.setItem("certificacoes_usuario_local", JSON.stringify(lista));
+
+    try {
+        await fetch(CERTIFICACOES_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(nova)
+        });
+    } catch {}
 
     await carregarCertificacoes();
     fecharModal("modal-cert");
@@ -428,7 +474,6 @@ async function adicionarCert() {
 
 function carregarBanner(input) {
     const file = input.files[0];
-
     if (!file) return;
 
     const reader = new FileReader();
@@ -453,7 +498,6 @@ function aplicarBanner(src) {
 
 function carregarFoto(input) {
     const file = input.files[0];
-
     if (!file) return;
 
     const reader = new FileReader();
@@ -520,13 +564,11 @@ function enviarMsg() {
 
     fecharModal("modal-msg");
     toast("Mensagem enviada!", "sucesso");
-
     document.getElementById("msg-texto").value = "";
 }
 
 function conectar() {
     const btn = document.getElementById("btn-conectar");
-
     if (!btn) return;
 
     btn.innerHTML = "✓ Conectado";
@@ -538,7 +580,6 @@ function conectar() {
 
 function renderBadgeDisp(valor) {
     const badge = document.getElementById("badge-disp");
-
     if (!badge) return;
 
     if (valor === "disponivel") {
@@ -573,7 +614,6 @@ function toast(msg, tipo = "") {
 
     t.textContent = msg;
     t.className = "toast ativo" + (tipo ? " " + tipo : "");
-
     clearTimeout(t._timer);
 
     t._timer = setTimeout(() => {
