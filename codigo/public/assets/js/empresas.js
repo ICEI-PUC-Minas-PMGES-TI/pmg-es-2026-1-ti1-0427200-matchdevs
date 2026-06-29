@@ -1,22 +1,33 @@
-if (!sessionStorage.getItem('usuarioCorrente')) {
-    window.location.href = 'login.html';
-} else {
-    const renderOriginal = GerenciadorEmpresas.prototype.renderizar;
+document.addEventListener("DOMContentLoaded", () => {
+    if (!sessionStorage.getItem("usuarioCorrente")) {
+        sessionStorage.setItem("returnURL", window.location.pathname.split("/").pop());
+        window.location.href = "login.html";
+        return;
+    }
 
-    GerenciadorEmpresas.prototype.renderizar = function () {
-        this.container.innerHTML = "";
+    const intervalo = setInterval(() => {
+        if (window.gerenciador && window.gerenciador.empresas) {
+            clearInterval(intervalo);
 
-        const empresasFavoritas = this.empresas.filter(empresa =>
-            this.ehFavorita(empresa.id)
-        );
+            window.gerenciador.renderizar = function () {
+                this.container.innerHTML = "";
 
-        if (empresasFavoritas.length === 0) {
-            this.container.innerHTML =
-                '<div class="empresa-nao-encontrada">Você ainda não favoritou nenhuma empresa.</div>';
-        } else {
-            empresasFavoritas.forEach(empresa =>
-                this.container.appendChild(this.criarCardEmpresa(empresa))
-            );
+                const empresasFavoritas = this.empresas.filter(empresa =>
+                    this.ehFavorita(empresa.id)
+                );
+
+                if (empresasFavoritas.length === 0) {
+                    this.container.innerHTML =
+                        '<div class="empresa-nao-encontrada">Você ainda não favoritou nenhuma empresa.</div>';
+                    return;
+                }
+
+                empresasFavoritas.forEach(empresa => {
+                    this.container.appendChild(this.criarCardEmpresa(empresa));
+                });
+            };
+
+            window.gerenciador.renderizar();
         }
-    };
-}
+    }, 50);
+});

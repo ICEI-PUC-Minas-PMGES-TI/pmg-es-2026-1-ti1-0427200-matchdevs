@@ -1,4 +1,5 @@
-const API_URL = "http://localhost:3000/usuarios";
+const API_URL = "http://localhost:3000";
+const USUARIOS_URL = `${API_URL}/usuarios`;
 
 const LOCAL_USERS_KEY = "usuarios_locais_bhworks";
 const LOCAL_CANDIDATES_KEY = "candidatos_bhworks";
@@ -49,19 +50,23 @@ function salvarPerfilCandidato(perfil) {
     const candidatos = JSON.parse(localStorage.getItem(LOCAL_CANDIDATES_KEY) || "[]");
 
     candidatos.push(perfil);
-
     localStorage.setItem(LOCAL_CANDIDATES_KEY, JSON.stringify(candidatos));
 }
 
 async function carregarUsuarios() {
     try {
-        const resposta = await fetch(API_URL);
+        const resposta = await fetch(USUARIOS_URL);
 
         if (!resposta.ok) {
             throw new Error("Falha ao buscar usuários.");
         }
 
-        return await resposta.json();
+        const usuarios = await resposta.json();
+
+        return [
+            ...usuarios,
+            ...getUsuariosLocais()
+        ];
 
     } catch (erro) {
         console.warn("JSON Server indisponível. Usando usuários locais.", erro);
@@ -76,7 +81,7 @@ async function carregarUsuarios() {
 
 async function salvarUsuario(usuario) {
     try {
-        const resposta = await fetch(API_URL, {
+        const resposta = await fetch(USUARIOS_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -139,8 +144,8 @@ if (form) {
             return;
         }
 
-        if (senha.length < 6) {
-            mostrarMensagem("A senha deve ter pelo menos 6 caracteres.");
+        if (senha.length < 3) {
+            mostrarMensagem("A senha deve ter pelo menos 3 caracteres.");
             return;
         }
 
@@ -189,6 +194,6 @@ if (form) {
 
         setTimeout(() => {
             window.location.href = "login.html";
-        }, 1400);
+        }, 1200);
     });
 }

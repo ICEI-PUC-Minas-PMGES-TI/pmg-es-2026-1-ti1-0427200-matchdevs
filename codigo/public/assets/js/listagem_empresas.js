@@ -20,67 +20,16 @@ class GerenciadorEmpresas {
             }
 
             this.empresas = await resposta.json();
-        } catch (erro) {
-            console.error("Erro ao buscar empresas no JSON Server:", erro);
 
-            this.empresas = [
-                {
-                    id: 1,
-                    nome: "BhTech Solutions",
-                    localizacao: "Belo Horizonte, MG",
-                    setor: "Tecnologia",
-                    porte: "Médio",
-                    fundacao: 2018,
-                    descricao: "Empresa focada em soluções backend escaláveis e inovação tecnológica.",
-                    especialidades: ["Node.js", "Cloud Computing", "APIs REST"]
-                },
-                {
-                    id: 2,
-                    nome: "InovaWeb Agency",
-                    localizacao: "Belo Horizonte, MG",
-                    setor: "Marketing Digital",
-                    porte: "Pequeno",
-                    fundacao: 2021,
-                    descricao: "Agência especializada em campanhas digitais de alta performance.",
-                    especialidades: ["SEO", "Google Ads", "Social Media"]
-                },
-                {
-                    id: 3,
-                    nome: "Eco Energia Brasil",
-                    localizacao: "São Paulo, SP",
-                    setor: "Energia Sustentável",
-                    porte: "Grande",
-                    fundacao: 2015,
-                    descricao: "Soluções em energia solar e sustentabilidade ambiental.",
-                    especialidades: ["Energia Solar", "Sustentabilidade", "Consultoria"]
-                },
-                {
-                    id: 4,
-                    nome: "DataFlow Solutions",
-                    localizacao: "Curitiba, PR",
-                    setor: "Big Data",
-                    porte: "Médio",
-                    fundacao: 2019,
-                    descricao: "Especialista em análise de dados e inteligência de negócios.",
-                    especialidades: ["Python", "Spark", "Machine Learning"]
-                },
-                {
-                    id: 5,
-                    nome: "Creative Design Co",
-                    localizacao: "Rio de Janeiro, RJ",
-                    setor: "Design e UX",
-                    porte: "Pequeno",
-                    fundacao: 2020,
-                    descricao: "Agência de design focada em experiência do usuário inovadora.",
-                    especialidades: ["UI/UX", "Web Design", "Branding"]
-                }
-            ];
+        } catch (erro) {
+            console.error("Erro ao carregar empresas:", erro);
+            this.empresas = [];
         }
     }
 
     carregarFavoritos() {
-        const favoritosArmazenados = localStorage.getItem("empresas_favoritas_v2");
-        return favoritosArmazenados ? JSON.parse(favoritosArmazenados) : [];
+        return JSON.parse(localStorage.getItem("empresas_favoritas_v2") || "[]")
+            .map(Number);
     }
 
     salvarFavoritos() {
@@ -88,10 +37,12 @@ class GerenciadorEmpresas {
     }
 
     ehFavorita(id) {
-        return this.favoritos.includes(id);
+        return this.favoritos.includes(Number(id));
     }
 
     toggleFavorito(id) {
+        id = Number(id);
+
         if (!sessionStorage.getItem("usuarioCorrente")) {
             sessionStorage.setItem("returnURL", window.location.pathname.split("/").pop());
             window.location.href = "login.html";
@@ -109,10 +60,12 @@ class GerenciadorEmpresas {
         }
 
         this.salvarFavoritos();
-        this.renderizar(this.input.value);
+        this.renderizar(this.input ? this.input.value : "");
     }
 
     renderizar(filtro = "") {
+        if (!this.container) return;
+
         this.container.innerHTML = "";
 
         const termo = filtro.toLowerCase();
@@ -121,23 +74,24 @@ class GerenciadorEmpresas {
             const nome = empresa.nome || "";
             const setor = empresa.setor || "";
             const localizacao = empresa.localizacao || "";
+            const descricao = empresa.descricao || "";
 
             return (
                 nome.toLowerCase().includes(termo) ||
                 setor.toLowerCase().includes(termo) ||
-                localizacao.toLowerCase().includes(termo)
+                localizacao.toLowerCase().includes(termo) ||
+                descricao.toLowerCase().includes(termo)
             );
         });
 
         if (empresasFiltradas.length === 0) {
             this.container.innerHTML =
-                '<div class="empresa-nao-encontrada">Nenhuma empresa encontrada para sua busca.</div>';
+                '<div class="empresa-nao-encontrada">Nenhuma empresa encontrada.</div>';
             return;
         }
 
         empresasFiltradas.forEach(empresa => {
-            const card = this.criarCardEmpresa(empresa);
-            this.container.appendChild(card);
+            this.container.appendChild(this.criarCardEmpresa(empresa));
         });
     }
 
@@ -153,23 +107,23 @@ class GerenciadorEmpresas {
         const porte = empresa.porte || empresa.funcionarios || "Não informado";
         const fundacao = empresa.fundacao || "Não informado";
 
-        const tags = especialidades
-            .map(especialidade => `<span class="tag">${especialidade}</span>`)
-            .join("");
+        const tags = especialidades.length
+            ? especialidades.map(item => `<span class="tag">${item}</span>`).join("")
+            : `<span class="tag">${empresa.setor || "Empresa"}</span>`;
 
         div.innerHTML = `
             <div class="card-header">
                 <div>
                     <h3>${empresa.nome || "Empresa sem nome"}</h3>
                     <p>
-                        <strong>${empresa.setor || "Setor não informado"}</strong> - 
+                        <strong>${empresa.setor || "Setor não informado"}</strong> -
                         ${empresa.localizacao || "Localização não informada"}
                     </p>
                 </div>
 
-                <button 
-                    class="btn-favorito ${classFavorito}" 
-                    onclick="gerenciador.toggleFavorito(${empresa.id})" 
+                <button
+                    class="btn-favorito ${classFavorito}"
+                    onclick="window.gerenciador.toggleFavorito(${empresa.id})"
                     title="Adicionar aos favoritos"
                 >
                     ${iconeFavorito}
@@ -189,11 +143,11 @@ class GerenciadorEmpresas {
             </div>
 
             <div class="botoes-container">
-                <button class="btn" onclick="gerenciador.verPerfil(${empresa.id})">
+                <button class="btn" onclick="window.gerenciador.verPerfil(${empresa.id})">
                     Ver Perfil
                 </button>
 
-                <button class="btn btn-secundario" onclick="gerenciador.contatoEmpresa(${empresa.id})">
+                <button class="btn btn-secundario" onclick="window.gerenciador.contatoEmpresa(${empresa.id})">
                     Enviar Contato
                 </button>
             </div>
@@ -203,39 +157,51 @@ class GerenciadorEmpresas {
     }
 
     verPerfil(id) {
-        const empresa = this.empresas.find(empresa => empresa.id === id);
+        const empresa = this.empresas.find(item => Number(item.id) === Number(id));
 
-        if (!empresa) {
-            return;
-        }
+        if (!empresa) return;
 
-        const especialidades = empresa.especialidades || empresa.habilidades || [];
-        const porte = empresa.porte || empresa.funcionarios || "Não informado";
-        const fundacao = empresa.fundacao || "Não informado";
+        localStorage.setItem("empresaVisualizada", JSON.stringify(empresa));
 
-        const detalhes = `
+        alert(`
 EMPRESA: ${empresa.nome || "Empresa sem nome"}
 SETOR: ${empresa.setor || "Não informado"}
 LOCALIZAÇÃO: ${empresa.localizacao || "Não informada"}
-PORTE: ${porte}
-ANO DE FUNDAÇÃO: ${fundacao}
+PORTE: ${empresa.porte || empresa.funcionarios || "Não informado"}
+FUNDAÇÃO: ${empresa.fundacao || "Não informado"}
 
 DESCRIÇÃO:
 ${empresa.descricao || "Descrição não informada."}
-
-ESPECIALIDADES:
-${especialidades.length > 0 ? especialidades.map((item, index) => `${index + 1}. ${item}`).join("\n") : "Nenhuma especialidade cadastrada."}
-        `;
-
-        alert(detalhes);
+        `);
     }
 
     contatoEmpresa(id) {
-        const empresa = this.empresas.find(empresa => empresa.id === id);
+        const empresa = this.empresas.find(item => Number(item.id) === Number(id));
 
-        if (empresa) {
-            this.mostrarNotificacao(`Mensagem de contato enviada para ${empresa.nome}!`, "sucesso");
+        if (!empresa) return;
+
+        const usuario = JSON.parse(sessionStorage.getItem("usuarioCorrente") || "null");
+
+        if (!usuario) {
+            sessionStorage.setItem("returnURL", window.location.pathname.split("/").pop());
+            window.location.href = "login.html";
+            return;
         }
+
+        const contatos = JSON.parse(localStorage.getItem("contatos_empresas") || "[]");
+
+        contatos.push({
+            id: Date.now(),
+            empresaId: empresa.id,
+            empresaNome: empresa.nome,
+            usuarioId: usuario.id,
+            usuarioNome: usuario.nome,
+            data: new Date().toISOString()
+        });
+
+        localStorage.setItem("contatos_empresas", JSON.stringify(contatos));
+
+        this.mostrarNotificacao(`Mensagem de contato enviada para ${empresa.nome}!`, "sucesso");
     }
 
     mostrarNotificacao(mensagem, tipo = "sucesso") {
@@ -251,7 +217,6 @@ ${especialidades.length > 0 ? especialidades.map((item, index) => `${index + 1}.
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             z-index: 1000;
-            animation: slideIn 0.3s ease;
             font-weight: 500;
         `;
 
@@ -259,11 +224,7 @@ ${especialidades.length > 0 ? especialidades.map((item, index) => `${index + 1}.
         document.body.appendChild(notif);
 
         setTimeout(() => {
-            notif.style.animation = "slideOut 0.3s ease";
-
-            setTimeout(() => {
-                notif.remove();
-            }, 300);
+            notif.remove();
         }, 3000);
     }
 
@@ -271,48 +232,14 @@ ${especialidades.length > 0 ? especialidades.map((item, index) => `${index + 1}.
         await this.carregarEmpresas();
         this.renderizar();
 
-        this.input.addEventListener("input", event => {
-            this.renderizar(event.target.value);
-        });
-
-        this.adicionarEstilosAnimacao();
-    }
-
-    adicionarEstilosAnimacao() {
-        const style = document.createElement("style");
-
-        style.textContent = `
-            @keyframes slideIn {
-                from {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes slideOut {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-
-                to {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-            }
-        `;
-
-        document.head.appendChild(style);
+        if (this.input) {
+            this.input.addEventListener("input", event => {
+                this.renderizar(event.target.value);
+            });
+        }
     }
 }
 
-let gerenciador;
-
 document.addEventListener("DOMContentLoaded", () => {
-    gerenciador = new GerenciadorEmpresas();
+    window.gerenciador = new GerenciadorEmpresas();
 });
