@@ -1,4 +1,4 @@
-const API_URL = '/vagas';
+const API_URL = 'http://localhost:3000/vagas';
 const LOCAL_JOBS_KEY = 'vagas_bhworks_local';
 
 const empresaLogada = JSON.parse(localStorage.getItem('empresaLogada') || 'null');
@@ -18,9 +18,15 @@ function getValor(id) {
 
 function salvarVagaLocal(vaga) {
     const vagasLocais = JSON.parse(localStorage.getItem(LOCAL_JOBS_KEY) || '[]');
-    const vagaLocal = { ...vaga, id: Date.now() };
+
+    const vagaLocal = {
+        ...vaga,
+        id: Date.now()
+    };
+
     vagasLocais.push(vagaLocal);
     localStorage.setItem(LOCAL_JOBS_KEY, JSON.stringify(vagasLocais));
+
     return vagaLocal;
 }
 
@@ -30,6 +36,9 @@ function configurarAcessoEmpresa() {
         areaBloqueio.style.display = 'flex';
         return;
     }
+
+    areaFormulario.style.display = 'block';
+    areaBloqueio.style.display = 'none';
 
     const nomeEmpresa = empresaLogada.nome || empresaLogada.razaoSocial || 'Empresa logada';
     const localizacaoEmpresa = empresaLogada.localizacao || '';
@@ -46,14 +55,25 @@ async function salvarVaga(vaga) {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(vaga)
         });
 
-        if (!response.ok) throw new Error('Falha ao salvar no servidor.');
+        if (!response.ok) {
+            throw new Error('Falha ao salvar no servidor.');
+        }
+
         return await response.json();
     } catch (error) {
-        mostrarMensagem('Vaga salva em modo local. Para gravar no servidor, rode o JSON Server.', 'aviso');
+        console.warn('Erro ao salvar vaga no JSON Server. Salvando localmente.', error);
+
+        mostrarMensagem(
+            'Vaga salva em modo local. Para gravar no servidor, rode o JSON Server.',
+            'aviso'
+        );
+
         return salvarVagaLocal(vaga);
     }
 }
@@ -83,7 +103,14 @@ form.addEventListener('submit', async function (event) {
         data_publicacao: new Date().toISOString().split('T')[0]
     };
 
-    if (!novaVaga.titulo || !novaVaga.empresa || !novaVaga.localizacao || !novaVaga.tipo_contrato || !novaVaga.descricao || requisitos.length === 0) {
+    if (
+        !novaVaga.titulo ||
+        !novaVaga.empresa ||
+        !novaVaga.localizacao ||
+        !novaVaga.tipo_contrato ||
+        !novaVaga.descricao ||
+        requisitos.length === 0
+    ) {
         mostrarMensagem('Preencha todos os campos obrigatórios.');
         return;
     }
@@ -92,7 +119,11 @@ form.addEventListener('submit', async function (event) {
 
     form.reset();
     configurarAcessoEmpresa();
-    mostrarMensagem(`Vaga "${vagaCriada.titulo}" cadastrada com sucesso.`, 'sucesso');
+
+    mostrarMensagem(
+        `Vaga "${vagaCriada.titulo}" cadastrada com sucesso.`,
+        'sucesso'
+    );
 });
 
 document.addEventListener('DOMContentLoaded', configurarAcessoEmpresa);

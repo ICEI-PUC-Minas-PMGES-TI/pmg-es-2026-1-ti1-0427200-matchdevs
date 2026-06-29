@@ -1,52 +1,70 @@
+const API_URL = "http://localhost:3000";
+const VAGAS_URL = `${API_URL}/vagas`;
+
 class GerenciadorVagas {
     constructor() {
-        this.vagas = [
-            {
-                id: 1,
-                titulo: "Desenvolvedor Backend",
-                empresa: "BhTech Solutions",
-                localizacao: "Belo Horizonte, MG",
-                tipo_contrato: "CLT",
-                salario: "R$ 8.000,00",
-                descricao: "Responsável por desenvolver e manter APIs escaláveis.",
-                requisitos: ["Node.js", "Conhecimento em bancos de dados relacionais", "Git e metodologias ágeis"]
-            },
-            {
-                id: 2,
-                titulo: "Analista de Marketing Digital",
-                empresa: "InovaWeb Agency",
-                localizacao: "São Paulo, SP",
-                tipo_contrato: "PJ",
-                salario: "R$ 6.500,00",
-                descricao: "Planejamento e execução de campanhas digitais focadas em performance.",
-                requisitos: ["SEO", "Google Ads", "Meta Ads", "Excel avançado"]
-            },
-            {
-                id: 3,
-                titulo: "Engenheiro de Dados",
-                empresa: "DataFlow Corp",
-                localizacao: "Curitiba, PR",
-                tipo_contrato: "CLT",
-                salario: "R$ 12.000,00",
-                descricao: "Construção e otimização de pipelines de dados para análise em larga escala.",
-                requisitos: ["Python", "Spark", "AWS", "Modelagem de dados"]
-            }
-        ];
-
+        this.vagas = [];
         this.favoritos = this.carregarFavoritos();
-        this.container = document.getElementById('listavagas');
-        this.input = document.getElementById('campopesquisa');
+        this.container = document.getElementById("listavagas");
+        this.input = document.getElementById("campopesquisa");
 
         this.inicializar();
     }
 
+    async carregarVagas() {
+        try {
+            const resposta = await fetch(VAGAS_URL);
+
+            if (!resposta.ok) {
+                throw new Error("Erro ao carregar vagas.");
+            }
+
+            this.vagas = await resposta.json();
+        } catch (erro) {
+            console.error("Erro ao buscar vagas no JSON Server:", erro);
+
+            this.vagas = [
+                {
+                    id: 1,
+                    titulo: "Desenvolvedor Backend",
+                    empresa: "BhTech Solutions",
+                    localizacao: "Belo Horizonte, MG",
+                    tipo_contrato: "CLT",
+                    salario: "R$ 8.000,00",
+                    descricao: "Responsável por desenvolver e manter APIs escaláveis.",
+                    requisitos: ["Node.js", "Conhecimento em bancos de dados relacionais", "Git e metodologias ágeis"]
+                },
+                {
+                    id: 2,
+                    titulo: "Analista de Marketing Digital",
+                    empresa: "InovaWeb Agency",
+                    localizacao: "São Paulo, SP",
+                    tipo_contrato: "PJ",
+                    salario: "R$ 6.500,00",
+                    descricao: "Planejamento e execução de campanhas digitais focadas em performance.",
+                    requisitos: ["SEO", "Google Ads", "Meta Ads", "Excel avançado"]
+                },
+                {
+                    id: 3,
+                    titulo: "Engenheiro de Dados",
+                    empresa: "DataFlow Corp",
+                    localizacao: "Curitiba, PR",
+                    tipo_contrato: "CLT",
+                    salario: "R$ 12.000,00",
+                    descricao: "Construção e otimização de pipelines de dados para análise em larga escala.",
+                    requisitos: ["Python", "Spark", "AWS", "Modelagem de dados"]
+                }
+            ];
+        }
+    }
+
     carregarFavoritos() {
-        const favoritosArmazenados = localStorage.getItem('vagas_favoritas_v2');
+        const favoritosArmazenados = localStorage.getItem("vagas_favoritas_v2");
         return favoritosArmazenados ? JSON.parse(favoritosArmazenados) : [];
     }
 
     salvarFavoritos() {
-        localStorage.setItem('vagas_favoritas_v2', JSON.stringify(this.favoritos));
+        localStorage.setItem("vagas_favoritas_v2", JSON.stringify(this.favoritos));
     }
 
     ehFavorita(id) {
@@ -54,38 +72,46 @@ class GerenciadorVagas {
     }
 
     toggleFavorito(id) {
-        if (!sessionStorage.getItem('usuarioCorrente')) {
-            sessionStorage.setItem('returnURL', window.location.href);
-            window.location.href = '../modulos/login/login.html';
+        if (!sessionStorage.getItem("usuarioCorrente")) {
+            sessionStorage.setItem("returnURL", window.location.pathname.split("/").pop());
+            window.location.href = "login.html";
             return;
         }
+
         const index = this.favoritos.indexOf(id);
-        
+
         if (index > -1) {
             this.favoritos.splice(index, 1);
-            this.mostrarNotificacao(`Vaga removida dos favoritos!`, 'remover');
+            this.mostrarNotificacao("Vaga removida dos favoritos!", "remover");
         } else {
             this.favoritos.push(id);
-            this.mostrarNotificacao(`Vaga adicionada aos favoritos!`, 'adicionar');
+            this.mostrarNotificacao("Vaga adicionada aos favoritos!", "adicionar");
         }
-        
+
         this.salvarFavoritos();
         this.renderizar(this.input.value);
     }
 
     renderizar(filtro = "") {
         this.container.innerHTML = "";
+
         const termo = filtro.toLowerCase();
 
-        // Filtra as vagas
-        const vagasFiltradas = this.vagas.filter(v =>
-            v.titulo.toLowerCase().includes(termo) ||
-            v.empresa.toLowerCase().includes(termo) ||
-            v.localizacao.toLowerCase().includes(termo)
-        );
+        const vagasFiltradas = this.vagas.filter(vaga => {
+            const titulo = vaga.titulo || "";
+            const empresa = vaga.empresa || "";
+            const localizacao = vaga.localizacao || "";
+
+            return (
+                titulo.toLowerCase().includes(termo) ||
+                empresa.toLowerCase().includes(termo) ||
+                localizacao.toLowerCase().includes(termo)
+            );
+        });
 
         if (vagasFiltradas.length === 0) {
-            this.container.innerHTML = '<div class="vaga-nao-encontrada">Nenhuma vaga encontrada para sua busca.</div>';
+            this.container.innerHTML =
+                '<div class="vaga-nao-encontrada">Nenhuma vaga encontrada para sua busca.</div>';
             return;
         }
 
@@ -96,33 +122,47 @@ class GerenciadorVagas {
     }
 
     criarCardVaga(vaga) {
-        const div = document.createElement('div');
-        div.className = 'card-vaga';
+        const div = document.createElement("div");
+        div.className = "card-vaga";
 
         const isFavorita = this.ehFavorita(vaga.id);
-        const iconeFavorito = isFavorita ? '★' : '☆';
-        const classFavorito = isFavorita ? 'ativo' : '';
+        const iconeFavorito = isFavorita ? "★" : "☆";
+        const classFavorito = isFavorita ? "ativo" : "";
 
-        const tags = vaga.requisitos
-            .map(r => `<span class="tag">${r}</span>`)
-            .join('');
+        const requisitos = vaga.requisitos || [];
+        const tipoContrato = vaga.tipo_contrato || vaga.tipo || "Não informado";
+
+        const tags = requisitos
+            .map(requisito => `<span class="tag">${requisito}</span>`)
+            .join("");
 
         div.innerHTML = `
             <div class="card-header">
                 <div>
-                    <h3>${vaga.titulo}</h3>
-                    <p><strong>${vaga.empresa}</strong> - ${vaga.localizacao}</p>
+                    <h3>${vaga.titulo || "Vaga sem título"}</h3>
+                    <p>
+                        <strong>${vaga.empresa || "Empresa não informada"}</strong> - 
+                        ${vaga.localizacao || "Localização não informada"}
+                    </p>
                 </div>
-                <button class="btn-favorito ${classFavorito}" onclick="gerenciador.toggleFavorito(${vaga.id})" title="Adicionar aos favoritos">
+
+                <button 
+                    class="btn-favorito ${classFavorito}" 
+                    onclick="gerenciador.toggleFavorito(${vaga.id})" 
+                    title="Adicionar aos favoritos"
+                >
                     ${iconeFavorito}
                 </button>
             </div>
 
             <div class="info-linha">
-                <b>Salário:</b> ${vaga.salario} | <b>Contrato:</b> ${vaga.tipo_contrato}
+                <b>Salário:</b> ${vaga.salario || "Não informado"} | 
+                <b>Contrato:</b> ${tipoContrato}
             </div>
 
-            <p class="descricao-vaga">${vaga.descricao}</p>
+            <p class="descricao-vaga">
+                ${vaga.descricao || "Descrição não informada."}
+            </p>
 
             <div class="tag-container">
                 ${tags}
@@ -132,6 +172,7 @@ class GerenciadorVagas {
                 <button class="btn" onclick="gerenciador.candidatar(${vaga.id})">
                     Candidatar-se
                 </button>
+
                 <button class="btn btn-secundario" onclick="gerenciador.verDetalhes(${vaga.id})">
                     Ver Detalhes
                 </button>
@@ -142,39 +183,48 @@ class GerenciadorVagas {
     }
 
     candidatar(id) {
-        const vaga = this.vagas.find(v => v.id === id);
+        const vaga = this.vagas.find(vaga => vaga.id === id);
+
         if (vaga) {
-            this.mostrarNotificacao(`Candidatura enviada para: ${vaga.titulo}`, 'sucesso');
+            this.mostrarNotificacao(`Candidatura enviada para: ${vaga.titulo}`, "sucesso");
         }
     }
 
     verDetalhes(id) {
-        const vaga = this.vagas.find(v => v.id === id);
-        if (vaga) {
-            const detalhes = `
-VAGA: ${vaga.titulo}
-EMPRESA: ${vaga.empresa}
-LOCALIZAÇÃO: ${vaga.localizacao}
-SALÁRIO: ${vaga.salario}
-TIPO DE CONTRATO: ${vaga.tipo_contrato}
+        const vaga = this.vagas.find(vaga => vaga.id === id);
+
+        if (!vaga) {
+            return;
+        }
+
+        const requisitos = vaga.requisitos || [];
+        const tipoContrato = vaga.tipo_contrato || vaga.tipo || "Não informado";
+
+        const detalhes = `
+VAGA: ${vaga.titulo || "Vaga sem título"}
+EMPRESA: ${vaga.empresa || "Empresa não informada"}
+LOCALIZAÇÃO: ${vaga.localizacao || "Não informada"}
+SALÁRIO: ${vaga.salario || "Não informado"}
+TIPO DE CONTRATO: ${tipoContrato}
 
 DESCRIÇÃO:
-${vaga.descricao}
+${vaga.descricao || "Descrição não informada."}
 
 REQUISITOS:
-${vaga.requisitos.map((r, i) => `${i + 1}. ${r}`).join('\n')}
-            `;
-            alert(detalhes);
-        }
+${requisitos.length > 0 ? requisitos.map((item, index) => `${index + 1}. ${item}`).join("\n") : "Nenhum requisito cadastrado."}
+        `;
+
+        alert(detalhes);
     }
 
-    mostrarNotificacao(mensagem, tipo = 'sucesso') {
-        const notif = document.createElement('div');
+    mostrarNotificacao(mensagem, tipo = "sucesso") {
+        const notif = document.createElement("div");
+
         notif.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: ${tipo === 'sucesso' ? '#4caf50' : tipo === 'adicionar' ? '#4c4cd6' : '#ff9800'};
+            background: ${tipo === "sucesso" ? "#4caf50" : tipo === "adicionar" ? "#4c4cd6" : "#ff9800"};
             color: white;
             padding: 15px 20px;
             border-radius: 8px;
@@ -183,33 +233,40 @@ ${vaga.requisitos.map((r, i) => `${i + 1}. ${r}`).join('\n')}
             animation: slideIn 0.3s ease;
             font-weight: 500;
         `;
+
         notif.textContent = mensagem;
         document.body.appendChild(notif);
 
         setTimeout(() => {
-            notif.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notif.remove(), 300);
+            notif.style.animation = "slideOut 0.3s ease";
+
+            setTimeout(() => {
+                notif.remove();
+            }, 300);
         }, 3000);
     }
 
-    inicializar() {
+    async inicializar() {
+        await this.carregarVagas();
         this.renderizar();
 
-        this.input.addEventListener('input', (e) => {
-            this.renderizar(e.target.value);
+        this.input.addEventListener("input", event => {
+            this.renderizar(event.target.value);
         });
 
         this.adicionarEstilosAnimacao();
     }
 
     adicionarEstilosAnimacao() {
-        const style = document.createElement('style');
+        const style = document.createElement("style");
+
         style.textContent = `
             @keyframes slideIn {
                 from {
                     transform: translateX(400px);
                     opacity: 0;
                 }
+
                 to {
                     transform: translateX(0);
                     opacity: 1;
@@ -221,18 +278,20 @@ ${vaga.requisitos.map((r, i) => `${i + 1}. ${r}`).join('\n')}
                     transform: translateX(0);
                     opacity: 1;
                 }
+
                 to {
                     transform: translateX(400px);
                     opacity: 0;
                 }
             }
         `;
+
         document.head.appendChild(style);
     }
 }
 
 let gerenciador;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     gerenciador = new GerenciadorVagas();
 });

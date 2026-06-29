@@ -1,10 +1,8 @@
 {
-  "name": "json-server-api",
+  "name": "bhworks-api",
   "version": "1.0.0",
-  "description": "API fake com JSON Server",
-  "main": "index.js",
   "scripts": {
-    "start": "json-server --watch codigo/public/assets/db/db.json --port 3000"
+    "start": "json-server --watch codigo/public/assets/db/db.json --port 3000 --static codigo/public"
   },
   "dependencies": {
     "json-server": "^0.17.4"

@@ -1,8 +1,7 @@
 const API_URL = "http://localhost:3000";
+const VAGAS_URL = `${API_URL}/vagas`;
 
-// Guarda o id da vaga em edição (null = modo "criar nova vaga")
 let vagaEditandoId = null;
-// Guarda a data de publicação original, para não perdê-la ao editar
 let dataPublicacaoOriginal = null;
 
 const form = document.getElementById("form-vaga");
@@ -14,13 +13,17 @@ document.addEventListener("DOMContentLoaded", carregarVagas);
 form.addEventListener("submit", salvarVaga);
 btnCancelar.addEventListener("click", cancelarEdicao);
 
-// Busca todas as vagas no json-server e desenha os cards na tela
 async function carregarVagas() {
     const lista = document.getElementById("vagas-lista");
     const vazio = document.getElementById("vagas-vazio");
 
     try {
-        const res = await fetch(`${API_URL}/vagas`);
+        const res = await fetch(VAGAS_URL);
+
+        if (!res.ok) {
+            throw new Error("Erro ao carregar vagas.");
+        }
+
         const vagas = await res.json();
 
         lista.innerHTML = "";
@@ -35,28 +38,35 @@ async function carregarVagas() {
         vagas.forEach(vaga => {
             const card = document.createElement("div");
             card.className = "vaga-card";
+
             card.innerHTML = `
                 <div class="vaga-topo">
-                    <span class="vaga-titulo">${vaga.titulo}</span>
-                    <span class="badge badge-${vaga.modelo}">${vaga.modelo}</span>
+                    <span class="vaga-titulo">${vaga.titulo || ""}</span>
+                    <span class="badge badge-${vaga.modelo || vaga.tipo_contrato || ""}">
+                        ${vaga.modelo || vaga.tipo_contrato || ""}
+                    </span>
                 </div>
-                <p class="vaga-desc">${vaga.descricao}</p>
+
+                <p class="vaga-desc">${vaga.descricao || ""}</p>
+
                 <div class="vaga-rodape">
-                    <span class="vaga-salario">${vaga.salario}</span>
-                    <span class="badge-tipo">${vaga.tipo}</span>
+                    <span class="vaga-salario">${vaga.salario || ""}</span>
+                    <span class="badge-tipo">${vaga.tipo || vaga.tipo_contrato || ""}</span>
                 </div>
+
                 <div class="vaga-acoes">
                     <button class="btn-editar" data-id="${vaga.id}">Editar</button>
                     <button class="btn-excluir" data-id="${vaga.id}">Excluir</button>
                 </div>
             `;
+
             lista.appendChild(card);
         });
 
-        // Liga os botões de cada card recém-criado (precisa ser feito depois do innerHTML)
         lista.querySelectorAll(".btn-editar").forEach(btn => {
             btn.addEventListener("click", () => editarVaga(btn.dataset.id));
         });
+
         lista.querySelectorAll(".btn-excluir").forEach(btn => {
             btn.addEventListener("click", () => excluirVaga(btn.dataset.id));
         });
@@ -67,7 +77,6 @@ async function carregarVagas() {
     }
 }
 
-// Lê os campos do formulário e decide se cria (POST) ou atualiza (PUT) a vaga
 async function salvarVaga(evento) {
     evento.preventDefault();
 
@@ -77,31 +86,46 @@ async function salvarVaga(evento) {
         .filter(item => item.length > 0);
 
     const dadosVaga = {
-        titulo: document.getElementById("vaga-titulo").value,
+        titulo: document.getElementById("vaga-titulo").value.trim(),
         tipo: document.getElementById("vaga-tipo").value,
         modelo: document.getElementById("vaga-modelo").value,
-        salario: document.getElementById("vaga-salario").value,
-        descricao: document.getElementById("vaga-descricao").value,
-        requisitos: requisitos
+        salario: document.getElementById("vaga-salario").value.trim(),
+        descricao: document.getElementById("vaga-descricao").value.trim(),
+        requisitos
     };
 
     try {
         if (vagaEditandoId) {
-            // Edição: mantém a data de publicação original
             dadosVaga.data_publicacao = dataPublicacaoOriginal;
-            await fetch(`${API_URL}/vagas/${vagaEditandoId}`, {
+
+            const resposta = await fetch(`${VAGAS_URL}/${vagaEditandoId}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: Number(vagaEditandoId), ...dadosVaga })
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: Number(vagaEditandoId),
+                    ...dadosVaga
+                })
             });
+
+            if (!resposta.ok) {
+                throw new Error("Erro ao atualizar vaga.");
+            }
         } else {
-            // Criação: data de publicação é a data de hoje
             dadosVaga.data_publicacao = new Date().toISOString().split("T")[0];
-            await fetch(`${API_URL}/vagas`, {
+
+            const resposta = await fetch(VAGAS_URL, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify(dadosVaga)
             });
+
+            if (!resposta.ok) {
+                throw new Error("Erro ao criar vaga.");
+            }
         }
 
         cancelarEdicao();
@@ -109,21 +133,25 @@ async function salvarVaga(evento) {
 
     } catch (erro) {
         console.error("Erro ao salvar vaga:", erro);
-        alert("Não foi possível salvar a vaga. Verifique se o json-server está rodando.");
+        alert("Não foi possível salvar a vaga. Verifique se o JSON Server está rodando.");
     }
 }
 
-// Busca os dados de uma vaga específica e preenche o formulário para edição
 async function editarVaga(id) {
     try {
-        const res = await fetch(`${API_URL}/vagas/${id}`);
+        const res = await fetch(`${VAGAS_URL}/${id}`);
+
+        if (!res.ok) {
+            throw new Error("Erro ao buscar vaga.");
+        }
+
         const vaga = await res.json();
 
-        document.getElementById("vaga-titulo").value = vaga.titulo;
-        document.getElementById("vaga-tipo").value = vaga.tipo;
-        document.getElementById("vaga-modelo").value = vaga.modelo;
-        document.getElementById("vaga-salario").value = vaga.salario;
-        document.getElementById("vaga-descricao").value = vaga.descricao;
+        document.getElementById("vaga-titulo").value = vaga.titulo || "";
+        document.getElementById("vaga-tipo").value = vaga.tipo || vaga.tipo_contrato || "";
+        document.getElementById("vaga-modelo").value = vaga.modelo || "";
+        document.getElementById("vaga-salario").value = vaga.salario || "";
+        document.getElementById("vaga-descricao").value = vaga.descricao || "";
         document.getElementById("vaga-requisitos").value = (vaga.requisitos || []).join(", ");
 
         vagaEditandoId = vaga.id;
@@ -140,25 +168,36 @@ async function editarVaga(id) {
     }
 }
 
-// Pede confirmação e remove a vaga do json-server
 async function excluirVaga(id) {
     const confirmar = confirm("Tem certeza que deseja excluir esta vaga?");
-    if (!confirmar) return;
+
+    if (!confirmar) {
+        return;
+    }
 
     try {
-        await fetch(`${API_URL}/vagas/${id}`, { method: "DELETE" });
+        const resposta = await fetch(`${VAGAS_URL}/${id}`, {
+            method: "DELETE"
+        });
+
+        if (!resposta.ok) {
+            throw new Error("Erro ao excluir vaga.");
+        }
+
         carregarVagas();
+
     } catch (erro) {
         console.error("Erro ao excluir vaga:", erro);
         alert("Não foi possível excluir a vaga.");
     }
 }
 
-// Limpa o formulário e volta para o modo "Nova vaga"
 function cancelarEdicao() {
     form.reset();
+
     vagaEditandoId = null;
     dataPublicacaoOriginal = null;
+
     formTitulo.textContent = "Nova Vaga";
     btnSalvar.textContent = "Salvar Vaga";
     btnCancelar.style.display = "none";

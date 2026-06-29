@@ -12,10 +12,12 @@
     <header class="banner-topo">
         <div class="topbar">
             <a href="home.html" class="logo">BH WORKS</a>
+
             <nav class="menu">
                 <a href="listagem_vagas.html">Vagas</a>
                 <a href="listagem_empresas.html">Empresas</a>
                 <a href="mapa.html">Mapa</a>
+                <a href="favoritos.html">Favoritos</a>
                 <a id="login-link" href="login.html">Login</a>
                 <a href="sobre.html">Sobre</a>
             </nav>
@@ -49,6 +51,17 @@
       </section>
 
       <section id="map" class="map" aria-label="Mapa com localizações das vagas"></section>
+
+      <section class="secao">
+        <h2>Vagas encontradas</h2>
+        <p>Veja abaixo as vagas filtradas no mapa.</p>
+
+        <div id="emptyState" class="vazio" hidden>
+          Nenhuma vaga encontrada para os filtros selecionados.
+        </div>
+
+        <div id="jobsList" class="jobs-list"></div>
+      </section>
     </main>
     <footer class="rodape">BH Works - Plataforma de vagas, empresas e candidatos</footer>
   </div>
@@ -69,7 +82,7 @@
       region: "BR"
     });
   </script>
-
+  <script src="./assets/js/api.js"></script>
   <script src="./assets/js/pesquisa.js" defer></script>
   <script src="./assets/js/menu.js"></script>
 </body>

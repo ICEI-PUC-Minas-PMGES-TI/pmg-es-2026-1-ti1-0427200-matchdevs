@@ -1,9 +1,34 @@
-// app.js — carrega data.json e renderiza a página de comparação (index.html)
+const API_URL = "http://localhost:3000";
+const VAGA_URL = `${API_URL}/vaga`;
+const CANDIDATOS_URL = `${API_URL}/candidatos`;
+const RESUMO_URL = `${API_URL}/resumo`;
 
 async function init() {
-  const res = await fetch("data.json");
-  const data = await res.json();
-  renderPage(data);
+  try {
+    const [vagaRes, candidatosRes, resumoRes] = await Promise.all([
+      fetch(VAGA_URL),
+      fetch(CANDIDATOS_URL),
+      fetch(RESUMO_URL)
+    ]);
+
+    if (!vagaRes.ok || !candidatosRes.ok || !resumoRes.ok) {
+      throw new Error("Erro ao carregar dados do JSON Server.");
+    }
+
+    const vagaData = await vagaRes.json();
+    const candidatos = await candidatosRes.json();
+    const resumoData = await resumoRes.json();
+
+    const data = {
+      vaga: Array.isArray(vagaData) ? vagaData[0] : vagaData,
+      candidatos,
+      resumo: Array.isArray(resumoData) ? resumoData[0] : resumoData
+    };
+
+    renderPage(data);
+  } catch (erro) {
+    console.error("Erro ao carregar comparação:", erro);
+  }
 }
 
 function renderPage(data) {
@@ -13,26 +38,23 @@ function renderPage(data) {
   renderResumo(data.resumo, data.candidatos);
 }
 
-// ── Sidebar: vaga ──────────────────────────────────────────────────────────
 function renderVaga(vaga) {
   document.getElementById("vaga-titulo").textContent = vaga.titulo;
   document.getElementById("vaga-publicado").textContent = "Publicado em " + vaga.publicado;
 }
 
-// ── Cabeçalho dos candidatos ───────────────────────────────────────────────
 function renderCabecalhoCandidatos(candidatos) {
   const [a, b] = candidatos;
 
-  document.getElementById("nome-a").textContent        = "Candidato " + a.id;
+  document.getElementById("nome-a").textContent = "Candidato " + a.id;
   document.getElementById("nomecompleto-a").textContent = a.nome;
-  document.getElementById("cidade-a").textContent       = a.cidade;
+  document.getElementById("cidade-a").textContent = a.cidade;
 
-  document.getElementById("nome-b").textContent        = "Candidato " + b.id;
+  document.getElementById("nome-b").textContent = "Candidato " + b.id;
   document.getElementById("nomecompleto-b").textContent = b.nome;
-  document.getElementById("cidade-b").textContent       = b.cidade;
+  document.getElementById("cidade-b").textContent = b.cidade;
 }
 
-// ── Linhas de comparação ───────────────────────────────────────────────────
 const CAMPOS = [
   {
     titulo: "Compatibilidade",
@@ -77,10 +99,9 @@ function renderLinhasComparacao(candidatos) {
   `).join("");
 }
 
-// ── Sidebar: resumo e próximos passos ─────────────────────────────────────
 function renderResumo(resumo, candidatos) {
   const recomendado = candidatos.find(c => c.id === resumo.recomendado);
-  const outro       = candidatos.find(c => c.id !== resumo.recomendado);
+  const outro = candidatos.find(c => c.id !== resumo.recomendado);
 
   document.getElementById("recomendado-nome").textContent =
     "Candidato " + recomendado.id + " — " + recomendado.nome;
@@ -90,9 +111,9 @@ function renderResumo(resumo, candidatos) {
 
   document.getElementById("btn-avancar-a").textContent =
     "Avançar com Candidato " + recomendado.id;
+
   document.getElementById("btn-avancar-b").textContent =
     "Avançar com Candidato " + outro.id;
 }
 
-// ── Start ──────────────────────────────────────────────────────────────────
 init();

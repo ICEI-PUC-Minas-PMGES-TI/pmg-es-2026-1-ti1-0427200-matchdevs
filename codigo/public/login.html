@@ -9,8 +9,18 @@
 <body>
     <main class="main-wrapper">
         <section class="login-area">
-            <div class="logo">BH WORKS</div>
+            <div class="banner-topo banner-topo-auth">
+                <div class="topbar">
+                    <a href="home.html" class="logo">BH WORKS</a>
 
+                    <nav class="menu">
+                        <a href="listagem_vagas.html">Vagas</a>
+                        <a href="listagem_empresas.html">Empresas</a>
+                        <a href="mapa.html">Mapa</a>
+                        <a id="login-link" href="login.html">Login</a>
+                    </nav>
+                </div>
+            </div>
             <h1>Login de Candidato</h1>
             <p class="sub-header">Entre para acompanhar vagas, salvar oportunidades e acessar sua área de candidato dentro da plataforma.</p>
 
@@ -29,7 +39,7 @@
 
                 <div class="botoes-container">
                     <button type="submit" class="btn">Entrar</button>
-                    <a class="btn btn-secundario" href="cadastro_candidatos.html">Cadastrar candidato</a>
+                    <a class="btn" href="cadastro_candidatos.html">Cadastrar candidato</a>
                 </div>
             </form>
 
@@ -64,7 +74,7 @@
             </div>
         </section>
     </main>
-
+    <script src="./assets/js/api.js"></script>
     <script src="./assets/js/login.js"></script>
 </body>
 </html>

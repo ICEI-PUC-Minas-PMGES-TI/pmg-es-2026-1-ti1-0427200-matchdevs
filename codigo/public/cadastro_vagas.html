@@ -9,8 +9,18 @@
 <body>
     <main class="main-wrapper">
         <section class="form-area" id="area-formulario">
-            <div class="logo">BH WORKS</div>
+            <div class="banner-topo banner-topo-auth">
+                <div class="topbar">
+                    <a href="home.html" class="logo">BH WORKS</a>
 
+                    <nav class="menu">
+                        <a href="listagem_vagas.html">Vagas</a>
+                        <a href="listagem_empresas.html">Empresas</a>
+                        <a href="mapa.html">Mapa</a>
+                        <a id="login-link" href="login.html">Login</a>
+                    </nav>
+                </div>
+            </div>
             <h1>Cadastro de Vaga</h1>
             <p class="sub-header">Publique uma oportunidade vinculada à empresa logada na plataforma.</p>
 
@@ -68,7 +78,7 @@
 
                 <div class="botoes-container">
                     <button type="submit" class="btn">Cadastrar vaga</button>
-                    <a class="btn btn-secundario" href="../index.html">Voltar para home</a>
+                    <a class="btn btn-secundario" href="home.html">Voltar para home</a>
                 </div>
             </form>
         </section>
@@ -85,9 +95,9 @@
 
         <section class="banner-area">
             <div class="banner-topo">
-                <a class="banner-link" href="../index.html">Home</a>
-                <a class="banner-link" href="../ListadeVagas/listaVagas.html">Vagas</a>
-                <a class="banner-link" href="../listadeempresas/listaEmpresas.html">Empresas</a>
+                <a class="banner-link" href="home.html">Home</a>
+                <a class="banner-link" href="listagem_vagas.html">Vagas</a>
+                <a class="banner-link" href="listagem_empresas.html">Empresas</a>
             </div>
 
             <div class="banner-conteudo">
@@ -102,7 +112,7 @@
             </div>
         </section>
     </main>
-
+    <script src="./assets/js/api.js"></script>
     <script src="./assets/js/cadastro_vagas.js"></script>
 </body>
 </html>

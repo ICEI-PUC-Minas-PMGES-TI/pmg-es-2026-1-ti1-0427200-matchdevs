@@ -1,170 +1,32 @@
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 1050px) {
-  .container,
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    position: static;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 960px) {
-  .main-wrapper.grid-auth,
-  .auth-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .banner-area {
-    min-height: 360px;
-  }
-}
-
 @media (max-width: 768px) {
-  body,
-  body.list-page,
-  body.dashboard-page,
-  body.page-centered,
-  body.auth-page,
-  body.form-page {
-    padding: 12px;
-    align-items: flex-start;
+  .banner-topo {
+    padding: 24px 20px;
+    min-height: auto;
   }
 
-  .nav,
-  .topo {
-    width: 100%;
-    padding: 16px;
-    align-items: flex-start;
+  .topbar {
     flex-direction: column;
+    align-items: flex-start;
   }
 
-  .nav-links,
-  .nav-nome {
-    display: none;
+  .banner-topo .logo {
+    font-size: 28px;
   }
 
-  .main {
-    padding: 0;
+  .banner-topo .menu {
+    justify-content: flex-start;
   }
 
-  .conteudo,
-  .content,
-  .form-area,
-  .bloqueio-area,
-  .left,
-  .banner-area {
+  .banner-topo .menu a {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .conteudo {
     padding: 24px 20px;
   }
 
-  .fields-grid,
-  .modal-grid,
-  .fg-grid,
-  .filters {
-    grid-template-columns: 1fr;
-  }
-
-  .form-linha,
-  .botoes-container,
-  .form-botoes {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-comparacao {
-    min-height: 260px;
-    padding: 28px 20px;
-  }
-
-  .linha,
-  .linha[style] {
-    grid-template-columns: 1fr !important;
-  }
-
-  .titulo,
-  .vs {
-    border-left: none;
-    border-right: none;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    min-height: 54px;
-  }
-
-  .candidato,
-  .perfil-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .perfil-avatar-wrapper,
-  .perfil-foto {
-    margin-top: -70px;
-  }
-
-  .metricas-row {
-    flex-wrap: wrap;
-    gap: 16px;
-    padding: 14px 12px;
-  }
-
-  .metrica-sep {
-    display: none;
-  }
-
-  .logo,
-  .nav-logo {
-    font-size: 26px;
-  }
-
-  h1 {
-    font-size: 26px;
-  }
-
-  h2 {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 520px) {
-  .card-header,
-  .vaga-topo,
-  .secao-topo,
-  .perfil-nome-row,
-  .perfil-meta {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .btn,
-  .btn-primary,
-  .btn-nova,
-  .btn-salvar,
-  .btn-secundario,
-  .btn-claro,
-  .btn-cancelar,
-  .btn-outline {
-    width: 100%;
-  }
-
-  .banner-conteudo h2,
-  .overlay h2 {
-    font-size: 26px;
+  .login-area {
+    padding: 24px 20px;
   }
 }
