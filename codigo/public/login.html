@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login de Candidato - BH Works</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="./assets/css/main.css">
 </head>
 <body>
     <main class="main-wrapper">
@@ -29,13 +29,13 @@
 
                 <div class="botoes-container">
                     <button type="submit" class="btn">Entrar</button>
-                    <a class="btn btn-secundario" href="../../cadastro%20de%20candidatos/index.html">Cadastrar candidato</a>
+                    <a class="btn btn-secundario" href="cadastro_candidatos.html">Cadastrar candidato</a>
                 </div>
             </form>
 
             <div class="atalhos">
-                <a class="link-simples" href="../../index.html">Voltar para home</a>
-                <a class="link-simples" href="../../Cadastro_de_Empresas/Loginempresas.html">Login de empresa</a>
+                <a class="link-simples" href="home.html">Voltar para home</a>
+                <a class="link-simples" href="login_empresas.html">Login de empresa</a>
             </div>
 
             <div class="demo-box">
@@ -47,9 +47,9 @@
 
         <section class="banner-area">
             <div class="banner-topo">
-                <a class="banner-link" href="../../ListadeVagas/listaVagas.html">Vagas</a>
-                <a class="banner-link" href="../../listadeempresas/index.html">Empresas</a>
-                <a class="banner-link" href="../../mapa.html">Mapa</a>
+                <a class="banner-link" href="listagem_vagas.html">Vagas</a>
+                <a class="banner-link" href="listagem_empresas.html">Empresas</a>
+                <a class="banner-link" href="mapa.html">Mapa</a>
             </div>
 
             <div class="banner-conteudo">
@@ -65,84 +65,6 @@
         </section>
     </main>
 
-    <script>
-        const API_URL = '/usuarios';
-        const RETURN_URL = sessionStorage.getItem('returnURL') || '../../pagina principal/index.html';
-        const USUARIOS_DEMO = [
-            { id: 1, login: 'admin', senha: '123', nome: 'Administrador do Sistema', email: 'admin@abc.com' },
-            { id: 2, login: 'user', senha: '123', nome: 'Candidato Comum', email: 'user@abc.com' }
-        ];
-
-        let db_usuarios = carregarUsuariosLocais();
-
-        function mostrarMensagem(texto, tipo = 'erro') {
-            const mensagem = document.getElementById('mensagem');
-            mensagem.textContent = texto;
-            mensagem.className = `mensagem ${tipo}`;
-        }
-
-        function limparMensagem() {
-            const mensagem = document.getElementById('mensagem');
-            mensagem.textContent = '';
-            mensagem.className = 'mensagem';
-        }
-
-        function carregarUsuariosLocais() {
-            const usuariosLocais = JSON.parse(localStorage.getItem('usuarios_locais_bhworks') || '[]');
-            return [...USUARIOS_DEMO, ...usuariosLocais];
-        }
-
-        async function carregarUsuarios() {
-            try {
-                const resposta = await fetch(API_URL);
-                if (!resposta.ok) throw new Error('Falha ao buscar candidatos.');
-                db_usuarios = await resposta.json();
-            } catch (erro) {
-                db_usuarios = carregarUsuariosLocais();
-                mostrarMensagem('Modo local ativo: use admin/123, user/123 ou cadastre um candidato pela tela de cadastro.', 'aviso');
-            }
-        }
-
-        function loginUser(login, senha) {
-            const usuario = db_usuarios.find(item => item.login === login && item.senha === senha);
-
-            if (!usuario) return false;
-
-            sessionStorage.setItem('usuarioCorrente', JSON.stringify({
-                id: usuario.id,
-                login: usuario.login,
-                email: usuario.email,
-                nome: usuario.nome
-            }));
-
-            return true;
-        }
-
-        function processaFormLogin(event) {
-            event.preventDefault();
-            limparMensagem();
-
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value;
-
-            if (!username || !password) {
-                mostrarMensagem('Preencha login e senha para entrar.');
-                return;
-            }
-
-            if (loginUser(username, password)) {
-                window.location.href = RETURN_URL;
-                return;
-            }
-
-            mostrarMensagem('Login ou senha incorretos.');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            carregarUsuarios();
-
-            document.getElementById('login-form').addEventListener('submit', processaFormLogin);
-        });
-    </script>
+    <script src="./assets/js/login.js"></script>
 </body>
 </html>
