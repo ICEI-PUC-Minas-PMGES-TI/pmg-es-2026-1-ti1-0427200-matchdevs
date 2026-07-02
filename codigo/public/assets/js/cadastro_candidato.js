@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "https://pmg-es-2026-1-ti1-0427200-matchdevs.onrender.com";
 const USUARIOS_URL = `${API_URL}/usuarios`;
 
 const LOCAL_USERS_KEY = "usuarios_locais_bhworks";

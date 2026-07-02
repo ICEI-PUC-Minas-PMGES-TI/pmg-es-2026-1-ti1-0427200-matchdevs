@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://pmg-es-2026-1-ti1-0427200-matchdevs.onrender.com";
 
 const API = {
   usuarios: `${API_BASE_URL}/usuarios`,
