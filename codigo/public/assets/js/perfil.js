@@ -76,13 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 <li><strong>Telefone:</strong> ${perfil.tel || "—"}</li>
                 <li>
                     <strong>LinkedIn:</strong>
-                    ${linkedinUrl}
+                    <a href="${linkedinUrl}" target="_blank">
                         ${perfil.linkedin || "—"}
                     </a>
                 </li>
                 <li>
                     <strong>GitHub:</strong>
-                    ${githubUrl}
+                    <a href="${githubUrl}" target="_blank">
                         ${perfil.github || "—"}
                     </a>
                 </li>

@@ -181,7 +181,7 @@ function renderPagina(perfil, pontuacoes, candidatos, vaga, pesos) {
 
     <main class="container">
       <section class="principal">
-        <a href="index.html" class="voltar">← Voltar para comparação</a>
+        <a href="comparacao_candidatos.html" class="voltar">← Voltar para comparação</a>
 
         <h1>Perfil Ideal para a Vaga</h1>
 
@@ -291,7 +291,7 @@ function renderPagina(perfil, pontuacoes, candidatos, vaga, pesos) {
             Avançar com Candidato ${melhorCand.id}
           </button>
 
-          <button class="btn-claro" onclick="location.href='index.html'">
+          <button class="btn-claro" onclick="location.href='comparacao_candidatos.html'">
             ← Voltar à comparação
           </button>
         </div>
