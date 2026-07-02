@@ -163,7 +163,7 @@ class GerenciadorEmpresas {
 
         localStorage.setItem("empresaVisualizada", JSON.stringify(empresa));
 
-        alert(`
+        window.location.href = "perfil_empresa.html";
 EMPRESA: ${empresa.nome || "Empresa sem nome"}
 SETOR: ${empresa.setor || "Não informado"}
 LOCALIZAÇÃO: ${empresa.localizacao || "Não informada"}
