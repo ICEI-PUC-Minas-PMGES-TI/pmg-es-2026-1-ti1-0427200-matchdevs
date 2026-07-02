@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/usuarios";
+const API_URL = "https://pmg-es-2026-1-ti1-0427200-matchdevs.onrender.com/usuarios";
 
 const form = document.getElementById("login-form");
 const mensagem = document.getElementById("mensagem");

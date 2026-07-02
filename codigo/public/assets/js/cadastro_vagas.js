@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/vagas';
+const API_URL = 'https://pmg-es-2026-1-ti1-0427200-matchdevs.onrender.com';
 const LOCAL_JOBS_KEY = 'vagas_bhworks_local';
 
 const empresaLogada = JSON.parse(localStorage.getItem('empresaLogada') || 'null');

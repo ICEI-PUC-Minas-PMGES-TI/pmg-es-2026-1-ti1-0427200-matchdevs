@@ -1,6 +1,6 @@
 let userPosition = null;
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://pmg-es-2026-1-ti1-0427200-matchdevs.onrender.com";
 const VAGAS_URL = `${API_URL}/vagas`;
 
 const GOOGLE_MAPS_CONFIG = {

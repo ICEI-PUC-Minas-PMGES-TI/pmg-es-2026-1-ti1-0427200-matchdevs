@@ -1,4 +1,4 @@
-const API = "http://localhost:3000";
+const API = "https://pmg-es-2026-1-ti1-0427200-matchdevs.onrender.com";
 
 const PERFIL_URL = `${API}/perfil`;
 const EXPERIENCIAS_URL = `${API}/experiencias`;
