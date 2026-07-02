@@ -2,7 +2,7 @@
   "name": "bhworks-api",
   "version": "1.0.0",
   "scripts": {
-    "start": "json-server --watch codigo/public/assets/db/db.json --port 3000 --static codigo/public"
+    "start": "json-server --host 0.0.0.0 --port $PORT --watch codigo/public/assets/db/db.json --static codigo/public"
   },
   "dependencies": {
     "json-server": "^0.17.4"
