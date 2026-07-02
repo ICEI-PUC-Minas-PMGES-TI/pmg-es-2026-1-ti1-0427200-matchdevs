@@ -1,4 +1,5 @@
 const API_URL = "http://localhost:3000";
+
 const EMPRESAS_URL = `${API_URL}/empresas`;
 
 class GerenciadorEmpresas {
@@ -24,12 +25,19 @@ class GerenciadorEmpresas {
         } catch (erro) {
             console.error("Erro ao carregar empresas:", erro);
             this.empresas = [];
+
+            if (this.container) {
+                this.container.innerHTML = `
+                    <div class="empresa-nao-encontrada">
+                        Erro ao carregar empresas. Verifique se a API está rodando.
+                    </div>
+                `;
+            }
         }
     }
 
     carregarFavoritos() {
-        return JSON.parse(localStorage.getItem("empresas_favoritas_v2") || "[]")
-            .map(Number);
+        return JSON.parse(localStorage.getItem("empresas_favoritas_v2") || "[]").map(Number);
     }
 
     salvarFavoritos() {
@@ -85,8 +93,11 @@ class GerenciadorEmpresas {
         });
 
         if (empresasFiltradas.length === 0) {
-            this.container.innerHTML =
-                '<div class="empresa-nao-encontrada">Nenhuma empresa encontrada.</div>';
+            this.container.innerHTML = `
+                <div class="empresa-nao-encontrada">
+                    Nenhuma empresa encontrada.
+                </div>
+            `;
             return;
         }
 
@@ -159,26 +170,23 @@ class GerenciadorEmpresas {
     verPerfil(id) {
         const empresa = this.empresas.find(item => Number(item.id) === Number(id));
 
-        if (!empresa) return;
+        if (!empresa) {
+            this.mostrarNotificacao("Empresa não encontrada.", "remover");
+            return;
+        }
 
         localStorage.setItem("empresaVisualizada", JSON.stringify(empresa));
 
         window.location.href = "perfil_empresa.html";
-EMPRESA: ${empresa.nome || "Empresa sem nome"}
-SETOR: ${empresa.setor || "Não informado"}
-LOCALIZAÇÃO: ${empresa.localizacao || "Não informada"}
-PORTE: ${empresa.porte || empresa.funcionarios || "Não informado"}
-FUNDAÇÃO: ${empresa.fundacao || "Não informado"}
-
-DESCRIÇÃO:
-${empresa.descricao || "Descrição não informada."}
-        `);
     }
 
     contatoEmpresa(id) {
         const empresa = this.empresas.find(item => Number(item.id) === Number(id));
 
-        if (!empresa) return;
+        if (!empresa) {
+            this.mostrarNotificacao("Empresa não encontrada.", "remover");
+            return;
+        }
 
         const usuario = JSON.parse(sessionStorage.getItem("usuarioCorrente") || "null");
 
@@ -211,7 +219,13 @@ ${empresa.descricao || "Descrição não informada."}
             position: fixed;
             top: 20px;
             right: 20px;
-            background: ${tipo === "sucesso" ? "#4caf50" : tipo === "adicionar" ? "#4c4cd6" : "#ff9800"};
+            background: ${
+                tipo === "sucesso"
+                    ? "#4caf50"
+                    : tipo === "adicionar"
+                    ? "#4c4cd6"
+                    : "#ff9800"
+            };
             color: white;
             padding: 15px 20px;
             border-radius: 8px;

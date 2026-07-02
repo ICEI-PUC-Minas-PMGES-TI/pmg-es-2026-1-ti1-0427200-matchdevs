@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutBtn.addEventListener("click", event => {
             event.preventDefault();
             sessionStorage.removeItem("usuarioCorrente");
-            window.location.href = "home.html";
+            window.location.href = "index.html";
         });
 
         menu.append(userInfo, logoutBtn);
