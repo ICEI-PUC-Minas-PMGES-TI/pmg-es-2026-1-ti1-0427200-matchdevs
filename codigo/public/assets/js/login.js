@@ -1,4 +1,4 @@
-const API_URL = "https://pmg-es-2026-1-ti1-0427200-matchdevs.onrender.com/usuarios";
+const API_URL = "/usuarios";
 
 const form = document.getElementById("login-form");
 const mensagem = document.getElementById("mensagem");
@@ -60,7 +60,7 @@ form.addEventListener("submit", async event => {
 
         sessionStorage.setItem("usuarioCorrente", JSON.stringify(usuarioCorrente));
 
-        const returnURL = sessionStorage.getItem("returnURL") || "home.html";
+        const returnURL = sessionStorage.getItem("returnURL") || "index.html";
         sessionStorage.removeItem("returnURL");
 
         window.location.href = returnURL;
