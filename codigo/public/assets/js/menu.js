@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutBtn.addEventListener("click", event => {
             event.preventDefault();
             localStorage.removeItem("empresaLogada");
-            window.location.href = "home.html";
+            window.location.href = "index.html";
         });
 
         menu.append(empresaInfo, logoutBtn);

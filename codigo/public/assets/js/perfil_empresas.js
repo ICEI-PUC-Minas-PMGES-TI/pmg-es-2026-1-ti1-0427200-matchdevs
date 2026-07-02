@@ -573,7 +573,7 @@ async function confirmarExclusao() {
     mostrarToast("Conta excluída.", "erro");
 
     setTimeout(() => {
-        window.location.href = "home.html";
+        window.location.href = "index.html";
     }, 1000);
 }
 
